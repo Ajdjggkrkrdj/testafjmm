@@ -1,0 +1,14 @@
+flask
+pyrogram
+tgcrypto
+cryptg
+aiohttp
+aiofiles
+requests
+ujson
+bs4
+multivolumefile
+pathlib
+yarl
+psutil
+py7zr
