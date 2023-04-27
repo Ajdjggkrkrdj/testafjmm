@@ -2,7 +2,7 @@ import psutil
 import shutil
 from pyrogram import Client , filters
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, ReplyKeyboardRemove,  CallbackQuery
-
+import threading
 import asyncio
 import tgcrypto
 import aiohttp
@@ -12,7 +12,7 @@ import requests
 import json
 import zipfile
 import platform
-
+from progress import Progress
 from json import loads,dumps
 from pathlib import Path
 from os.path import exists
@@ -57,7 +57,7 @@ USER = { 'modo': 'on', 'VIP':['dev_sorcerer'], 'APYE': { '1': '29566', '2': '295
 VIP = USER['VIP']
 ROOT = {}
 downlist={}#lista d archivos a descargar :D
-
+tarea = {}
 task = { 'dev_sorcerer': False}
 ##Base de Datos##
 def update(username):
@@ -448,7 +448,7 @@ async def start(client: Client, message: Message):
 	if b.split(".")[0] == "http://cinfo":
 		rv = 'c'
 	elif b.split(".")[0] == "https://ediciones":
-		rv = 'e'
+		rv = 'ed'
 	elif b.split(".")[0] == "https://apye":
 		rv = 'a'
 	elif b == 'educa':
@@ -465,7 +465,7 @@ async def start(client: Client, message: Message):
 		msg+="☆ ℍ𝕠𝕤𝕥: **EDUCA** ✓𝖉𝖎𝖗𝖊𝖈𝖙 𝖑𝖎𝖓𝖐𝖘✓\n"
 	elif rv == "a":
 		msg+="☆ ℍ𝕠𝕤𝕥: **apye** ✓𝕽𝖊𝖛𝖎𝖘𝖙𝖆✓\n"
-	elif rv == "e":
+	elif rv == "ed":
 		msg+="☆ ℍ𝕠𝕤𝕥: **ediciones** ✓𝕽𝖊𝖛𝖎𝖘𝖙𝖆✓\n"
 	elif rv == "c":
 		msg+="☆ ℍ𝕠𝕤𝕥: **cinfo** ✓𝕽𝖊𝖛𝖎𝖘𝖙𝖆✓\n"
@@ -709,7 +709,7 @@ async def rm(client: Client, message: Message):
 		await send_config()
 	else:
 		try:
-			size += Path(str(ROOT[username]["actual_root"])+"/"+msgh[1][i]).stat().st_size
+			size += Path(str(ROOT[username]["actual_root"])+"/"+msgh[1][list]).stat().st_size
 			unlink(str(ROOT[username]["actual_root"])+"/"+msgh[1][int(list)])
 		except:
 			size += get_folder_size(str(ROOT[username]["actual_root"])+"/"+msgh[1][i])
