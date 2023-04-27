@@ -48,9 +48,8 @@ API_ID = 17617166
 API_HASH = "3ff86cddc30dcd947505e0b8493ce380"
 TOKEN = os.getenv("TOKEN")
 Channel_Id = -1001560753414
-db_access = 74 #os.getenv("DB")#4 #74
+db_access = 1363#os.getenv("DB")#4 #74
 DB = -1001950857309
-CHANNEL = -1001950857309
 
 bot = Client("maxup",api_id=API_ID,api_hash=API_HASH,bot_token=TOKEN)
 
@@ -74,7 +73,7 @@ async def send_config():
 		await bot.edit_message_text(Channel_Id,message_id=db_access,text=dumps(USER,indent=4))
 	except:
 		await bot.send_message(Channel_Id,text=dumps(USER,indent=4))
-		pass	
+		pass
 
 @bot.on_message(filters.regex("❌ ℂ𝔸ℕℂ𝔼𝕃𝔸ℝ ❌"))
 async def cancel_down(client: Client, message: Message):
@@ -1150,21 +1149,7 @@ async def progress_down_tg(chunk,total,filename,start,message):
 		except:pass
 	seg = localtime().tm_sec
 #Subida a la nube
-async def uploadfile_progres(chunk,filesize,start,filename,message, parts):
-	now = time()
-	diff = now - start
-	mbs = chunk / diff
-	filename = filename[:13]+"•••"+filename.split(".")[-1]
-	msg = f"⏫ **𝕊𝕦𝕓𝕚𝕖𝕟𝕕𝕠 {parts} 𝕡𝕒𝕣𝕥𝕖𝕤** ⏫\n\n"
-	try:
-		msg+=update_progress_up(chunk,filesize)+ " " + sizeof_fmt(mbs)+"/s\n\n"
-	except:pass
-	msg+= f"🏷️**•ℕ𝕒𝕞𝕖:** `{filename}`\n📤**•𝕌𝕡𝕝𝕠𝕒𝕕:** `{sizeof_fmt(chunk)}/{sizeof_fmt(filesize)}`"
-	global seg
-	if seg != localtime().tm_sec:
-		try:message.edit(msg)
-		except:pass
-	seg = localtime().tm_sec
+
 #ConvertBytes=>>
 def sizeof_fmt(num, suffix='B'):
     for unit in ['', 'Ki', 'Mi', 'Gi', 'Ti', 'Pi', 'Ei', 'Zi']:
