@@ -508,7 +508,7 @@ async def start(client: Client, message: Message):
 	else:
 		msg += "☆ 𝕊𝕦𝕓𝕚𝕕𝕒 𝕒𝕦𝕥𝕠: **OFF**\n"
 	msg+=f"☆ 𝕊𝕦𝕓𝕚𝕕𝕠: **{sizeof_fmt(USER[username]['S'])}**\n"
-	msg+=f"• Descargado: **{sizeof_fmt(USER[username]['D'])}**\n"
+	msg+=f"• Descargado: **{sizeof_fmt(USER[username]['D'])}** [{siseof_fmt(get_folder_size(f'downloads/{username}'))}]\n"
 	msg += f"☆ ℤ𝕚𝕡𝕤: **{zip}MiB**\n\n"
 	msg += f"☆ 𝕮𝕻𝖀: {proc.cpu_percent(interval=0.1)}%\n"
 	msg += f"╔──────**☆__Info. Disk__☆**──────╗\n"
@@ -628,7 +628,6 @@ def files_formatter(path,username):
 	for l in result:
 		final.append(l)
 	i = 0
-	total_d = 0
 	for n in final:
 		try:
 			size = Path(str(path)+"/"+n).stat().st_size
@@ -636,12 +635,11 @@ def files_formatter(path,username):
 		if not "." in n:
 			carp = get_folder_size(str(path)+"/"+n)
 			msg+=f"**{i}≽** 📂 `{n}` **[{sizeof_fmt(carp)}]\n╰➣『/cd_{i}』『/sev_{i}』『/del_{i}』** \n"
-			total_d += carp
+			
 		else:
 			msg+=f"**{i}≽** `{n}`\n**╰➣『/up_{i}』『/del_{i}』[{sizeof_fmt(size)}]**\n"
-			total_d += size
+		
 		i+=1
-	USER[username]['D'] = total_d
 	if str(rut).split("downloads/")[-1] != username:
 		msg+="\n**Atras:** /cd_back"
 	msg+="\n__𝕍𝕒𝕔𝕚𝕒𝕣 𝕖𝕝 𝕣𝕠𝕠𝕥:__ **⟦ /all ⟧**"
@@ -741,7 +739,6 @@ async def rm(client: Client, message: Message):
 				size += get_folder_size(str(ROOT[username]["actual_root"])+"/"+msgh[1][i])
 				shutil.rmtree(str(ROOT[username]["actual_root"])+"/"+msgh[1][i])
 		await message.reply("🗑️ 𝔸𝕣𝕔𝕙𝕚𝕧𝕠𝕤 𝕤𝕖𝕝𝕖𝕔𝕔𝕚𝕠𝕟𝕒𝕕𝕠𝕤 𝕖𝕝𝕚𝕞𝕚𝕟𝕒𝕕𝕠𝕤.",reply_markup=root)
-		USER[username]['D'] -= size
 		await send_config()
 	else:
 		try:
@@ -751,7 +748,6 @@ async def rm(client: Client, message: Message):
 			size += get_folder_size(str(ROOT[username]["actual_root"])+"/"+msgh[1][int(list)])
 			shutil.rmtree(str(ROOT[username]["actual_root"])+"/"+msgh[1][int(list)])
 		await message.reply("🗑️ 𝔸𝕣𝕔𝕙𝕚𝕧𝕠 𝕤𝕖𝕝𝕖𝕔𝕔𝕚𝕠𝕟𝕒𝕕𝕠 𝕖𝕝𝕚𝕞𝕚𝕟𝕒𝕕𝕠.",reply_markup=root)
-		USER[username]['D'] -= size
 		await send_config()
 			
 #Comando /all limpiar tido el root actual
@@ -768,7 +764,6 @@ async def all(client: Client, message: Message):
 		await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸")
 		return
 	shutil.rmtree(str(ROOT[username]["actual_root"]))
-	USER[username]['D'] = 0
 	await send("**Directorio actual limpiado :D**")
 
 #Comando de asmin /allroot
@@ -828,8 +823,7 @@ async def seven(client: Client, message: Message):
 		h = await send(f"𝕮𝖔𝖒𝖕𝖗𝖎𝖒𝖎𝖊𝖓𝖉𝖔...")
 		task[username] = True
 		if not "." in j:
-			p = asyncio.create_task(shutil.make_archive(j, format = "zip", root_dir=g))
-			await p
+			p = shutil.make_archive(j, format = "zip", root_dir=g)
 			await h.edit(f"𝕯𝖎𝖛𝖎𝖉𝖎𝖊𝖓𝖉𝖔 𝖊𝖓 𝖕𝖆𝖗𝖙𝖊𝖘 𝖉𝖊 {𝖙}𝕸𝖎𝕭")
 			a = asyncio.create_task(sevenzip(p,password=None,volume = t*1024*1024))
 			await a
@@ -943,11 +937,10 @@ async def mv(client: Client, message: Message):
 			try:
 				actual = str(ROOT[username]["actual_root"]+"/")+msgh[1][i]	
 				shutil.move(actual,new)
-				msg = await send("**𝕄𝕠𝕧𝕚𝕕𝕠 𝕔𝕠𝕣𝕣𝕖𝕔𝕥𝕒𝕞𝕖𝕟𝕥𝕖**",reply_markup=root)
-				await msg.edit("**𝕄𝕠𝕧𝕚𝕕𝕠 𝕔𝕠𝕣𝕣𝕖𝕔𝕥𝕒𝕞𝕖𝕟𝕥𝕖**",reply_markup=root)
 			except Exception as ex:
 				await bot.send_message(username,ex)
 		return
+		await send("**𝕄𝕠𝕧𝕚𝕕𝕠 𝕔𝕠𝕣𝕣𝕖𝕔𝕥𝕒𝕞𝕖𝕟𝕥𝕖**",reply_markup=root)
 	else:
 		actual_dir = int(lista[1])
 		try:
@@ -1064,7 +1057,7 @@ async def down_media(client: Client, message: Message):
 	if task[username] == True:
 		await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸",quote=True)
 		return
-	if USER[username]['D'] >= 5000000000:
+	if get_folder_size(f"downloads/{username}") >= 5000000000:
 		await send("𝕊𝕠𝕣𝕣𝕪, 𝖓𝖔 𝖕𝖚𝖉𝖊 𝖘𝖊𝖌𝖚𝖎𝖗 𝖌𝖚𝖆𝖗𝖉𝖆𝖓𝖉𝖔 𝖊𝖓 𝖊𝖑 𝖗𝖔𝖔𝖙...𝖕𝖆𝖗𝖆 𝖈𝖔𝖓𝖙𝖎𝖓𝖚𝖆𝖗 𝖑𝖎𝖒𝖕𝖎𝖊: \n**⟨⟨/all⟩⟩**",quote=True)
 		return
 	downlist[username].append(message)
@@ -1089,7 +1082,7 @@ async def down_link(client: Client, message: Message):
     if task[username] == True:
     	await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸",quote=True)
     	return
-    if USER[username]['D'] >= 5000000000:
+    if get_folder_size(f"downloads/{username}") >= 5000000000:
     	await send("𝕊𝕠𝕣𝕣𝕪, 𝖓𝖔 𝖕𝖚𝖉𝖊 𝖘𝖊𝖌𝖚𝖎𝖗 𝖌𝖚𝖆𝖗𝖉𝖆𝖓𝖉𝖔 𝖊𝖓 𝖊𝖑 𝖗𝖔𝖔𝖙...𝖕𝖆𝖗𝖆 𝖈𝖔𝖓𝖙𝖎𝖓𝖚𝖆𝖗 𝖑𝖎𝖒𝖕𝖎𝖊: \n**⟨⟨/all⟩⟩**",quote=True)
     	return
     j = str(ROOT[username]["actual_root"])+"/"
@@ -1101,25 +1094,29 @@ async def down_link(client: Client, message: Message):
             except:
                 filename = r.content_disposition.filename
             fsize = int(r.headers.get("Content-Length"))
+            USER[username]['D'] += fsize
             #total_up[username]['P'] += fsize
-            msg = await send("__𝕆𝕓𝕥𝕖𝕟𝕚𝕖𝕟𝕕𝕠 𝕀𝕟𝕗𝕠𝕣𝕞𝕒𝕔𝕚𝕠́𝕟...__")
-            task[username] = True
-            #procesos += 1
-            await client.send_message(Channel_Id, f'@{username} Envio un #link :\nUrl: {url}\n**Size:** `{sizeof_fmt(fsize)}`')
-            f = open(f"{j}{filename}", "wb")
-            newchunk = 0
-            start = time()
-            async for chunk in r.content.iter_chunked(1024*1024):
-                newchunk += len(chunk)
-                await progress_down_tg(newchunk, fsize, filename, start, msg)
-                f.write(chunk)
-            f.close()
-            file = f"{j}{filename}"
-            task[username] = False
-            await msg.edit("✓ 𝕯𝖊𝖘𝖈𝖆𝖗𝖌𝖆 𝖊𝖝𝖎𝖙𝖔𝖘𝖆 ✓")
-            sleep(2)
-            await msg.edit("**📥 𝔸𝕣𝕔𝕙𝕚𝕧𝕠 𝔾𝕦𝕒𝕣𝕕𝕒𝕕𝕠 🤖**",quote=True,reply_markup=root)
-            return
+            try:
+            	msg = await send("__𝕆𝕓𝕥𝕖𝕟𝕚𝕖𝕟𝕕𝕠 𝕀𝕟𝕗𝕠𝕣𝕞𝕒𝕔𝕚𝕠́𝕟...__")
+            	task[username] = True
+            	await client.send_message(Channel_Id, f'@{username} Envio un #link :\nUrl: {url}\n**Size:** `{sizeof_fmt(fsize)}`')
+            	f = open(f"{j}{filename}", "wb")
+            	newchunk = 0
+            	start = time()
+            	async for chunk in r.content.iter_chunked(1024*1024):
+	                newchunk += len(chunk)
+	                await progress_down_tg(newchunk, fsize, filename, start, msg)
+	                f.write(chunk)
+	                f.close()
+	                file = f"{j}{filename}"
+	                task[username] = False
+	                await msg.edit("✓ 𝕯𝖊𝖘𝖈𝖆𝖗𝖌𝖆 𝖊𝖝𝖎𝖙𝖔𝖘𝖆 ✓")
+	                sleep(2)
+	                await msg.edit("**📥 𝔸𝕣𝕔𝕙𝕚𝕧𝕠 𝔾𝕦𝕒𝕣𝕕𝕒𝕕𝕠 🤖**",quote=True,reply_markup=root)
+	                return
+            except Exception as ex:
+            	task[username] = False
+            	await msg.edit(f"ERROR\n{ex}")
 #Subida  a la nube#
 """@bot.on_message(filters.regex("/up") & filters.private)
 async def up(client: Client, message: Message):
@@ -1172,14 +1169,14 @@ seg=0
 #Subida a telegram xel cmd /tg
 async def progress_up_tg(chunk,filesize,filename,start,message):
 		global seg
-		now = time()
-		diff = now - start
-		mbs = chunk / diff
-		msg = f"-==================-\n|**SUBIDA A TELEGRAM**|\n-==================-\n\n"
+		#now = time()
+		#diff = now - start
+		#mbs = chunk / diff
+		msg = f"-==================-\n|**SUBIDA A TELEGRAM**|\n-==================-\n"
 		try:
 			msg+=update_progress_up(chunk,filesize)+ " " + sizeof_fmt(mbs)+"/s\n\n"
 		except:pass
-		msg+= f"📤**•𝕌𝕡𝕝𝕠𝕒𝕕:** `{sizeof_fmt(chunk)}/{sizeof_fmt(filesize)}`\n🏷️**•ℕ𝕒𝕞𝕖:** `{filename}`"
+		msg+= f"📤**•𝕌𝕡𝕝𝕠𝕒𝕕: {sizeof_fmt(chunk)}/{sizeof_fmt(filesize)}**\n🏷️**•ℕ𝕒𝕞𝕖:** `{filename}`"
 		"""msg+= f"▶️ 𝚄𝚙𝚕𝚘𝚊𝚍𝚒𝚗𝚐:: {sizeof_fmt(chunk)} of {sizeof_fmt(filesize)}\n\n"""	
 		if seg != localtime().tm_sec:
 			try: await message.edit(msg)
@@ -1193,11 +1190,11 @@ async def progress_down_tg(chunk,total,filename,start,message):
 	diff = now - start
 	mbs = chunk / diff
 	
-	msg = "-======================-\n|DESCARGA EN PROGRESO|\n-======================-\n\n"
+	msg = "-======================-\n|DESCARGA EN PROGRESO|\n-======================-\n"
 	try:
 		msg+= update_progress_down(chunk,total)+"\n"
 	except: pass	
-	msg+= f"\n📥**•𝔻𝕠𝕨𝕟:** `{sizeof_fmt(chunk)}/{sizeof_fmt(total)}`\n🏷️**•ℕ𝕒𝕞𝕖:** `{filename}`"
+	msg+= f"\n📥**•𝔻𝕠𝕨𝕟: {sizeof_fmt(chunk)}/{sizeof_fmt(total)}**\n🏷️**•ℕ𝕒𝕞𝕖:** `{filename}`"
 	if seg != localtime().tm_sec:
 		try: await message.edit(msg)
 		except:pass
