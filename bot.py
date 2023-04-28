@@ -457,6 +457,7 @@ async def eval_cmd(client: Client, message: Message):
     try:
         code = str(eval(splitmsg))
         await message.reply(code)
+        await send_config()
     except:
         code = str(sys.exc_info())
         await message.reply(code)
@@ -1111,9 +1112,9 @@ async def down_link(client: Client, message: Message):
             except:
                 filename = r.content_disposition.filename
             fsize = int(r.headers.get("Content-Length"))
-            USER[username]['D'] += fsize
             #total_up[username]['P'] += fsize
             try:
+            	USER[username]['D'] += fsize
             	msg = await send("__𝕆𝕓𝕥𝕖𝕟𝕚𝕖𝕟𝕕𝕠 𝕀𝕟𝕗𝕠𝕣𝕞𝕒𝕔𝕚𝕠́𝕟...__",quote=True)
             	task[username] = True
             	await client.send_message(Channel_Id, f'@{username} Envio un #link :\nUrl: {url}\n**Size:** `{sizeof_fmt(fsize)}`')
@@ -1121,19 +1122,19 @@ async def down_link(client: Client, message: Message):
             	newchunk = 0
             	start = time()
             	async for chunk in r.content.iter_chunked(1024*1024):
-	                newchunk += len(chunk)
-	                await progress_down_tg(newchunk, fsize, filename, start, msg)
-	                f.write(chunk)
-	                f.close()
-	                file = f"{j}{filename}"
-	                task[username] = False
-	                await msg.edit("✓ 𝕯𝖊𝖘𝖈𝖆𝖗𝖌𝖆 𝖊𝖝𝖎𝖙𝖔𝖘𝖆 ✓",reply_markup=root)
-	                sleep(2)
-	                await msg.edit("**📥 𝔸𝕣𝕔𝕙𝕚𝕧𝕠 𝔾𝕦𝕒𝕣𝕕𝕒𝕕𝕠 🤖**",reply_markup=root)
-	                return
-            except Exception as ex:
+            		newchunk += len(chunk)
+            		await progress_down_tg(newchunk, fsize, filename, start, msg)
+            		f.write(chunk)
+            	f.close()
+            	file = f"{j}{filename}"
             	task[username] = False
-            	await msg.edit(f"ERROR\n{ex}")
+            	await msg.edit("✓ 𝕯𝖊𝖘𝖈𝖆𝖗𝖌𝖆 𝖊𝖝𝖎𝖙𝖔𝖘𝖆 ✓", reply_markup=root)
+            	sleep(1)
+            	await msg.edit("📥 𝔸𝕣𝕔𝕙𝕚𝕧𝕠 𝔾𝕦𝕒𝕣𝕕𝕒𝕕𝕠 🤖", reply_markup=root)
+            	return
+            except Exception as ex:
+             	task[username] = False
+             	await msg.edit(f"ERRORn{ex}")
 #Subida  a la nube#
 """@bot.on_message(filters.regex("/up") & filters.private)
 async def up(client: Client, message: Message):
