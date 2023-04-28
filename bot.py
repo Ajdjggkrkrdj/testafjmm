@@ -129,7 +129,7 @@ async def carga_tg(client: Client, message: Message):
 	task[username] = True
 	for i in downlist[username]:
 		filesize = int(str(i).split('"file_size":')[1].split(",")[0])
-		USER[username]['D'] += filesize
+
 		#total_up[username]['P']+=filesize
 		try:
 			filename = str(i).split('"file_name": ')[1].split(",")[0].replace('"',"")	
@@ -508,6 +508,7 @@ async def start(client: Client, message: Message):
 	else:
 		msg += "☆ 𝕊𝕦𝕓𝕚𝕕𝕒 𝕒𝕦𝕥𝕠: **OFF**\n"
 	msg+=f"☆ 𝕊𝕦𝕓𝕚𝕕𝕠: **{sizeof_fmt(USER[username]['S'])}**\n"
+	msg+=f"• Descargado: **{sizeof_fmt(USER[username]['D'])}**\n"
 	msg += f"☆ ℤ𝕚𝕡𝕤: **{zip}MiB**\n\n"
 	msg += f"☆ 𝕮𝕻𝖀: {proc.cpu_percent(interval=0.1)}%\n"
 	msg += f"╔──────**☆__Info. Disk__☆**──────╗\n"
@@ -627,16 +628,20 @@ def files_formatter(path,username):
 	for l in result:
 		final.append(l)
 	i = 0
+	total_d = 0
 	for n in final:
 		try:
 			size = Path(str(path)+"/"+n).stat().st_size
 		except: pass
 		if not "." in n:
 			carp = get_folder_size(str(path)+"/"+n)
-			msg+=f"**{i}≽** 📂 `{n}` **[{sizeof_fmt(carp)}]\n╰➣『/cd_{i}』『/sev_{i}』『/del_{i}』** \n" 
+			msg+=f"**{i}≽** 📂 `{n}` **[{sizeof_fmt(carp)}]\n╰➣『/cd_{i}』『/sev_{i}』『/del_{i}』** \n"
+			total_d += carp
 		else:
 			msg+=f"**{i}≽** `{n}`\n**╰➣『/up_{i}』『/del_{i}』[{sizeof_fmt(size)}]**\n"
+			total_d += size
 		i+=1
+	USER[username]['D'] = total_d
 	if str(rut).split("downloads/")[-1] != username:
 		msg+="\n**Atras:** /cd_back"
 	msg+="\n__𝕍𝕒𝕔𝕚𝕒𝕣 𝕖𝕝 𝕣𝕠𝕠𝕥:__ **⟦ /all ⟧**"
@@ -776,7 +781,7 @@ async def delall(client: Client, message: Message):
 	if username not in BOSS:
 		return
 	else:pass
-	shutil.rmtree("downloads/")
+	shutil.rmtree("downloads")
 	await send("**Root de todos los usiarios limpio ;D**")
 	return
 
@@ -808,11 +813,12 @@ async def seven(client: Client, message: Message):
 			g = str(ROOT[username]["actual_root"]+"/")+msgh[1][i]
 			p = asyncio.create_task(shutil.make_archive(j, format = "zip", root_dir=g))
 			shutil.move(p,ROOT[username]["actual_root"])	
+			await p
 			await h.edit("✓ 𝕮𝖔𝖒𝖕𝖗𝖊𝖓𝖘𝖎𝖔́𝖓 𝖗𝖊𝖆𝖑𝖎𝖟𝖆𝖉𝖆 ✓",reply_markup=root)
 			task[username] = False 
 			return
 		else:
-			await message.reply("✖️ __No puede comprimir archivos(picarlos si!), solo carpetas__ ✖️")
+			await message.reply("✖️ __No puede comprimir archivos (picarlos si!), solo carpetas__ ✖️")
 			return
 	elif len(lista) == 3:
 		i = int(lista[1])
@@ -823,8 +829,10 @@ async def seven(client: Client, message: Message):
 		task[username] = True
 		if not "." in j:
 			p = asyncio.create_task(shutil.make_archive(j, format = "zip", root_dir=g))
+			await p
 			await h.edit(f"𝕯𝖎𝖛𝖎𝖉𝖎𝖊𝖓𝖉𝖔 𝖊𝖓 𝖕𝖆𝖗𝖙𝖊𝖘 𝖉𝖊 {𝖙}𝕸𝖎𝕭")
 			a = asyncio.create_task(sevenzip(p,password=None,volume = t*1024*1024))
+			await a
 			os.remove(p)
 			for i in a :
 				shutil.move(i,ROOT[username]["actual_root"])
@@ -834,6 +842,7 @@ async def seven(client: Client, message: Message):
 		else:
 			task[username] = True
 			a = asyncio.create_task(sevenzip(g,password=None,volume = t*1024*1024))
+			await a
 			await h.edit("✓ 𝕮𝖔𝖒𝖕𝖗𝖊𝖓𝖘𝖎𝖔́𝖓 𝖗𝖊𝖆𝖑𝖎𝖟𝖆𝖉𝖆 ✓",reply_markup=root)
 			task[username] = False
 			return
@@ -1033,6 +1042,7 @@ async def tg(client: Client, message: Message):
 		start = time()
 		task[username] = True
 		r = asyncio.create_task(bot.send_document(username,path,file_name=filename,progress=progress_up_tg,progress_args=(filename,start,msg),thumb = "thumb.jpg"))
+		await r
 		await msg.edit("**𝕊𝕦𝕓𝕚𝕕𝕒 𝕖𝕩𝕚𝕥𝕠𝕤𝕒 🚀**")
 		task[username] = False
 		return
@@ -1137,7 +1147,7 @@ def update_progress_up(inte,max):
 	percentage *= 100
 	percentage = round(percentage)
 	hashes = int(percentage / 6)
-	spaces = 18 - hashes
+	spaces = 19 - hashes
 	progress_bar = "●" * hashes + "○" * spaces
 	percentage_pos = int(hashes / 1)
 	percentage_string = str(percentage) + "%"
@@ -1165,12 +1175,11 @@ async def progress_up_tg(chunk,filesize,filename,start,message):
 		now = time()
 		diff = now - start
 		mbs = chunk / diff
-		filename = filename[:13]+"•••"+filename.split(".")[-1]
 		msg = f"-==================-\n|**SUBIDA A TELEGRAM**|\n-==================-\n\n"
 		try:
 			msg+=update_progress_up(chunk,filesize)+ " " + sizeof_fmt(mbs)+"/s\n\n"
 		except:pass
-		msg+= f"🏷️**•ℕ𝕒𝕞𝕖:** `{filename}`\n📤**•𝕌𝕡𝕝𝕠𝕒𝕕:** `{sizeof_fmt(chunk)}/{sizeof_fmt(filesize)}`"
+		msg+= f"📤**•𝕌𝕡𝕝𝕠𝕒𝕕:** `{sizeof_fmt(chunk)}/{sizeof_fmt(filesize)}`\n🏷️**•ℕ𝕒𝕞𝕖:** `{filename}`"
 		"""msg+= f"▶️ 𝚄𝚙𝚕𝚘𝚊𝚍𝚒𝚗𝚐:: {sizeof_fmt(chunk)} of {sizeof_fmt(filesize)}\n\n"""	
 		if seg != localtime().tm_sec:
 			try: await message.edit(msg)
@@ -1183,12 +1192,12 @@ async def progress_down_tg(chunk,total,filename,start,message):
 	now = time()
 	diff = now - start
 	mbs = chunk / diff
-	filename = filename[:13]+"•••"+filename.split(".")[-1]
+	
 	msg = "-======================-\n|DESCARGA EN PROGRESO|\n-======================-\n\n"
 	try:
 		msg+= update_progress_down(chunk,total)+"\n"
 	except: pass	
-	msg+= f"☄️**•𝕊𝕡𝕖𝕖𝕕:** `{sizeof_fmt(mbs)}/s`\n🏷️**•ℕ𝕒𝕞𝕖:** `{filename}`\n📤**•𝔻𝕠𝕨𝕟:** `{sizeof_fmt(chunk)}/{sizeof_fmt(total)}`"
+	msg+= f"\n📥**•𝔻𝕠𝕨𝕟:** `{sizeof_fmt(chunk)}/{sizeof_fmt(total)}`\n🏷️**•ℕ𝕒𝕞𝕖:** `{filename}`"
 	if seg != localtime().tm_sec:
 		try: await message.edit(msg)
 		except:pass
