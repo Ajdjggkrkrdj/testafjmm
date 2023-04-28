@@ -122,6 +122,7 @@ async def carga_tg(client: Client, message: Message):
 	ms = await send("𝕆𝕓𝕥𝕖𝕟𝕚𝕖𝕟𝕕𝕠 𝕀𝕟𝕗𝕠𝕣𝕞𝕒𝕔𝕚𝕠́𝕟...",reply_markup=ReplyKeyboardRemove())
 	await ms.delete()
 	msg = await send("𝕆𝕓𝕥𝕖𝕟𝕚𝕖𝕟𝕕𝕠 𝕀𝕟𝕗𝕠𝕣𝕞𝕒𝕔𝕚𝕠́𝕟...")
+	sleep(1)
 	#await ms.delete()
 	#msg = await message.reply("🔄")
 	count = 0
@@ -141,6 +142,7 @@ async def carga_tg(client: Client, message: Message):
 			a = await i.download(file_name=str(ROOT[username]["actual_root"])+"/"+filename,progress=progress_down_tg,progress_args=(filename,start,msg))
 			if Path(str(ROOT[username]["actual_root"])+"/"+ filename).stat().st_size == filesize:
 				await msg.edit("𝕯𝖊𝖘𝖈𝖆𝖗𝖌𝖆 𝖊𝖝𝖎𝖙𝖔𝖘𝖆")
+				downlist[username] = []
 				task[username] = False
 				count +=1
 		except Exception as ex:
@@ -150,6 +152,7 @@ async def carga_tg(client: Client, message: Message):
 				return	
 	if count == len(downlist[username]):
 		await msg.edit("𝕋𝕠𝕕𝕠𝕤 𝕝𝕠𝕤 𝕒𝕣𝕔𝕙𝕚𝕧𝕠𝕤 𝕕𝕖𝕤𝕔𝕒𝕣𝕘𝕒𝕕𝕠𝕤 ⬇️",reply_markup=root)
+		downlist[username] = []
 		task[username] = False
 		return
 	else:
@@ -199,13 +202,17 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		msgg = files_formatter(str(ROOT[username]["actual_root"]),username)
 		await limite_msg(msgg[0],username)
 		await msg.delete()
+		await callback_query.answer()
 	elif callback_query.data == "del":
 		await msg.delete()
+		await callback_query.answer()
 	elif callback_query.data == "back":
 		await msg.edit("☁️ 𝕊𝕖𝕝𝕖𝕔𝕔𝕚𝕠𝕟𝕖 𝕖𝕝 𝕙𝕠𝕤𝕥 𝕒 𝕤𝕦𝕓𝕚𝕣 🚀",reply_markup=MENU)
+		await callback_query.answer()
 	elif callback_query.data == "APYE":
 		USER[username]['zips'] = 35
 		await msg.edit("☁️ 𝕊𝕖𝕝𝕖𝕔𝕔𝕚𝕠𝕟𝕖 𝕖𝕝 𝕔𝕝𝕚𝕖𝕟𝕥𝕖 🚀",reply_markup=APYE)
+		await callback_query.answer()
 		USER[username]['host'] = "https://apye.esceg.cu/index.php/apye/"
 		await send_config()
 	#APYE CALLBACK.data
@@ -216,6 +223,7 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		USER[username]['passw'] = 'Cliente01*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la apye 1 ✓")
+		await callback_query.answer()
 	elif callback_query.data == "2":
 		id = USER['APYE']['2']
 		USER[username]['up_id'] = id
@@ -223,6 +231,7 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		USER[username]['passw'] = 'Cliente02*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la apye 2 ✓")
+		await callback_query.answer()
 	elif callback_query.data == "3":
 		id = USER['APYE']['3']
 		USER[username]['up_id'] = id
@@ -230,6 +239,7 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		USER[username]['passw'] = 'Cliente03*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la apye 3 ✓")
+		await callback_query.answer()
 	elif callback_query.data == "4":
 		id = USER['APYE']['4']
 		USER[username]['up_id'] = id
@@ -237,6 +247,7 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		USER[username]['passw'] = 'Cliente04*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la apye 4 ✓")
+		await callback_query.answer()
 	elif callback_query.data == "5":
 		id = USER['APYE']['5']
 		USER[username]['up_id'] = id
@@ -244,6 +255,7 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		USER[username]['passw'] = 'Cliente05*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la apye 5 ✓")
+		await callback_query.answer()
 	elif callback_query.data == "6":
 		id = USER['APYE']['6']
 		USER[username]['up_id'] = id
@@ -251,6 +263,7 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		USER[username]['passw'] = 'Cliente06*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la apye 6 ✓")
+		await callback_query.answer()
 	elif callback_query.data == "7":
 		id = USER['APYE']['7']
 		USER[username]['up_id'] = id
@@ -258,6 +271,7 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		USER[username]['passw'] = 'Cliente07*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la apye 7 ✓")
+		await callback_query.answer()
 	elif callback_query.data == "8":
 		id = USER['APYE']['8']
 		USER[username]['up_id'] = id
@@ -265,6 +279,7 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		USER[username]['passw'] = 'Cliente08*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la apye 8 ✓")
+		await callback_query.answer()
 	elif callback_query.data == "9":
 		id = USER['APYE']['9']
 		USER[username]['up_id'] = id
@@ -272,6 +287,7 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		USER[username]['passw'] = 'Cliente09*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la apye 9 ✓")
+		await callback_query.answer()
 	elif callback_query.data == "10":
 		id = USER['APYE']['10']
 		USER[username]['up_id'] = id
@@ -279,10 +295,12 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		USER[username]['passw'] = 'Cliente10*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la apye 10 ✓")
+		await callback_query.answer()
 	elif callback_query.data == "EDIC":
 		USER[username]["zips"] = 20
 		USER[username]['host'] = "https://ediciones.uo.edu.cu/index.php/e1/"
 		await msg.edit("☁️ 𝕊𝕖𝕝𝕖𝕔𝕔𝕚𝕠𝕟𝕖 𝕖𝕝 𝕔𝕝𝕚𝕖𝕟𝕥𝕖 🚀",reply_markup=EDIC)
+		await callback_query.answer()
 		await send_config()
 	#EDICiones CALLBACK.data
 	elif callback_query.data == "01":
@@ -292,6 +310,7 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		USER[username]['passw'] = 'Cliente01*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la edic. 1 ✓")
+		await callback_query.answer()
 	elif callback_query.data == "02":
 		id = USER['EDIC']['02']
 		USER[username]['up_id'] = id
@@ -299,6 +318,7 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		USER[username]['passw'] = 'Cliente02*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la edic. 2 ✓")
+		await callback_query.answer()
 	elif callback_query.data == "03":
 		id = USER['EDIC']['03']
 		USER[username]['up_id'] = id
@@ -306,6 +326,7 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		USER[username]['passw'] = 'Cliente03*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la edic. 3 ✓")
+		await callback_query.answer()
 	elif callback_query.data == "04":
 		id = USER['EDIC']['04']
 		USER[username]['up_id'] = id
@@ -313,6 +334,7 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		USER[username]['passw'] = 'Cliente04*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la edic. 4 ✓")
+		await callback_query.answer()
 	elif callback_query.data == "05":
 		id = USER['EDIC']['05']
 		USER[username]['up_id'] = id
@@ -320,11 +342,13 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		USER[username]['passw'] = 'Cliente05*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la edic. 5 ✓")
+		await callback_query.answer()
 	elif callback_query.data == "CINFO":
 		USER[username]["zips"] = 10
 		USER[username]['host'] = "http://cinfo.idict.cu/index.php/cinfo/"
 		await msg.edit("☁️ 𝕊𝕖𝕝𝕖𝕔𝕔𝕚𝕠𝕟𝕖 𝕖𝕝 𝕔𝕝𝕚𝕖𝕟𝕥𝕖 🚀",reply_markup=CINFO)
 		await send_config()
+		await callback_query.answer()
 	#CINFO CALLBACK.data
 	elif callback_query.data == "001":
 		id = USER['CINFO']['001']
@@ -333,6 +357,7 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		USER[username]['passw'] = 'Cliente01*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la cinfo 1 ✓")
+		await callback_query.answer()
 	elif callback_query.data == "002":
 		id = USER['CINFO']['002']
 		USER[username]['up_id'] = id
@@ -340,6 +365,7 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		USER[username]['passw'] = 'Cliente02*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la cinfo 2 ✓")
+		await callback_query.answer()
 	elif callback_query.data == "003":
 		id = USER['CINFO']['003']
 		USER[username]['up_id'] = id
@@ -347,6 +373,7 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		USER[username]['passw'] = 'Cliente03*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la cinfo 3 ✓")
+		await callback_query.answer()
 	elif callback_query.data == "004":
 		id = USER['CINFO']['004']
 		USER[username]['up_id'] = id
@@ -354,6 +381,7 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		USER[username]['passw'] = 'Cliente04*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la cinfo 4 ✓")
+		await callback_query.answer()
 	elif callback_query.data == "005":
 		id = USER['CINFO']['005']
 		USER[username]['up_id'] = id
@@ -361,12 +389,15 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		USER[username]['passw'] = 'Cliente05*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la cinfo 5 ✓")
+		await callback_query.answer()
 	elif callback_query.data == "EDUCA":
-		USER[username]['host'] = 'educa'
+		await callback_query.answer("EDUCA no disponible!")
+		"""USER[username]['host'] = 'educa'
 		USER[username]['zips'] = 2
 		await send_config()
-		await msg.edit("✓ **EDUCA** 𝕮𝖔𝖓𝖋𝖎𝖌𝖚𝖗𝖆𝖉𝖆 𝖈𝖔𝖓 𝖊́𝖝𝖎𝖙𝖔 ✓")		
-	await callback_query.answer()
+		await msg.edit("✓ **EDUCA** 𝕮𝖔𝖓𝖋𝖎𝖌𝖚𝖗𝖆𝖉𝖆 𝖈𝖔𝖓 𝖊́𝖝𝖎𝖙𝖔 ✓")
+		await callback_query.answer()"""
+	
 		
 @bot.on_message(filters.command("rv", prefixes="/") & filters.private)
 async def rev(client:Client, message:Message):
@@ -476,7 +507,7 @@ async def start(client: Client, message: Message):
 		msg += "☆ 𝕊𝕦𝕓𝕚𝕕𝕒 𝕒𝕦𝕥𝕠: **ON**\n"
 	else:
 		msg += "☆ 𝕊𝕦𝕓𝕚𝕕𝕒 𝕒𝕦𝕥𝕠: **OFF**\n"
-	msg+=f"☆ 𝕊𝕦𝕓𝕚𝕕𝕠: {sizeof_fmt(USER[username]['S'])}\n"
+	msg+=f"☆ 𝕊𝕦𝕓𝕚𝕕𝕠: **{sizeof_fmt(USER[username]['S'])}**\n"
 	msg += f"☆ ℤ𝕚𝕡𝕤: **{zip}MiB**\n\n"
 	msg += f"☆ 𝕮𝕻𝖀: {proc.cpu_percent(interval=0.1)}%\n"
 	msg += f"╔──────**☆__Info. Disk__☆**──────╗\n"
@@ -670,7 +701,7 @@ async def rename(client: Client, message: Message):
 	if not "." in actual:
 		if not "." in name2: pass
 		else:
-			await send("**La carpeta no se puede renombrar con puntos v:**")
+			await send("**La carpeta no se puede renombrar con punto v:**")
 			return
 	shutil.move(actual,h+"/"+name2)
 	await send(f"**ℝ𝕖𝕟𝕠𝕞𝕓𝕣𝕒𝕕𝕠:**\n~~{msgh[1][name1]}~~\n➥ `{name2}`",reply_markup=root)
@@ -709,10 +740,10 @@ async def rm(client: Client, message: Message):
 		await send_config()
 	else:
 		try:
-			size += Path(str(ROOT[username]["actual_root"])+"/"+msgh[1][list]).stat().st_size
+			size += Path(str(ROOT[username]["actual_root"])+"/"+msgh[1][int(list)]).stat().st_size
 			unlink(str(ROOT[username]["actual_root"])+"/"+msgh[1][int(list)])
 		except:
-			size += get_folder_size(str(ROOT[username]["actual_root"])+"/"+msgh[1][i])
+			size += get_folder_size(str(ROOT[username]["actual_root"])+"/"+msgh[1][int(list)])
 			shutil.rmtree(str(ROOT[username]["actual_root"])+"/"+msgh[1][int(list)])
 		await message.reply("🗑️ 𝔸𝕣𝕔𝕙𝕚𝕧𝕠 𝕤𝕖𝕝𝕖𝕔𝕔𝕚𝕠𝕟𝕒𝕕𝕠 𝕖𝕝𝕚𝕞𝕚𝕟𝕒𝕕𝕠.",reply_markup=root)
 		USER[username]['D'] -= size
@@ -765,10 +796,7 @@ async def seven(client: Client, message: Message):
 	if task[username] == True:
 		await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸")
 		return
-	if "_" in message.text:
-		lista = message.text.split("_")
-	else:
-		lista = message.text.split(" ")
+	lista = message.text.replace("_", " ").split()
 	msgh = files_formatter(str(ROOT[username]["actual_root"]),username)
 
 	if len(lista) == 2:
@@ -778,7 +806,7 @@ async def seven(client: Client, message: Message):
 			h = await send(f"𝕮𝖔𝖒𝖕𝖗𝖎𝖒𝖎𝖊𝖓𝖉𝖔...")
 			task[username] = True
 			g = str(ROOT[username]["actual_root"]+"/")+msgh[1][i]
-			p = shutil.make_archive(j, format = "zip", root_dir=g)
+			p = asyncio.create_task(shutil.make_archive(j, format = "zip", root_dir=g))
 			shutil.move(p,ROOT[username]["actual_root"])	
 			await h.edit("✓ 𝕮𝖔𝖒𝖕𝖗𝖊𝖓𝖘𝖎𝖔́𝖓 𝖗𝖊𝖆𝖑𝖎𝖟𝖆𝖉𝖆 ✓",reply_markup=root)
 			task[username] = False 
@@ -786,7 +814,6 @@ async def seven(client: Client, message: Message):
 		else:
 			await message.reply("✖️ __No puede comprimir archivos(picarlos si!), solo carpetas__ ✖️")
 			return
-
 	elif len(lista) == 3:
 		i = int(lista[1])
 		j = str(msgh[1][i])
@@ -795,9 +822,9 @@ async def seven(client: Client, message: Message):
 		h = await send(f"𝕮𝖔𝖒𝖕𝖗𝖎𝖒𝖎𝖊𝖓𝖉𝖔...")
 		task[username] = True
 		if not "." in j:
-			p = shutil.make_archive(j, format = "zip", root_dir=g)
+			p = asyncio.create_task(shutil.make_archive(j, format = "zip", root_dir=g))
 			await h.edit(f"𝕯𝖎𝖛𝖎𝖉𝖎𝖊𝖓𝖉𝖔 𝖊𝖓 𝖕𝖆𝖗𝖙𝖊𝖘 𝖉𝖊 {𝖙}𝕸𝖎𝕭")
-			a = sevenzip(p,password=None,volume = t*1024*1024)
+			a = asyncio.create_task(sevenzip(p,password=None,volume = t*1024*1024))
 			os.remove(p)
 			for i in a :
 				shutil.move(i,ROOT[username]["actual_root"])
@@ -806,7 +833,7 @@ async def seven(client: Client, message: Message):
 			return
 		else:
 			task[username] = True
-			a = sevenzip(g,password=None,volume = t*1024*1024)
+			a = asyncio.create_task(sevenzip(g,password=None,volume = t*1024*1024))
 			await h.edit("✓ 𝕮𝖔𝖒𝖕𝖗𝖊𝖓𝖘𝖎𝖔́𝖓 𝖗𝖊𝖆𝖑𝖎𝖟𝖆𝖉𝖆 ✓",reply_markup=root)
 			task[username] = False
 			return
@@ -907,7 +934,7 @@ async def mv(client: Client, message: Message):
 			try:
 				actual = str(ROOT[username]["actual_root"]+"/")+msgh[1][i]	
 				shutil.move(actual,new)
-				msg = send("**𝕄𝕠𝕧𝕚𝕕𝕠 𝕔𝕠𝕣𝕣𝕖𝕔𝕥𝕒𝕞𝕖𝕟𝕥𝕖**",reply_markup=root)
+				msg = await send("**𝕄𝕠𝕧𝕚𝕕𝕠 𝕔𝕠𝕣𝕣𝕖𝕔𝕥𝕒𝕞𝕖𝕟𝕥𝕖**",reply_markup=root)
 				await msg.edit("**𝕄𝕠𝕧𝕚𝕕𝕠 𝕔𝕠𝕣𝕣𝕖𝕔𝕥𝕒𝕞𝕖𝕟𝕥𝕖**",reply_markup=root)
 			except Exception as ex:
 				await bot.send_message(username,ex)
@@ -1001,10 +1028,11 @@ async def tg(client: Client, message: Message):
 	try:
 		path = str(ROOT[username]["actual_root"]+"/")+msgh[1][list]
 		msg = await send(f"__𝕆𝕓𝕥𝕖𝕟𝕚𝕖𝕟𝕕𝕠 𝕚𝕟𝕗𝕠...__\n**{path}**")
+		sleep(1)
 		filename = msgh[1][list]
 		start = time()
 		task[username] = True
-		r = await bot.send_document(username,path,file_name=filename,progress=progress_up_tg,progress_args=(filename,start,msg),thumb = "thumb.jpg")
+		r = asyncio.create_task(bot.send_document(username,path,file_name=filename,progress=progress_up_tg,progress_args=(filename,start,msg),thumb = "thumb.jpg"))
 		await msg.edit("**𝕊𝕦𝕓𝕚𝕕𝕒 𝕖𝕩𝕚𝕥𝕠𝕤𝕒 🚀**")
 		task[username] = False
 		return
@@ -1082,8 +1110,27 @@ async def down_link(client: Client, message: Message):
             sleep(2)
             await msg.edit("**📥 𝔸𝕣𝕔𝕙𝕚𝕧𝕠 𝔾𝕦𝕒𝕣𝕕𝕒𝕕𝕠 🤖**",quote=True,reply_markup=root)
             return
-           
-
+#Subida  a la nube#
+"""@bot.on_message(filters.regex("/up") & filters.private)
+async def up(client: Client, message: Message):
+	username = message.from_user.username
+	user_id = message.from_user.id
+	list = int(message.text.replace("_", " ").split()[1])
+	if task[username] == True:
+	   	await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸",quote=True)
+	   	return
+	msg = await message.reply("ℙ𝕣𝕖𝕡𝕒𝕣𝕒𝕟𝕕𝕠 𝕤𝕦𝕓𝕚𝕕𝕒...")
+	msgh = files_formatter(str(ROOT[username]["actual_root"]),username)
+	path = str(ROOT[username]["actual_root"]+"/")+msgh[1][list]
+	if USER[username]['host'] == 'educa':
+		await message.reply("**EDUCA** __se encuentra en mantenimiento, notifique si no es asi!__")
+	else:
+		parar_up = threading.Event()
+		tarea = threading.Thread(target=up_revistas_api,args=(path,user_id,msg,username,parar_up,))
+		tarea.start()
+		tarea[username]={'parar_up': parar_up, 'tarea': tarea}
+		task[username] = True"""
+		
 ##MENSAGED DE PROGRESO ⬆⬇
 def update_progress_up(inte,max):
 	percentage = inte / max
@@ -1103,7 +1150,7 @@ def update_progress_down(inte,max):
 	percentage *= 100
 	percentage = round(percentage)
 	hashes = int(percentage / 6)
-	spaces = 18 - hashes
+	spaces = 19 - hashes
 	progress_bar = "■" * hashes + "□" * spaces
 	percentage_pos = int(hashes / 1)
 	percentage_string = str(percentage) + "%"
