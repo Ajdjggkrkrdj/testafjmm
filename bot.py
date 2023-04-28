@@ -233,26 +233,35 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		await msg.edit("✓ Ok ahora subire a la apye 2 ✓")
 		await callback_query.answer()
 	elif callback_query.data == "3":
+		if username not in VIP:
+			await callback_query.answer("Cliente solo para premiums ‼️")
+			return
 		id = USER['APYE']['3']
 		USER[username]['up_id'] = id
 		USER[username]['user'] = 'clientetres'
-		USER[username]['passw'] = 'Cliente03*'
+		USER[username]['passw'] = 'C1i3n7e03*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la apye 3 ✓")
 		await callback_query.answer()
 	elif callback_query.data == "4":
+		if username not in VIP:
+			await callback_query.answer("Cliente solo para premiums ‼️")
+			return
 		id = USER['APYE']['4']
 		USER[username]['up_id'] = id
 		USER[username]['user'] = 'clientecuatro'
-		USER[username]['passw'] = 'Cliente04*'
+		USER[username]['passw'] = 'C1i3n7e04*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la apye 4 ✓")
 		await callback_query.answer()
 	elif callback_query.data == "5":
+		if username not in VIP:
+			await callback_query.answer("Cliente solo para premiums ‼️")
+			return
 		id = USER['APYE']['5']
 		USER[username]['up_id'] = id
 		USER[username]['user'] = 'clientecinco'
-		USER[username]['passw'] = 'Cliente05*'
+		USER[username]['passw'] = 'C1i3nte05*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la apye 5 ✓")
 		await callback_query.answer()
@@ -391,7 +400,7 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		await msg.edit("✓ Ok ahora subire a la cinfo 5 ✓")
 		await callback_query.answer()
 	elif callback_query.data == "EDUCA":
-		await callback_query.answer("EDUCA no disponible!")
+		await callback_query.answer("EDUCA no disponible ‼️")
 		"""USER[username]['host'] = 'educa'
 		USER[username]['zips'] = 2
 		await send_config()
@@ -508,7 +517,7 @@ async def start(client: Client, message: Message):
 	else:
 		msg += "☆ 𝕊𝕦𝕓𝕚𝕕𝕒 𝕒𝕦𝕥𝕠: **OFF**\n"
 	msg+=f"☆ 𝕊𝕦𝕓𝕚𝕕𝕠: **{sizeof_fmt(USER[username]['S'])}**\n"
-	msg+=f"• Descargado: **{sizeof_fmt(USER[username]['D'])}** [{sizeof_fmt(get_folder_size(f'downloads/{username}'))}]\n"
+	msg+=f"• Descargado: **{sizeof_fmt(USER[username]['D'])}** [{siseof_fmt(get_folder_size(f'downloads/{username}'))}]\n"
 	msg += f"☆ ℤ𝕚𝕡𝕤: **{zip}MiB**\n\n"
 	msg += f"☆ 𝕮𝕻𝖀: {proc.cpu_percent(interval=0.1)}%\n"
 	msg += f"╔──────**☆__Info. Disk__☆**──────╗\n"
@@ -1158,7 +1167,7 @@ def update_progress_down(inte,max):
 	percentage = round(percentage)
 	hashes = int(percentage / 6)
 	spaces = 19 - hashes
-	progress_bar = "■" * hashes + "□" * spaces
+	progress_bar = "■" * hashes + "▣" * spaces
 	percentage_pos = int(hashes / 1)
 	percentage_string = str(percentage) + "%"
 	
@@ -1169,9 +1178,9 @@ seg=0
 #Subida a telegram xel cmd /tg
 async def progress_up_tg(chunk,filesize,filename,start,message):
 		global seg
-		#now = time()
-		#diff = now - start
-		#mbs = chunk / diff
+		now = time()
+		diff = now - start
+		mbs = chunk / diff
 		msg = f"-==================-\n|**SUBIDA A TELEGRAM**|\n-==================-\n"
 		try:
 			msg+=update_progress_up(chunk,filesize)+ " " + sizeof_fmt(mbs)+"/s\n\n"
@@ -1186,9 +1195,9 @@ async def progress_up_tg(chunk,filesize,filename,start,message):
 ##Descsrga de archivos links
 async def progress_down_tg(chunk,total,filename,start,message):
 	global seg
-	now = time()
-	diff = now - start
-	mbs = chunk / diff
+	#now = time()
+	#diff = now - start
+	#mbs = chunk / diff
 	
 	msg = "-======================-\n|DESCARGA EN PROGRESO|\n-======================-\n"
 	try:
