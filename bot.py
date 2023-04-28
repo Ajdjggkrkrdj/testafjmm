@@ -527,7 +527,8 @@ async def start(client: Client, message: Message):
 	msg+="**⚆ _ ⚆ 𝕿𝖗𝖆𝖋𝖎𝖈 𝖆𝖓𝖉 𝕽𝖔𝖔𝖙 ⚆ _ ⚆**"
 	msg+=f"☆ 𝔻𝕖𝕤𝕔𝕒𝕣𝕘𝕒𝕕𝕠: **⟨{sizeof_fmt(USER[username]['D'])}⟩**\n"
 	msg+=f"☆ 𝕊𝕦𝕓𝕚𝕕𝕠: **⟨⟨{sizeof_fmt(USER[username]['S'])}⟩⟩**\n"
-	msg+=f "☆ ℝ𝕠𝕠𝕥: **⟨⟨⟨{sizeof_fmt(get_folder_size(f'downloads/{username}'))}⟩⟩⟩\n\n**"
+	g = get_folder_size(f'downloads/{username}')
+	msg+=f"☆ ℝ𝕠𝕠𝕥: **⟨⟨⟨{sizeof_fmt(g)}⟩⟩⟩\n\n**"
 	#Info Dissk an CPU usage
 	msg += f"☆ 𝕮𝕻𝖀: {proc.cpu_percent(interval=0.1)}%\n"
 	msg += f"╔──────**☆__Info. Disk__☆**──────╗\n"
