@@ -508,7 +508,7 @@ async def start(client: Client, message: Message):
 	else:
 		msg += "☆ 𝕊𝕦𝕓𝕚𝕕𝕒 𝕒𝕦𝕥𝕠: **OFF**\n"
 	msg+=f"☆ 𝕊𝕦𝕓𝕚𝕕𝕠: **{sizeof_fmt(USER[username]['S'])}**\n"
-	msg+=f"• Descargado: **{sizeof_fmt(USER[username]['D'])}** [{siseof_fmt(get_folder_size(f'downloads/{username}'))}]\n"
+	msg+=f"• Descargado: **{sizeof_fmt(USER[username]['D'])}** [{sizeof_fmt(get_folder_size(f'downloads/{username}'))}]\n"
 	msg += f"☆ ℤ𝕚𝕡𝕤: **{zip}MiB**\n\n"
 	msg += f"☆ 𝕮𝕻𝖀: {proc.cpu_percent(interval=0.1)}%\n"
 	msg += f"╔──────**☆__Info. Disk__☆**──────╗\n"
