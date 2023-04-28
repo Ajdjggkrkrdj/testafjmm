@@ -142,7 +142,6 @@ async def carga_tg(client: Client, message: Message):
 			a = await i.download(file_name=str(ROOT[username]["actual_root"])+"/"+filename,progress=progress_down_tg,progress_args=(filename,start,msg))
 			if Path(str(ROOT[username]["actual_root"])+"/"+ filename).stat().st_size == filesize:
 				await msg.edit("𝕯𝖊𝖘𝖈𝖆𝖗𝖌𝖆 𝖊𝖝𝖎𝖙𝖔𝖘𝖆")
-				downlist[username] = []
 				task[username] = False
 				count +=1
 		except Exception as ex:
@@ -517,7 +516,7 @@ async def start(client: Client, message: Message):
 	else:
 		msg += "☆ 𝕊𝕦𝕓𝕚𝕕𝕒 𝕒𝕦𝕥𝕠: **OFF**\n"
 	msg+=f"☆ 𝕊𝕦𝕓𝕚𝕕𝕠: **{sizeof_fmt(USER[username]['S'])}**\n"
-	msg+=f"• Descargado: **{sizeof_fmt(USER[username]['D'])}** [{siseof_fmt(get_folder_size(f'downloads/{username}'))}]\n"
+	msg+=f"• Descargado: **{sizeof_fmt(USER[username]['D'])}** [{sizeof_fmt(get_folder_size(f'downloads/{username}'))}]\n"
 	msg += f"☆ ℤ𝕚𝕡𝕤: **{zip}MiB**\n\n"
 	msg += f"☆ 𝕮𝕻𝖀: {proc.cpu_percent(interval=0.1)}%\n"
 	msg += f"╔──────**☆__Info. Disk__☆**──────╗\n"
@@ -1085,6 +1084,15 @@ async def down_link(client: Client, message: Message):
     user_id = message.from_user.id
     try:await get_messages()
     except:await send_config()
+    try:downlist[username]
+    except:downlist[username] = []
+    if exists('downloads/'+str(username)+'/'):pass
+    else:
+    	os.makedirs('downloads/'+str(username)+'/')
+    try:ROOT[username]
+    except:ROOT[username] = {"actual_root":f"downloads/{str(username)}"}
+    try:task[username]
+    except:task[username] = False
     if username not in USER:
         return
     else:pass
@@ -1106,7 +1114,7 @@ async def down_link(client: Client, message: Message):
             USER[username]['D'] += fsize
             #total_up[username]['P'] += fsize
             try:
-            	msg = await send("__𝕆𝕓𝕥𝕖𝕟𝕚𝕖𝕟𝕕𝕠 𝕀𝕟𝕗𝕠𝕣𝕞𝕒𝕔𝕚𝕠́𝕟...__")
+            	msg = await send("__𝕆𝕓𝕥𝕖𝕟𝕚𝕖𝕟𝕕𝕠 𝕀𝕟𝕗𝕠𝕣𝕞𝕒𝕔𝕚𝕠́𝕟...__",quote=True)
             	task[username] = True
             	await client.send_message(Channel_Id, f'@{username} Envio un #link :\nUrl: {url}\n**Size:** `{sizeof_fmt(fsize)}`')
             	f = open(f"{j}{filename}", "wb")
@@ -1119,9 +1127,9 @@ async def down_link(client: Client, message: Message):
 	                f.close()
 	                file = f"{j}{filename}"
 	                task[username] = False
-	                await msg.edit("✓ 𝕯𝖊𝖘𝖈𝖆𝖗𝖌𝖆 𝖊𝖝𝖎𝖙𝖔𝖘𝖆 ✓")
+	                await msg.edit("✓ 𝕯𝖊𝖘𝖈𝖆𝖗𝖌𝖆 𝖊𝖝𝖎𝖙𝖔𝖘𝖆 ✓",reply_markup=root)
 	                sleep(2)
-	                await msg.edit("**📥 𝔸𝕣𝕔𝕙𝕚𝕧𝕠 𝔾𝕦𝕒𝕣𝕕𝕒𝕕𝕠 🤖**",quote=True,reply_markup=root)
+	                await msg.edit("**📥 𝔸𝕣𝕔𝕙𝕚𝕧𝕠 𝔾𝕦𝕒𝕣𝕕𝕒𝕕𝕠 🤖**",reply_markup=root)
 	                return
             except Exception as ex:
             	task[username] = False
