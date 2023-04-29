@@ -92,9 +92,9 @@ async def cancel_down(client: Client, message: Message):
 	else:pass	
 	if downlist[username] == []:
 		await send("._.")
-		archivos[username] = 0
 		return	
 	downlist[username] = []
+	archivos[username] = 0
 	await send(" ✓ Cancelado ✓",reply_markup=ReplyKeyboardRemove())
 	return
 	
@@ -589,6 +589,7 @@ async def add(client: Client, message: Message):
 	if len(msg) == 3 and username in BOSS:
 		user = msg[1]
 		USER['VIP'].append(user)
+		await send_config()
 		await send(f"Usuario @{user}, funciones premium desbloqueadas")
 		await bot.send_message(user,"**💎 ᖰƦ៩៣ɨ⩏៣ ᖱ៩នᖲɭ០ᖳ⩏៩♬ᖱ០ 🤑**")
 		await bot.send_sticker(user, "CAACAgUAAxkBAAIMyWRASx9PeghXHc7gyJMQf7dUHCt6AAI2BwAC5xZZVg8UceTsLBrNHgQ")
@@ -627,7 +628,7 @@ async def ban(client: Client, message: Message):
 		user = message.text.split(" ")[1]
 		user = user.replace("@","")
 		del USER[user]
-		USER['VIP'].pop(user)
+		USER['VIP'].remove(user)
 		shutil.rmtree("downloads/"+user)
 		await send_config()
 		await send(f"Usiario @{user} contrato vencido, toma nota XD")
@@ -837,9 +838,8 @@ async def seven(client: Client, message: Message):
 			h = await send(f"𝕮𝖔𝖒𝖕𝖗𝖎𝖒𝖎𝖊𝖓𝖉𝖔...")
 			task[username] = True
 			g = str(ROOT[username]["actual_root"]+"/")+msgh[1][i]
-			p = asyncio.create_task(shutil.make_archive(j, format = "zip", root_dir=g))
+			p = await make_archive_async(j, format = "zip", root_dir=g)
 			shutil.move(p,ROOT[username]["actual_root"])	
-			await p
 			await h.edit("✓ 𝕮𝖔𝖒𝖕𝖗𝖊𝖓𝖘𝖎𝖔́𝖓 𝖗𝖊𝖆𝖑𝖎𝖟𝖆𝖉𝖆 ✓",reply_markup=root)
 			task[username] = False 
 			return
@@ -854,7 +854,7 @@ async def seven(client: Client, message: Message):
 		h = await send(f"𝕮𝖔𝖒𝖕𝖗𝖎𝖒𝖎𝖊𝖓𝖉𝖔...")
 		task[username] = True
 		if not "." in j:
-			p = shutil.make_archive(j, format = "zip", root_dir=g)
+			p = await make_archive_async(j, format = "zip", root_dir=g)
 			await h.edit(f"𝕯𝖎𝖛𝖎𝖉𝖎𝖊𝖓𝖉𝖔 𝖊𝖓 𝖕𝖆𝖗𝖙𝖊𝖘 𝖉𝖊 {𝖙}𝕸𝖎𝕭")
 			sleep(2)
 			a = asyncio.create_task(sevenzip(p,password=None,volume = t*1024*1024))
@@ -874,6 +874,10 @@ async def seven(client: Client, message: Message):
 			return
 			
 ######Metodos de comprension#######
+async def make_archive_async(zip_name, format, root_dir):
+    loop = asyncio.get_event_loop()
+    return await loop.run_in_executor(None, shutil.make_archive, zip_name, format, root_dir)
+#
 async def sevenzip(fpath: Path, password: str = None, volume = None):
     filters = [{"id": FILTER_COPY}]
     fpath = Path(fpath)
@@ -1096,7 +1100,7 @@ async def down_media(client: Client, message: Message):
 		await send("𝕊𝕠𝕣𝕣𝕪, 𝖓𝖔 𝖕𝖚𝖉𝖊 𝖘𝖊𝖌𝖚𝖎𝖗 𝖌𝖚𝖆𝖗𝖉𝖆𝖓𝖉𝖔 𝖊𝖓 𝖊𝖑 𝖗𝖔𝖔𝖙...𝖕𝖆𝖗𝖆 𝖈𝖔𝖓𝖙𝖎𝖓𝖚𝖆𝖗 𝖑𝖎𝖒𝖕𝖎𝖊: \n**⟨⟨/all⟩⟩**",quote=True)
 		return
 	c = archivos[username]
-	if username not in BOSS and c >5:
+	if username not in BOSS and c >=5:
 		await send("**❌ MAXIMO A DESCARGAR 5 ❌**",reply_markup=DOWN)
 		return
 	downlist[username].append(message)
@@ -1131,7 +1135,7 @@ async def down_link(client: Client, message: Message):
     if task[username] == True:
     	await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸",quote=True)
     	return
-    if get_folder_size(f"downloads/{username}") >= 4000000000:
+    if get_folder_size(f"downloads/{username}") >= 4294967296:
     	await send("𝕊𝕠𝕣𝕣𝕪, 𝖓𝖔 𝖕𝖚𝖉𝖊 𝖘𝖊𝖌𝖚𝖎𝖗 𝖌𝖚𝖆𝖗𝖉𝖆𝖓𝖉𝖔 𝖊𝖓 𝖊𝖑 𝖗𝖔𝖔𝖙...𝖕𝖆𝖗𝖆 𝖈𝖔𝖓𝖙𝖎𝖓𝖚𝖆𝖗 𝖑𝖎𝖒𝖕𝖎𝖊: \n**⟨⟨/all⟩⟩**",quote=True)
     	return
     j = str(ROOT[username]["actual_root"])+"/"
@@ -1161,7 +1165,7 @@ async def down_link(client: Client, message: Message):
             	await msg.edit("✓ 𝕯𝖊𝖘𝖈𝖆𝖗𝖌𝖆 𝖊𝖝𝖎𝖙𝖔𝖘𝖆 ✓", reply_markup=root)
             	USER[username]['D'] += fsize
             	await send_config()
-            	sleep(0.5)
+            	sleep(0.3)
             	await msg.edit("📥 𝔸𝕣𝕔𝕙𝕚𝕧𝕠 𝔾𝕦𝕒𝕣𝕕𝕒𝕕𝕠 🤖", reply_markup=root)
             	return
             except Exception as ex:
