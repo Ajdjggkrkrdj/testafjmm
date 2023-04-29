@@ -625,10 +625,15 @@ async def ban(client: Client, message: Message):
 	except:await send_config()
 	
 	if username in BOSS:
+		msg = message.text.split(" ")
+		if len(msg) == 3:
+			user = message.text.split(" ")[1]
+			user = user.replace("@","")
+			USER['VIP'].remove(user)
+			await send(f"Usaurio @{user} ya no es premium!!!")
 		user = message.text.split(" ")[1]
 		user = user.replace("@","")
 		del USER[user]
-		USER['VIP'].remove(user)
 		shutil.rmtree("downloads/"+user)
 		await send_config()
 		await send(f"Usiario @{user} contrato vencido, toma nota XD")
@@ -783,7 +788,7 @@ async def rm(client: Client, message: Message):
 			
 #Comando /all limpiar tido el root actual
 @bot.on_message(filters.command("all", prefixes="/")& filters.private)
-async def all(client: Client, message: Message):
+async def delete(client: Client, message: Message):
 	username = message.from_user.username
 	send = message.reply
 	try:await get_messages()
@@ -799,7 +804,7 @@ async def all(client: Client, message: Message):
 	await send("**Directorio actual limpiado :D**")
 
 #Comando de asmin /allroot
-@bot.on_message(filters.command("delall", prefixes="/")& filters.private)
+@bot.on_message(filters.command("dlall", prefixes="/")& filters.private)
 async def delall(client: Client, message: Message):
 	username = message.from_user.username
 	send = message.reply
@@ -838,7 +843,7 @@ async def seven(client: Client, message: Message):
 			h = await send(f"𝕮𝖔𝖒𝖕𝖗𝖎𝖒𝖎𝖊𝖓𝖉𝖔...")
 			task[username] = True
 			g = str(ROOT[username]["actual_root"]+"/")+msgh[1][i]
-			p = await make_archive_async(j, format = "zip", root_dir=g)
+			p = shutil.make_archive(j, format = "zip", root_dir=g)
 			shutil.move(p,ROOT[username]["actual_root"])	
 			await h.edit("✓ 𝕮𝖔𝖒𝖕𝖗𝖊𝖓𝖘𝖎𝖔́𝖓 𝖗𝖊𝖆𝖑𝖎𝖟𝖆𝖉𝖆 ✓",reply_markup=root)
 			task[username] = False 
@@ -854,7 +859,7 @@ async def seven(client: Client, message: Message):
 		h = await send(f"𝕮𝖔𝖒𝖕𝖗𝖎𝖒𝖎𝖊𝖓𝖉𝖔...")
 		task[username] = True
 		if not "." in j:
-			p = await make_archive_async(j, format = "zip", root_dir=g)
+			p = shutil.make_archive(j, format = "zip", root_dir=g)
 			await h.edit(f"𝕯𝖎𝖛𝖎𝖉𝖎𝖊𝖓𝖉𝖔 𝖊𝖓 𝖕𝖆𝖗𝖙𝖊𝖘 𝖉𝖊 {𝖙}𝕸𝖎𝕭")
 			sleep(2)
 			a = asyncio.create_task(sevenzip(p,password=None,volume = t*1024*1024))
@@ -874,10 +879,6 @@ async def seven(client: Client, message: Message):
 			return
 			
 ######Metodos de comprension#######
-async def make_archive_async(zip_name, format, root_dir):
-    loop = asyncio.get_event_loop()
-    return await loop.run_in_executor(None, shutil.make_archive, zip_name, format, root_dir)
-#
 async def sevenzip(fpath: Path, password: str = None, volume = None):
     filters = [{"id": FILTER_COPY}]
     fpath = Path(fpath)
