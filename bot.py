@@ -118,7 +118,7 @@ async def carga_tg(client: Client, message: Message):
 		await message.reply("._.",reply_markup=ReplyKeyboardRemove())
 		return
 	else:pass
-	if USER[username]['D'] >= 4000000000:
+	if USER[username]['D'] >= 4294967296:
 		await send("𝕊𝕠𝕣𝕣𝕪, 𝖓𝖔 𝖕𝖚𝖉𝖊 𝖘𝖊𝖌𝖚𝖎𝖗 𝖌𝖚𝖆𝖗𝖉𝖆𝖓𝖉𝖔 𝖊𝖓 𝖊𝖑 𝖗𝖔𝖔𝖙...𝖕𝖆𝖗𝖆 𝖈𝖔𝖓𝖙𝖎𝖓𝖚𝖆𝖗 𝖑𝖎𝖒𝖕𝖎𝖊: \n**⟨⟨/all⟩⟩**")
 		return
 	ms = await send("𝕆𝕓𝕥𝕖𝕟𝕚𝕖𝕟𝕕𝕠 𝕀𝕟𝕗𝕠𝕣𝕞𝕒𝕔𝕚𝕠́𝕟...",reply_markup=ReplyKeyboardRemove())
@@ -524,7 +524,7 @@ async def start(client: Client, message: Message):
 		msg += "☆ 𝕊𝕦𝕓𝕚𝕕𝕒 𝕒𝕦𝕥𝕠: **OFF**\n"	
 	msg += f"☆ ℤ𝕚𝕡𝕤: **{zip}MiB**\n\n"
 	#Info trafic an root
-	msg+="**⚆ _ ⚆ 𝕿𝖗𝖆𝖋𝖎𝖈 𝖆𝖓𝖉 𝕽𝖔𝖔𝖙 ⚆ _ ⚆**"
+	msg+="**⚆ _ ⚆ 𝕿𝕽𝕬𝕱𝕱𝕴𝕮 𝖆𝖓𝖉 𝕽𝕺𝕺𝕿 ⚆ _ ⚆\n**"
 	msg+=f"☆ 𝔻𝕖𝕤𝕔𝕒𝕣𝕘𝕒𝕕𝕠: **⟨{sizeof_fmt(USER[username]['D'])}⟩**\n"
 	msg+=f"☆ 𝕊𝕦𝕓𝕚𝕕𝕠: **⟨⟨{sizeof_fmt(USER[username]['S'])}⟩⟩**\n"
 	g = get_folder_size(f'downloads/{username}')
@@ -793,9 +793,9 @@ async def all(client: Client, message: Message):
 	if task[username] == True:
 		await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸")
 		return
-	else:
-		await shutil.rmtree(str(ROOT[username]["actual_root"]))
-		await send("**Directorio actual limpiado :D**")
+	else:pass
+	shutil.rmtree(str(ROOT[username]["actual_root"]))
+	await send("**Directorio actual limpiado :D**")
 
 #Comando de asmin /allroot
 @bot.on_message(filters.command("delall", prefixes="/")& filters.private)
@@ -807,7 +807,7 @@ async def delall(client: Client, message: Message):
 	if username not in BOSS:
 		return
 	else:pass
-	await shutil.rmtree("downloads")
+	shutil.rmtree("downloads")
 	await send("**Root de todos los usiarios limpio ;D**")
 	return
 
@@ -1092,7 +1092,7 @@ async def down_media(client: Client, message: Message):
 	if task[username] == True:
 		await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸",quote=True)
 		return
-	if get_folder_size(f"downloads/{username}") >= 4000000000:
+	if get_folder_size(f"downloads/{username}") >= 4294967296:
 		await send("𝕊𝕠𝕣𝕣𝕪, 𝖓𝖔 𝖕𝖚𝖉𝖊 𝖘𝖊𝖌𝖚𝖎𝖗 𝖌𝖚𝖆𝖗𝖉𝖆𝖓𝖉𝖔 𝖊𝖓 𝖊𝖑 𝖗𝖔𝖔𝖙...𝖕𝖆𝖗𝖆 𝖈𝖔𝖓𝖙𝖎𝖓𝖚𝖆𝖗 𝖑𝖎𝖒𝖕𝖎𝖊: \n**⟨⟨/all⟩⟩**",quote=True)
 		return
 	c = archivos[username]
