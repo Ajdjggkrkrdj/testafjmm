@@ -91,7 +91,7 @@ async def send_config():
 	try:
 		await bot.edit_message_text(CHANNEL,message_id=db_access,text=dumps(USER,indent=4))
 	except:
-		await bot.send_message(CHANNEL,text=dumps(USER,indent=4))
+		#await bot.send_message(CHANNEL,text=dumps(USER,indent=4))
 		pass
 
 @bot.on_message(filters.regex("❌ ℂ𝔸ℕℂ𝔼𝕃𝔸ℝ ❌"))
@@ -499,7 +499,7 @@ async def start(client: Client, message: Message):
 		await bot.send_photo(username,'portada.jpg', caption="⚠️ **NO TIENE ACCESO** ⚠️\n__Contacte al administrador y únase al canal para que se mantenga informado__\n[**BETA**]",reply_markup=START_MESSAGE_BUTTONS)
 		return
 	else:pass
-	if USER['modo'] == 'on' and username not in BOSS:
+	if USER['modo'] != 'on' and username not in BOSS:
 		a = await message.reply("🤖")
 		sleep(3)
 		await a.edit("⚠️ **ɃØ₮ Ø₣₣** ⚠️\n__Todas las funciones del bot apagadas...__**está horario es tomado para liberar espacio en las revistas. 🥵**\nEl bot se encenderá manualmente a las 12:00, **mientras puede irse a dormir 😐 o si lo prefiere ir preparando el contenido a subir 😜**",reply_markup=tutos)
