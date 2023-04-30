@@ -1284,7 +1284,7 @@ async def uploadfile_progres(chunk,filesize,start,filename,message):
 	try:
 		msg+=update_progress_up(chunk,filesize)+ " " + sizeof_fmt(mbs)+"/s\n\n"
 	except:pass
-	msg+= f"📤**•𝕌𝕡𝕝𝕠𝕒𝕕:** **{sizeof_fmt(chunk)}/{sizeof_fmt(filesize)}**\n🏷️**•ℕ𝕒𝕞𝕖:** `{filename}`\n"
+	msg+= f"📤**•𝕌𝕡𝕝𝕠𝕒𝕕: {sizeof_fmt(chunk)}/{sizeof_fmt(filesize)}**\n🏷️**•ℕ𝕒𝕞𝕖:** `{filename}`\n"
 	global seg
 	if seg != localtime().tm_sec:
 		try:message.edit(msg,reply_markup=cancelar)
@@ -1303,14 +1303,12 @@ async def up_revistas_api(file,usid,msg,username):
 		filename = file.split("/")[-1]
 		filesize = Path(file).stat().st_size
 		print(21)
-		proxy = USER[username]["proxy"]
+		proxy = USER[username]['proxy']
 		headers = {'User-Agent':'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:109.0) Gecko/20100101 Firefox/109.0'}
 		#login
 		msg = await msg.edit("💫 **Preparando subida...**")
-		if proxy == False:
-			connector = aiohttp.TCPConnector()
-		else:
-			connector = aiohttp_socks.ProxyConnector.from_url(str(proxy))
+		connector = aiohttp.TCPConnector()
+		#connector = aiohttp_socks.ProxyConnector.from_url('socks5://143.244.205.72:1080')
 		async with aiohttp.ClientSession(connector=connector) as session:
 			async with session.get(host + "login") as response:
 				html = await response.text()
@@ -1335,20 +1333,17 @@ async def up_revistas_api(file,usid,msg,username):
 					await msg.edit("❌ **ERROR** ❌\nℂ𝕣𝕖𝕕𝕖𝕟𝕔𝕚𝕒𝕝𝕖𝕤 𝕚𝕟𝕔𝕠𝕣𝕣𝕖𝕔𝕥𝕒𝕤, 𝕡𝕦𝕖𝕕𝕖 𝕤𝕖𝕣 𝕥𝕒𝕞𝕓𝕚𝕖́𝕟 𝕒𝕝𝕘𝕦𝕟𝕒 𝕔𝕠𝕟𝕗𝕚𝕘𝕦𝕣𝕒𝕔𝕚𝕠́𝕟...𝕠 𝕝𝕒 𝕟𝕦𝕓𝕖 𝕖𝕤𝕥𝕒́ 𝕔𝕒𝕚́𝕕𝕒/𝕓𝕒𝕟𝕟𝕖𝕒𝕕𝕒. 😐")
 				else:
 					await msg.edit("🟢")
-					sleep(2)
+					sleep(5)
 					print(22)
 					links = []
 					if mode=='n':
 						if filesize-1048>zipssize:
 							parts = round(filesize / zipssize)
 							parts+=1
-							
 							await msg.edit(f"┏━━━━• **❅Preparando❅** •━━━━┓\n🧩 𝕋𝕠𝕥𝕒𝕝: **{parts} partes**\n┗━━━━•**❅🔩{USER[username]['zips']}MiB🔩❅**•━━━━┛")
 							files = sevenzip(file,volume=zipssize)
 							print(24)
-							numero = 0
 							for file in files:
-								numero += 1
 								try:
 									upload_data = {}
 									upload_data["fileStage"] = "2"
@@ -1363,17 +1358,11 @@ async def up_revistas_api(file,usid,msg,username):
 											parse = str(text).replace('\/','/')
 											url = str(parse).split('url":"')[1].split('"')[0]
 											links.append(url)
-											await bot.send_message(username,f"**[{file.split('/')[-1]}]({url})**")
-											USER[username]['S']+=zipssize
-											await send_config()
 										else:
-											await bot.send_message(username,f"**F**: `{file.split('/')[-1]}`")
+											await msg.edit(f"🔻 Failed 🔺\nUP: {file.split('/')[-1]}")
 								except:
 									pass
-							ca = file.split('/')[-1]
-							c = ca.split(".")[-1]
-							
-							await msg.edit(f"✅ Finalizado ⤵️")
+							await msg.edit(f"✅ Finalizado \n\n{file.split('/')[-1]}\n[ .txt ] ⤵️")
 							txtname = file.split('.')[0].replace(' ','_')+'.txt'
 							with open(txtname,"w") as t:
 								message = ""
@@ -1381,12 +1370,9 @@ async def up_revistas_api(file,usid,msg,username):
 									message+=li+"\n"
 								t.write(message)
 								t.close()
-							await bot.send_document(usid,txtname,caption=f"🚀 𝕾𝖚𝖇𝖎𝖉𝖆 𝕰𝖃𝕴𝕿𝕺𝕾𝕬 🚀 \n\n[{file.split('/')[-1]}]({url})\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login",disable_web_page_preview=True)
-							await bot.send_document(CHANNEL,txtname,caption=f"**TxT de @{username}**\nℙ𝕒𝕣𝕥𝕖𝕤: `{c}`\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login",disable_web_page_preview=True)
+							await bot.send_document(usid,txtname)
 						else:
-							numero = 1
-							parts = 1
-							await msg.edit("**↑ SUBIENDO UN ARCHIVO ↑**",reply_markup=cancelar)
+							await msg.edit("🔹 Subiendo 🔹")
 							upload_data = {}
 							upload_data["fileStage"] = "2"
 							upload_data["name[es_ES]"] = file.split('/')[-1]
@@ -1399,22 +1385,17 @@ async def up_revistas_api(file,usid,msg,username):
 								if '_href' in text:
 									parse = str(text).replace('\/','/')
 									url = str(parse).split('url":"')[1].split('"')[0]
-									await msg.edit(f"🚀 𝕾𝖚𝖇𝖎𝖉𝖆 𝕰𝖃𝕴𝕿𝕺𝕾𝕬 🚀 \n\n**[{file.split('/')[-1]}]({url})**\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login",disable_web_page_preview=True)
-									await bot.sebd_message(CHANNEL,f"Subido x @{username} #enlace\n**[{file.split('/')[-1]}]({url})**\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login",disable_web_page_preview=True)
-									USER[username]['S'] += zipssize
-									await send_config()
-									"""txtname = file.split('.')[0].replace(' ','_')+'.txt'
+									await msg.edit(f"✅ Finalizado \n\n{file.split('/')[-1]}\n[ .txt ] ⤵️")
+									txtname = file.split('.')[0].replace(' ','_')+'.txt'
 									with open(txtname,"w") as t:
 										t.write(url)
 										t.close()
-									await bot.send_document(usid,txtname)"""
+									await bot.send_document(usid,txtname)
 								else:
-									await msg.edit(f"ℕ𝕠 𝕤𝕖 𝕡𝕦𝕕𝕠 𝕤𝕦𝕓𝕚𝕣:\n\n**{file.split('/')[-1]}**")
+									await msg.edit(f"🔻 Failed 🔺\nUP: {file.split('/')[-1]}")
 	except Exception as ex:
-		task[username] = False
-		await message.reply("❌ **ERROR** ❌\nℂ𝕣𝕖𝕕𝕖𝕟𝕔𝕚𝕒𝕝𝕖𝕤 𝕚𝕟𝕔𝕠𝕣𝕣𝕖𝕔𝕥𝕒𝕤, 𝕡𝕦𝕖𝕕𝕖 𝕤𝕖𝕣 𝕥𝕒𝕞𝕓𝕚𝕖́𝕟 𝕒𝕝𝕘𝕦𝕟𝕒 𝕔𝕠𝕟𝕗𝕚𝕘𝕦𝕣𝕒𝕔𝕚𝕠́𝕟...𝕠 𝕝𝕒 𝕟𝕦𝕓𝕖 𝕖𝕤𝕥𝕒́ 𝕔𝕒𝕚́𝕕𝕒/𝕓𝕒𝕟𝕟𝕖𝕒𝕕𝕒. 😐")
-	finally:
-	       task[username] = False
+		print(str(ex))
+		await msg.edit("®️ Ocurrió un error en su Conexión")
 
 #ConvertBytes=>>
 def sizeof_fmt(num, suffix='B'):
