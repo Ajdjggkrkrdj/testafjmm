@@ -15,6 +15,11 @@ root = InlineKeyboardMarkup(
 		[InlineKeyboardButton("༒⩔៩Ʀ ♬Ʀ¢Ϧɨ⩔០ន༒",callback_data='root')]
 	]
 )
+tutos = InlineKeyboardMarkup(
+	[
+		[InlineKeyboardButton("👨🏼‍💻 ₮Ʉ₮Ø$ 👨🏼‍💻",url='https://t.me/+SCbjkkQfp4ZiYjgx')]
+	]
+)
 
 cancelar = InlineKeyboardMarkup(
 	[
