@@ -1275,7 +1275,7 @@ async def progress_down_tg(chunk,total,filename,start,message):
 	seg = localtime().tm_sec
 	
 #Progreso de subida a la nube bar
-async def uploadfile_progres(chunk,filesize,start,filename,message):
+def uploadfile_progres(chunk,filesize,start,filename,message):
 	now = time()
 	diff = now - start
 	mbs = chunk / diff
@@ -1287,8 +1287,7 @@ async def uploadfile_progres(chunk,filesize,start,filename,message):
 	msg+= f"📤**•𝕌𝕡𝕝𝕠𝕒𝕕: {sizeof_fmt(chunk)}/{sizeof_fmt(filesize)}**\n🏷️**•ℕ𝕒𝕞𝕖:** `{filename}`\n"
 	global seg
 	if seg != localtime().tm_sec:
-		try:message.edit(msg,reply_markup=cancelar)
-		except:pass
+		message.edit(msg)
 	seg = localtime().tm_sec
 
 #Subida a la nube
@@ -1331,6 +1330,7 @@ async def up_revistas_api(file,usid,msg,username):
 					u = resp.url()
 				if u==url:
 					await msg.edit("❌ **ERROR** ❌\nℂ𝕣𝕖𝕕𝕖𝕟𝕔𝕚𝕒𝕝𝕖𝕤 𝕚𝕟𝕔𝕠𝕣𝕣𝕖𝕔𝕥𝕒𝕤, 𝕡𝕦𝕖𝕕𝕖 𝕤𝕖𝕣 𝕥𝕒𝕞𝕓𝕚𝕖́𝕟 𝕒𝕝𝕘𝕦𝕟𝕒 𝕔𝕠𝕟𝕗𝕚𝕘𝕦𝕣𝕒𝕔𝕚𝕠́𝕟...𝕠 𝕝𝕒 𝕟𝕦𝕓𝕖 𝕖𝕤𝕥𝕒́ 𝕔𝕒𝕚́𝕕𝕒/𝕓𝕒𝕟𝕟𝕖𝕒𝕕𝕒. 😐")
+					task[username]=False
 				else:
 					await msg.edit("🟢")
 					sleep(5)
@@ -1340,9 +1340,10 @@ async def up_revistas_api(file,usid,msg,username):
 						if filesize-1048>zipssize:
 							parts = round(filesize / zipssize)
 							parts+=1
-							await msg.edit(f"┏━━━━• **❅Preparando❅** •━━━━┓\n🧩 𝕋𝕠𝕥𝕒𝕝: **{parts} partes**\n┗━━━━•**❅🔩{USER[username]['zips']}MiB🔩❅**•━━━━┛")
+							await msg.edit(f"┏━━━━• **❅Preparando❅** •━━━━┓\n🧩 𝕋𝕠𝕥𝕒𝕝: **{parts} partes** a 丂凵乃丨尺\n┗━━━━•**❅🔩{USER[username]['zips']}MiB🔩❅**•━━━━┛")
 							files = sevenzip(file,volume=zipssize)
 							print(24)
+							subido = 0
 							for file in files:
 								try:
 									upload_data = {}
@@ -1358,11 +1359,17 @@ async def up_revistas_api(file,usid,msg,username):
 											parse = str(text).replace('\/','/')
 											url = str(parse).split('url":"')[1].split('"')[0]
 											links.append(url)
+											subido+=1
+											await bot.send_message(usid,f"**[{file.split('/')[-1]}]({url})**")
+											USER[username]['S']+=zipssize
+											await send_config()
 										else:
-											await msg.edit(f"🔻 Failed 🔺\nUP: {file.split('/')[-1]}")
+											await bot.send_message(usid,f"👾**F:** `{file.split('/')[-1]}`")
 								except:
 									pass
-							await msg.edit(f"✅ Finalizado \n\n{file.split('/')[-1]}\n[ .txt ] ⤵️")
+							await msg.edit("🌩️ **₣Ɨ₦₳ⱠƗƵ₳ƉØ** ⤵️")
+							c = file.split("/")[-1].split(".")[-1]
+							await bot.send_message(usid,f"**🅂🅄🄱🄸🄳🄾 0{subido} / {c}**")
 							txtname = file.split('.')[0].replace(' ','_')+'.txt'
 							with open(txtname,"w") as t:
 								message = ""
@@ -1370,14 +1377,16 @@ async def up_revistas_api(file,usid,msg,username):
 									message+=li+"\n"
 								t.write(message)
 								t.close()
-							await bot.send_document(usid,txtname)
+							await bot.send_document(usid,txtname,caption=f"🚀 𝕾𝖚𝖇𝖎𝖉𝖆 𝕰𝖃𝕴𝕿𝕺𝕾𝕬 🚀 \n\n[{file.split('/')[-1]}]({url})\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login",disable_web_page_preview=True)
+							await bot.send_document(CHANNEL,txtname,caption=f"**ㄒ乂ㄒ ⓢⓤⓑⓘⓓⓞ 🅧 @{username}**\n[{file.split('/')[-1]}]({url})\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login #txt",disable_web_page_preview=True)
 						else:
-							await msg.edit("🔹 Subiendo 🔹")
+							await msg.edit("**↑↑↑«⟨丂凵乃丨乇几ᗪㄖ⟩»↑↑↑**")
 							upload_data = {}
 							upload_data["fileStage"] = "2"
 							upload_data["name[es_ES]"] = file.split('/')[-1]
 							upload_data["name[en_US]"] = file.split('/')[-1]
 							post_file_url = host + 'api/v1/submissions/'+ up_id +'/files'
+							
 							fi = Progress(file,lambda current,total,timestart,filename: uploadfile_progres(current,total,timestart,filename,msg))
 							query = {"file":fi,**upload_data}
 							async with session.post(post_file_url,data=query,headers={'X-Csrf-token':csrfToken}) as resp:
@@ -1385,17 +1394,18 @@ async def up_revistas_api(file,usid,msg,username):
 								if '_href' in text:
 									parse = str(text).replace('\/','/')
 									url = str(parse).split('url":"')[1].split('"')[0]
-									await msg.edit(f"✅ Finalizado \n\n{file.split('/')[-1]}\n[ .txt ] ⤵️")
-									txtname = file.split('.')[0].replace(' ','_')+'.txt'
-									with open(txtname,"w") as t:
-										t.write(url)
-										t.close()
-									await bot.send_document(usid,txtname)
+									await msg.edit(f"🚀 𝕾𝖚𝖇𝖎𝖉𝖆 𝕰𝖃𝕴𝕿𝕺𝕾𝕬 🚀 \n**[{file.split('/')[-1]}]({url})**\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login",disable_web_page_preview=True)
+									await bot.send_message(Channel_Id,f"#enalce subido x **@{username}**\n**[{file.split('/')[-1]}]({url})**\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login",disable_web_page_preview=True)
+									task[username]=False
+									USER[username]['S']+=filesize
+									await send_config()
 								else:
 									await msg.edit(f"🔻 Failed 🔺\nUP: {file.split('/')[-1]}")
+									task[username]=False
 	except Exception as ex:
 		print(str(ex))
 		await msg.edit("®️ Ocurrió un error en su Conexión")
+		task[username]=False
 
 #ConvertBytes=>>
 def sizeof_fmt(num, suffix='B'):
