@@ -2,7 +2,7 @@ import psutil
 import shutil
 from pyrogram import Client , filters
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, ReplyKeyboardRemove,  CallbackQuery
-import threading
+
 import asyncio
 import tgcrypto
 import aiohttp
@@ -1187,11 +1187,11 @@ async def up(client: Client, message: Message):
 	path = str(ROOT[username]["actual_root"]+"/")+msgh[1][list]
 	if USER[username]['host'] == 'educa':
 		await message.reply("**EDUCA** __se encuentra en mantenimiento, notifique si no es asi!__")
+		return
 	else:
-		parar_up = threading.Event()
-		tarea = threading.Thread(target=up_revistas_api,args=(path,user_id,msg,username,parar_up,))
-		tarea.start()
-		tarea_up[username]={'parar_up': parar_up, 'tarea': tarea}
+		
+		tarea = asyncio.create_task(up_revistas_api(path,user_id,msg,username))
+		tarea_up[username]={'tarea': tarea}
 		task[username] = True
 		
 ##MENSAGED DE PROGRESO ⬆⬇
@@ -1274,8 +1274,8 @@ async def uploadfile_progres(chunk,filesize,start,filename,message, parts,numero
 	seg = localtime().tm_sec
 
 #Subida a la nube
-async def up_revistas_api(file,usid,msg,username,parar_up):
-	while not parar_up.is_set():
+async def up_revistas_api(file,usid,msg,username):
+	try:
 		host=USER[username]["host"]
 		user=USER[username]['user']
 		passw=USER[username]['passw']
@@ -1285,7 +1285,7 @@ async def up_revistas_api(file,usid,msg,username,parar_up):
 		filename = file.split("/")[-1]
 		filesize = Path(file).stat().st_size
 		print(21)
-		proxy = USER["proxy"]
+		proxy = USER[username]["proxy"]
 		headers = {'User-Agent':'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:109.0) Gecko/20100101 Firefox/109.0'}
 		#login
 		msg = await msg.edit("💫 **Preparando subida...**")
@@ -1318,7 +1318,7 @@ async def up_revistas_api(file,usid,msg,username,parar_up):
 					return
 				else:
 					await msg.edit("🟢")
-					sleep(3)
+					sleep(2)
 					print(22)
 					links = []
 					if mode=='n':
@@ -1390,8 +1390,11 @@ async def up_revistas_api(file,usid,msg,username,parar_up):
 									await bot.send_document(usid,txtname)"""
 								else:
 									await msg.edit(f"ℕ𝕠 𝕤𝕖 𝕡𝕦𝕕𝕠 𝕤𝕦𝕓𝕚𝕣:\n**{file.split('/')[-1]}**")
-	print('Cancelando putaMierda')
-	await msg.edit("✓ Subida Cancelada ✓")
+	except asyncio.CancelledError:
+		pass
+	finally:
+	       task[username] = False
+	       del tarea_up[username]
 
 #ConvertBytes=>>
 def sizeof_fmt(num, suffix='B'):
