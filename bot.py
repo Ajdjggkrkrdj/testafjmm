@@ -13,7 +13,7 @@ import requests
 import json
 import zipfile
 import platform
-from progress import Progress
+
 from json import loads,dumps
 from pathlib import Path
 from os.path import exists
@@ -33,7 +33,7 @@ from random import randint
 from re import findall
 from yarl import URL
 from bs4 import BeautifulSoup
-from io import BufferedReader
+from io import BufferedReader, FileIO
 from aiohttp import ClientSession
 from py7zr import SevenZipFile
 from py7zr import FILTER_COPY
@@ -41,6 +41,22 @@ from zipfile import ZipFile
 from multivolumefile import MultiVolume
 from config import *
 import sys
+
+class Progress(BufferedReader):
+    def __init__(self, filename, read_callback):
+        f = open(filename, "rb")
+        self.filename = Path(filename).name
+        self.__read_callback = read_callback
+        super().__init__(raw=f)
+        self.start = time()
+        self.length = Path(filename).stat().st_size
+
+    def read(self, size=None):
+        calc_sz = size
+        if not calc_sz:
+            calc_sz = self.length - self.tell()
+        self.__read_callback(self.tell(), self.length,self.start,self.filename)
+        return super(Progress, self).read(size)
 #=================================#
 #Power by @dev_sorcerer !!!
 
@@ -1183,18 +1199,18 @@ async def up(client: Client, message: Message):
 	if task[username] == True:
 	   	await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸",quote=True)
 	   	return
-	msg = await message.reply("ℙ𝕣𝕖𝕡𝕒𝕣𝕒𝕟𝕕𝕠 𝕤𝕦𝕓𝕚𝕕𝕒...")
-	msgh = files_formatter(str(ROOT[username]["actual_root"]),username)
-	path = str(ROOT[username]["actual_root"]+"/")+msgh[1][list]
-	if USER[username]['host'] == 'educa':
-		await message.reply("**EDUCA** __se encuentra en mantenimiento, notifique si no es asi!__")
-		return
-	else:
-		try:
-			task[username] = True
-			await up_revistas_api(path,user_id,msg,username)
-		except Exception as ex:
-			await msg.edit("**ERROR**\n{ex}")
+	try:
+	   msg = await message.reply("ℙ𝕣𝕖𝕡𝕒𝕣𝕒𝕟𝕕𝕠 𝕤𝕦𝕓𝕚𝕕𝕒...")
+	   msgh = files_formatter(str(ROOT[username]["actual_root"]),username)
+	   path = str(ROOT[username]["actual_root"]+"/")+msgh[1][list]
+	   if USER[username]['host'] == 'educa':
+	   	await message.reply("**EDUCA** __se encuentra en mantenimiento, notifique si no es asi!__")
+	   	return
+	   else:
+	   	task[username] = True
+	   	await up_revistas_api(path,user_id,msg,username)
+	except Exception as ex:
+		await message.reply(f"**ERROR**\n{ex}")
 		
 ##MENSAGED DE PROGRESO ⬆⬇
 def update_progress_up(inte,max):
@@ -1396,10 +1412,9 @@ async def up_revistas_api(file,usid,msg,username):
 									await msg.edit(f"ℕ𝕠 𝕤𝕖 𝕡𝕦𝕕𝕠 𝕤𝕦𝕓𝕚𝕣:\n\n**{file.split('/')[-1]}**")
 	except Exception as ex:
 		task[username] = False
-		await msg.edit("❌ **ERROR** ❌\nℂ𝕣𝕖𝕕𝕖𝕟𝕔𝕚𝕒𝕝𝕖𝕤 𝕚𝕟𝕔𝕠𝕣𝕣𝕖𝕔𝕥𝕒𝕤, 𝕡𝕦𝕖𝕕𝕖 𝕤𝕖𝕣 𝕥𝕒𝕞𝕓𝕚𝕖́𝕟 𝕒𝕝𝕘𝕦𝕟𝕒 𝕔𝕠𝕟𝕗𝕚𝕘𝕦𝕣𝕒𝕔𝕚𝕠́𝕟...𝕠 𝕝𝕒 𝕟𝕦𝕓𝕖 𝕖𝕤𝕥𝕒́ 𝕔𝕒𝕚́𝕕𝕒/𝕓𝕒𝕟𝕟𝕖𝕒𝕕𝕒. 😐")
+		await message.reply("❌ **ERROR** ❌\nℂ𝕣𝕖𝕕𝕖𝕟𝕔𝕚𝕒𝕝𝕖𝕤 𝕚𝕟𝕔𝕠𝕣𝕣𝕖𝕔𝕥𝕒𝕤, 𝕡𝕦𝕖𝕕𝕖 𝕤𝕖𝕣 𝕥𝕒𝕞𝕓𝕚𝕖́𝕟 𝕒𝕝𝕘𝕦𝕟𝕒 𝕔𝕠𝕟𝕗𝕚𝕘𝕦𝕣𝕒𝕔𝕚𝕠́𝕟...𝕠 𝕝𝕒 𝕟𝕦𝕓𝕖 𝕖𝕤𝕥𝕒́ 𝕔𝕒𝕚́𝕕𝕒/𝕓𝕒𝕟𝕟𝕖𝕒𝕕𝕒. 😐")
 	finally:
 	       task[username] = False
-	       del tarea_up[username]
 
 #ConvertBytes=>>
 def sizeof_fmt(num, suffix='B'):
