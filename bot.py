@@ -64,8 +64,8 @@ API_ID = 17617166
 API_HASH = "3ff86cddc30dcd947505e0b8493ce380"
 TOKEN = os.getenv("TOKEN")
 Channel_Id = -1001560753414
-db_access = 1363#os.getenv("DB")#4 #74
-CHANNEL = -1001560753414
+db_access = 8#os.getenv("DB")#4 #74
+CHANNEL = -1001555187910
 
 bot = Client("maxup",api_id=API_ID,api_hash=API_HASH,bot_token=TOKEN)
 
@@ -82,14 +82,14 @@ archivos = {}
 def update(username):
 	USER[username] = {'S':0 ,'D':0, 'auto': 'n', 'proxy': False, 'host': 'https://apye.esceg.cu/index.php/apye/','user': 'clienteuno','passw' : 'Cliente01*', 'up_id': '29566','mode' : 'n','zips' : 35}
 async def get_messages():
-	msg = await bot.get_messages(Channel_Id,message_ids=db_access)
+	msg = await bot.get_messages(CHANNEL,message_ids=db_access)
 	USER.update(loads(msg.text))
 	return
 async def send_config():
 	try:
-		await bot.edit_message_text(Channel_Id,message_id=db_access,text=dumps(USER,indent=4))
+		await bot.edit_message_text(CHANNEL,message_id=db_access,text=dumps(USER,indent=4))
 	except:
-		await bot.send_message(Channel_Id,text=dumps(USER,indent=4))
+		await bot.send_message(CHANNEL,text=dumps(USER,indent=4))
 		pass
 
 @bot.on_message(filters.regex("❌ ℂ𝔸ℕℂ𝔼𝕃𝔸ℝ ❌"))
@@ -136,7 +136,7 @@ async def carga_tg(client: Client, message: Message):
 		await message.reply("._.",reply_markup=ReplyKeyboardRemove())
 		return
 	else:pass
-	if USER[username]['D'] >= 4294967296:
+	if USER[username]['D'] >= 3294967296:
 		await send("𝕊𝕠𝕣𝕣𝕪, 𝖓𝖔 𝖕𝖚𝖉𝖊 𝖘𝖊𝖌𝖚𝖎𝖗 𝖌𝖚𝖆𝖗𝖉𝖆𝖓𝖉𝖔 𝖊𝖓 𝖊𝖑 𝖗𝖔𝖔𝖙...𝖕𝖆𝖗𝖆 𝖈𝖔𝖓𝖙𝖎𝖓𝖚𝖆𝖗 𝖑𝖎𝖒𝖕𝖎𝖊: \n**⟨⟨/all⟩⟩**")
 		return
 	ms = await send("𝕆𝕓𝕥𝕖𝕟𝕚𝕖𝕟𝕕𝕠 𝕀𝕟𝕗𝕠𝕣𝕞𝕒𝕔𝕚𝕠́𝕟...",reply_markup=ReplyKeyboardRemove())
@@ -497,6 +497,11 @@ async def start(client: Client, message: Message):
 		await bot.send_photo(username,'portada.jpg', caption="⚠️ **NO TIENE ACCESO** ⚠️\n__Contacte al administrador y únase al canal para que se mantenga informado__\n[**BETA**]",reply_markup=START_MESSAGE_BUTTONS)
 		return
 	else:pass
+	if USER['modo'] == 'on':
+		a = await message.reply("🤖")
+		sleep(3)
+		await a.edit("⚠️ **ɃØ₮ Ø₣₣** ⚠️\n__Todas las funciones del bot apagadas...__**está horario es tomado para liberar espacio en las revistas. 🥵**\nEl bot se encenderá manualmente a las 12:00, **mientras puede irse a dormir 😐 o si lo prefiere ir preparando el contenido a subir 😜**",reply_markup=tutos)
+		return
 
 	try:downlist[username]
 	except:downlist[username] = []
@@ -717,6 +722,8 @@ async def ls(client: Client, message: Message):
 	if username not in USER:
 		return
 	else:pass
+	if username not in BOSS and USER['modo'] == 'on':
+		return
 	try:downlist[username]
 	except:downlist[username] = []
 	if exists('downloads/'+str(username)+'/'):pass
@@ -743,6 +750,8 @@ async def rename(client: Client, message: Message):
 	if username not in USER:
 		return
 	else:pass
+	if username not in BOSS and USER['modo'] == 'on':
+		return
 	if task[username] == True:
 		await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸")
 		return
@@ -776,6 +785,8 @@ async def rm(client: Client, message: Message):
 	if username not in USER:
 		return
 	else:pass
+	if username not in BOSS and USER['modo'] == 'on':
+		return
 	if task[username] == True:
 		await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸")
 		return
@@ -814,6 +825,8 @@ async def delete(client: Client, message: Message):
 	if username not in USER:
 		return
 	else:pass
+	if username not in BOSS and USER['modo'] == 'on':
+		return
 	if task[username] == True:
 		await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸")
 		return
@@ -845,6 +858,8 @@ async def seven(client: Client, message: Message):
 	if username not in USER:
 		return
 	else:pass
+	if username not in BOSS and USER['modo'] == 'on':
+		return
 	if username not in USER['VIP']:
 		await send("Comando solo para usuarios premium v:")
 		return
@@ -950,6 +965,8 @@ async def cmd_mkdir(client: Client, message: Message):
 	if username not in USER:
 		return
 	else:pass
+	if username not in BOSS and USER['modo'] == 'on':
+		return
 	if task[username] == True:
 		await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸")
 		return
@@ -976,6 +993,8 @@ async def mv(client: Client, message: Message):
 	if username not in USER:
 		return
 	else:pass
+	if username not in BOSS and USER['modo'] == 'on':
+		return
 	if task[username] == True:
 		await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸")
 		return
@@ -1020,6 +1039,8 @@ async def cd(client: Client, message: Message):
 	if username not in USER:
 		return
 	else:pass
+	if username not in BOSS and USER['modo'] == 'on':
+		return
 	if task[username] == True:
 		await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸")
 		return
@@ -1075,6 +1096,8 @@ async def tg(client: Client, message: Message):
 	if username not in USER:
 		return
 	else:pass
+	if username not in BOSS and USER['modo'] == 'on':
+		return
 	if task[username] == True:
 		await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸")
 		return
@@ -1112,10 +1135,12 @@ async def down_media(client: Client, message: Message):
 	if username not in USER:
 		return
 	else:pass
+	if username not in BOSS and USER['modo'] == 'on':
+		return
 	if task[username] == True:
 		await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸",quote=True)
 		return
-	if get_folder_size(f"downloads/{username}") >= 4294967296:
+	if get_folder_size(f"downloads/{username}") >= 3294967296:
 		await send("𝕊𝕠𝕣𝕣𝕪, 𝖓𝖔 𝖕𝖚𝖉𝖊 𝖘𝖊𝖌𝖚𝖎𝖗 𝖌𝖚𝖆𝖗𝖉𝖆𝖓𝖉𝖔 𝖊𝖓 𝖊𝖑 𝖗𝖔𝖔𝖙...𝖕𝖆𝖗𝖆 𝖈𝖔𝖓𝖙𝖎𝖓𝖚𝖆𝖗 𝖑𝖎𝖒𝖕𝖎𝖊: \n**⟨⟨/all⟩⟩**",quote=True)
 		return
 	c = archivos[username]
@@ -1151,10 +1176,12 @@ async def down_link(client: Client, message: Message):
     if username not in USER:
         return
     else:pass
+    if username not in BOSS and USER['modo'] == 'on':
+		return
     if task[username] == True:
     	await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸",quote=True)
     	return
-    if get_folder_size(f"downloads/{username}") >= 4294967296:
+    if get_folder_size(f"downloads/{username}") >= 3294967296:
     	await send("𝕊𝕠𝕣𝕣𝕪, 𝖓𝖔 𝖕𝖚𝖉𝖊 𝖘𝖊𝖌𝖚𝖎𝖗 𝖌𝖚𝖆𝖗𝖉𝖆𝖓𝖉𝖔 𝖊𝖓 𝖊𝖑 𝖗𝖔𝖔𝖙...𝖕𝖆𝖗𝖆 𝖈𝖔𝖓𝖙𝖎𝖓𝖚𝖆𝖗 𝖑𝖎𝖒𝖕𝖎𝖊: \n**⟨⟨/all⟩⟩**",quote=True)
     	return
     j = str(ROOT[username]["actual_root"])+"/"
@@ -1195,6 +1222,11 @@ async def down_link(client: Client, message: Message):
 async def up(client: Client, message: Message):
 	username = message.from_user.username
 	user_id = message.from_user.id
+	if username not in USER:
+		return
+	else:pass
+	if username not in BOSS and USER['modo'] == 'on':
+		return
 	list = int(message.text.replace("_", " ").split()[1])
 	if task[username] == True:
 	   	await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸",quote=True)
@@ -1376,9 +1408,8 @@ async def up_revistas_api(file,usid,msg,username):
 											await bot.send_message(usid,f"👾**F:** `{file.split('/')[-1]}`")
 								except:
 									pass
-							await msg.edit("🌩️ **₣Ɨ₦₳ⱠƗƵ₳ƉØ** ⤵️")
-							c = file.split("/")[-1].split(".")[-1]
-							await bot.send_message(usid,f"**🅂🅄🄱🄸🄳🄾 0{subido} / {c}**")
+							await msg.edit("🌩️ **₣Ɨ₦₳ⱠƗƵ₳ƉØ** ⤵️")							
+							await bot.send_message(usid,f"💻 **🅂🅄🄱🄸🄳🄾 {subido} / {parts}** ☁️")
 							txtname = file.split('.')[0].replace(' ','_')+'.txt'
 							with open(txtname,"w") as t:
 								message = ""
@@ -1386,10 +1417,11 @@ async def up_revistas_api(file,usid,msg,username):
 									message+=li+"\n"
 								t.write(message)
 								t.close()
-							await bot.send_document(usid,txtname,caption=f"🚀 𝕾𝖚𝖇𝖎𝖉𝖆 𝕰𝖃𝕴𝕿𝕺𝕾𝕬 🚀 \n\n`{file.split('/')[-1]}`\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login",disable_web_page_preview=True)
-							await bot.send_document(CHANNEL,txtname,caption=f"**ㄒ乂ㄒ ⓢⓤⓑⓘⓓⓞ 🅧 @{username}**\n`{file.split('/')[-1]}`\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login #txt",disable_web_page_preview=True)
+							await bot.send_document(usid,txtname,caption=f"🚀 𝕾𝖚𝖇𝖎𝖉𝖆 𝕰𝖃𝕴𝕿𝕺𝕾𝕬 🚀 \n\n`{file.split('/')[-1]}`\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login", thumb='thumb.jpg')
+							await bot.send_document(CHANNEL,txtname,caption=f"**ㄒ乂ㄒ ⓢⓤⓑⓘⓓⓞ 🅧 @{username}**\n`{file.split('/')[-1]}`\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login #txt",thumb = 'thumb.jpg')
 						else:
-							await msg.edit("**↑↑↑«⟨丂凵乃丨乇几ᗪㄖ⟩»↑↑↑**")
+							await msg.edit("**«⟨丂凵乃丨乇几ᗪㄖ⟩»**")
+							sleep(1)
 							upload_data = {}
 							upload_data["fileStage"] = "2"
 							upload_data["name[es_ES]"] = file.split('/')[-1]
@@ -1413,8 +1445,9 @@ async def up_revistas_api(file,usid,msg,username):
 									await msg.edit(f"👾**F:** `{file.split('/')[-1]}`")
 									task[username]=False
 	except Exception as ex:
+		await bot.send_message(BOSS,str(ex))
 		print(str(ex))
-		await msg.edit("®️ Ocurrió un error en su Conexión")
+		await msg.edit("𝔼𝕣𝕣𝕠𝕣‼️ ℙ𝕦𝕖𝕕𝕖 𝕤𝕖𝕣 𝕢𝕦𝕖 𝕝𝕒. 𝕣𝕖𝕧𝕚𝕤𝕥𝕒 𝕖𝕤𝕥𝕖 𝕔𝕠𝕞𝕡𝕝𝕖𝕥𝕒𝕞𝕖𝕟𝕥𝕖 𝕝𝕝𝕖𝕟𝕒, 𝕖𝕤𝕡𝕖𝕣𝕖 𝕠 𝕦𝕥𝕚𝕝𝕚𝕫𝕖 𝕠𝕥𝕣𝕠 𝕔𝕝𝕚𝕖𝕟𝕥𝕖 𝕕𝕚𝕤𝕡𝕠𝕟𝕚𝕓𝕝𝕖: **/rv**")
 		task[username]=False
 
 #ConvertBytes=>>
