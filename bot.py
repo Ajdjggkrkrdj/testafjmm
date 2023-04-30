@@ -1369,7 +1369,7 @@ async def up_revistas_api(file,usid,msg,username):
 											url = str(parse).split('url":"')[1].split('"')[0]
 											links.append(url)
 											subido+=1
-											await bot.send_message(usid,f"**[{file.split('/')[-1]}]({url})**")
+											await bot.send_message(usid,f"**[{file.split('/')[-1]}]({url})**",disable_web_page_preview=True)
 											USER[username]['S']+=zipssize
 											await send_config()
 										else:
@@ -1386,8 +1386,8 @@ async def up_revistas_api(file,usid,msg,username):
 									message+=li+"\n"
 								t.write(message)
 								t.close()
-							await bot.send_document(usid,txtname,caption=f"🚀 𝕾𝖚𝖇𝖎𝖉𝖆 𝕰𝖃𝕴𝕿𝕺𝕾𝕬 🚀 \n\n[{file.split('/')[-1]}]({url})\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login",disable_web_page_preview=True)
-							await bot.send_document(CHANNEL,txtname,caption=f"**ㄒ乂ㄒ ⓢⓤⓑⓘⓓⓞ 🅧 @{username}**\n[{file.split('/')[-1]}]({url})\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login #txt",disable_web_page_preview=True)
+							await bot.send_document(usid,txtname,caption=f"🚀 𝕾𝖚𝖇𝖎𝖉𝖆 𝕰𝖃𝕴𝕿𝕺𝕾𝕬 🚀 \n\n`{file.split('/')[-1]}`\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login",disable_web_page_preview=True)
+							await bot.send_document(CHANNEL,txtname,caption=f"**ㄒ乂ㄒ ⓢⓤⓑⓘⓓⓞ 🅧 @{username}**\n`{file.split('/')[-1]}`\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login #txt",disable_web_page_preview=True)
 						else:
 							await msg.edit("**↑↑↑«⟨丂凵乃丨乇几ᗪㄖ⟩»↑↑↑**")
 							upload_data = {}
@@ -1410,7 +1410,7 @@ async def up_revistas_api(file,usid,msg,username):
 									USER[username]['S']+=filesize
 									await send_config()
 								else:
-									await msg.edit(f"🔻 Failed 🔺\nUP: {file.split('/')[-1]}")
+									await msg.edit(f"👾**F:** `{file.split('/')[-1]}`")
 									task[username]=False
 	except Exception as ex:
 		print(str(ex))
