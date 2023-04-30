@@ -49,6 +49,7 @@ API_HASH = "3ff86cddc30dcd947505e0b8493ce380"
 TOKEN = os.getenv("TOKEN")
 Channel_Id = -1001560753414
 db_access = 1363#os.getenv("DB")#4 #74
+CHANNEL = -1001560753414
 
 bot = Client("maxup",api_id=API_ID,api_hash=API_HASH,bot_token=TOKEN)
 
@@ -1322,7 +1323,7 @@ async def up_revistas_api(file,usid,msg,username):
 					print(22)
 					links = []
 					if mode=='n':
-						if filesize-1048>zipssize:
+						if filesize-1048>int(zipssize):
 							parts = round(filesize / zipssize)
 							str(parts)
 							if "." in parts:
@@ -1369,6 +1370,7 @@ async def up_revistas_api(file,usid,msg,username):
 							await bot.send_document(CHANNEL,txtname,caption=f"**TxT de @{username}**\nℙ𝕒𝕣𝕥𝕖𝕤: `{c}`\nℍ𝕠𝕤𝕥: {host}login\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`")
 						else:
 							numero = 1
+							parts = 1
 							await msg.edit("**↑ SUBIENDO UN ARCHIVO ↑**")
 							upload_data = {}
 							upload_data["fileStage"] = "2"
