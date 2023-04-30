@@ -6,6 +6,7 @@ import threading
 import asyncio
 import tgcrypto
 import aiohttp
+import aiohttp_socks
 import os
 import re
 import requests
@@ -57,7 +58,7 @@ USER = { 'modo': 'on', 'VIP':['dev_sorcerer'], 'APYE': { '1': '29566', '2': '295
 
 ROOT = {}
 downlist={}#lista d archivos a descargar :D
-tarea = {}
+tarea_up = {}
 task = { 'dev_sorcerer': False}
 archivos = {}
 ##Base de Datos##
@@ -862,7 +863,7 @@ async def seven(client: Client, message: Message):
 			p = shutil.make_archive(j, format = "zip", root_dir=g)
 			await h.edit(f"𝕯𝖎𝖛𝖎𝖉𝖎𝖊𝖓𝖉𝖔 𝖊𝖓 𝖕𝖆𝖗𝖙𝖊𝖘 𝖉𝖊 {𝖙}𝕸𝖎𝕭")
 			sleep(2)
-			a = asyncio.create_task(sevenzip(p,password=None,volume = t*1024*1024))
+			a = sevenzip(p,password=None,volume = t*1024*1024)
 			await a
 			os.remove(p)
 			for i in a :
@@ -1172,8 +1173,8 @@ async def down_link(client: Client, message: Message):
             except Exception as ex:
              	task[username] = False
              	await msg.edit(f"ERROR\n{ex}")
-#Subida  a la nube#
-"""@bot.on_message(filters.regex("/up") & filters.private)
+#Comamdo /up subida a la rev
+@bot.on_message(filters.regex("/up") & filters.private)
 async def up(client: Client, message: Message):
 	username = message.from_user.username
 	user_id = message.from_user.id
@@ -1190,8 +1191,8 @@ async def up(client: Client, message: Message):
 		parar_up = threading.Event()
 		tarea = threading.Thread(target=up_revistas_api,args=(path,user_id,msg,username,parar_up,))
 		tarea.start()
-		tarea[username]={'parar_up': parar_up, 'tarea': tarea}
-		task[username] = True"""
+		tarea_up[username]={'parar_up': parar_up, 'tarea': tarea}
+		task[username] = True
 		
 ##MENSAGED DE PROGRESO ⬆⬇
 def update_progress_up(inte,max):
@@ -1254,7 +1255,143 @@ async def progress_down_tg(chunk,total,filename,start,message):
 		try: await message.edit(msg)
 		except:pass
 	seg = localtime().tm_sec
+	
+#Progreso de subida a la nube bar
+async def uploadfile_progres(chunk,filesize,start,filename,message, parts,numero):
+	now = time()
+	diff = now - start
+	mbs = chunk / diff
+
+	msg = f"⏫ **𝕊𝕦𝕓𝕚𝕖𝕟𝕕𝕠 **{numero}/{parts}** 𝕡𝕒𝕣𝕥𝕖𝕤** ⏫\n\n"
+	try:
+		msg+=update_progress_up(chunk,filesize)+ " " + sizeof_fmt(mbs)+"/s\n\n"
+	except:pass
+	msg+= f"📤**•𝕌𝕡𝕝𝕠𝕒𝕕:** **{sizeof_fmt(chunk)}/{sizeof_fmt(filesize)}**\n🏷️**•ℕ𝕒𝕞𝕖:** `{filename}`\n"
+	global seg
+	if seg != localtime().tm_sec:
+		try:message.edit(msg,reply_markup=cancelar)
+		except:pass
+	seg = localtime().tm_sec
+
 #Subida a la nube
+async def up_revistas_api(file,usid,msg,username,parar_up):
+	while not parar_up.is_set():
+		host=USER[username]["host"]
+		user=USER[username]['user']
+		passw=USER[username]['passw']
+		up_id=USER[username]['up_id']
+		mode=USER[username]['mode']
+		zipssize=USER[username]['zips']*1024*1024
+		filename = file.split("/")[-1]
+		filesize = Path(file).stat().st_size
+		print(21)
+		proxy = USER["proxy"]
+		headers = {'User-Agent':'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:109.0) Gecko/20100101 Firefox/109.0'}
+		#login
+		msg = await msg.edit("💫 **Preparando subida...**")
+		if proxy == False:
+			connector = aiohttp.TCPConnector()
+		else:
+			connector = aiohttp_socks.ProxyConnector.from_url(str(proxy))
+		async with aiohttp.ClientSession(connector=connector) as session:
+			async with session.get(host + "login") as response:
+				html = await response.text()
+			soup = BeautifulSoup(html, "html.parser")
+			csrfToken = soup.find("input",attrs={"name":"csrfToken"})['value']
+			url_post = host + 'login/signIn'
+			payload = {}
+			payload['csrfToken'] = csrfToken
+			payload['source'] = ''
+			payload['username'] = user
+			payload['password'] = passw
+			payload['remember'] = '1'
+			async with session.post(url_post, data=payload) as e:
+				print(222)
+			url = host + 'user/profile'
+			async with session.get(url) as resp:
+				try:
+					u = resp.url
+				except:
+					u = resp.url()
+				if u==url:
+					await msg.edit("❌ **ERROR** ❌\nℂ𝕣𝕖𝕕𝕖𝕟𝕔𝕚𝕒𝕝𝕖𝕤 𝕚𝕟𝕔𝕠𝕣𝕣𝕖𝕔𝕥𝕒𝕤, 𝕡𝕦𝕖𝕕𝕖 𝕤𝕖𝕣 𝕥𝕒𝕞𝕓𝕚𝕖́𝕟 𝕒𝕝𝕘𝕦𝕟𝕒 𝕔𝕠𝕟𝕗𝕚𝕘𝕦𝕣𝕒𝕔𝕚𝕠́𝕟...𝕠 𝕝𝕒 𝕟𝕦𝕓𝕖 𝕖𝕤𝕥𝕒́ 𝕔𝕒𝕚́𝕕𝕒/𝕓𝕒𝕟𝕟𝕖𝕒𝕕𝕒. 😐")
+					return
+				else:
+					await msg.edit("🟢")
+					sleep(3)
+					print(22)
+					links = []
+					if mode=='n':
+						if filesize-1048>zipssize:
+							parts = round(filesize / zipssize)
+							str(parts)
+							if "." in parts:
+								int(parts)
+								parts+=1
+							else:pass
+							await msg.edit(f"┏━━━━• **❅Preparando❅** •━━━━┓\n🧩 𝕋𝕠𝕥𝕒𝕝: `{parts} partes`\n┗━━━━•**❅🔩{USER[username]['zips']}MiB🔩❅**•━━━━┛")
+							files = sevenzip(file,volume=zipssize)
+							print(24)
+							numero = 0
+							for file in files:
+								numero += 1
+								try:
+									upload_data = {}
+									upload_data["fileStage"] = "2"
+									upload_data["name[es_ES]"] = file.split('/')[-1]
+									upload_data["name[en_US]"] = file.split('/')[-1]
+									post_file_url = host + 'api/v1/submissions/'+ up_id +'/files'
+									fi = Progress(file,lambda current,total,timestart,filename: uploadfile_progres(current,total,timestart,filename,msg,parts,numero))
+									query = {"file":fi,**upload_data}
+									async with session.post(post_file_url,data=query,headers={'X-Csrf-token':csrfToken}) as resp:
+										text = await resp.text()
+										if '_href' in text:
+											parse = str(text).replace('\/','/')
+											url = str(parse).split('url":"')[1].split('"')[0]
+											links.append(url)
+											await bot.send_message(username,f"**[{file.split('/')[-1]}]({url})**")
+										else:
+											await bot.send_message(username,f"**F**: `{file.split('/')[-1]}`")
+								except:
+									pass
+							ca = file.split('/')[-1]
+							c = ca.split(".")[-1]
+							
+							await msg.edit(f"✅ Finalizado ⤵️")
+							txtname = file.split('.')[0].replace(' ','_')+'.txt'
+							with open(txtname,"w") as t:
+								message = ""
+								for li in links:
+									message+=li+"\n"
+								t.write(message)
+								t.close()
+							await bot.send_document(usid,txtname,caption=f"🚀 𝕾𝖚𝖇𝖎𝖉𝖆 𝕰𝖃𝕴𝕿𝕺𝕾𝕬 🚀 \n\nℙ𝕒𝕣𝕥𝕖𝕤: `{c}`\nℍ𝕠𝕤𝕥: {host}login\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`")
+							await bot.send_document(CHANNEL,txtname,caption=f"**TxT de @{username}**\nℙ𝕒𝕣𝕥𝕖𝕤: `{c}`\nℍ𝕠𝕤𝕥: {host}login\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`")
+						else:
+							numero = 1
+							await msg.edit("**↑ SUBIENDO UN ARCHIVO ↑**")
+							upload_data = {}
+							upload_data["fileStage"] = "2"
+							upload_data["name[es_ES]"] = file.split('/')[-1]
+							upload_data["name[en_US]"] = file.split('/')[-1]
+							post_file_url = host + 'api/v1/submissions/'+ up_id +'/files'
+							fi = Progress(file,lambda current,total,timestart,filename: uploadfile_progres(current,total,timestart,filename,msg,parts, numero))
+							query = {"file":fi,**upload_data}
+							async with session.post(post_file_url,data=query,headers={'X-Csrf-token':csrfToken}) as resp:
+								text = await resp.text()
+								if '_href' in text:
+									parse = str(text).replace('\/','/')
+									url = str(parse).split('url":"')[1].split('"')[0]
+									await msg.edit(f"🚀 𝕾𝖚𝖇𝖎𝖉𝖆 𝕰𝖃𝕴𝕿𝕺𝕾𝕬 🚀 \n\n[{file.split('/')[-1]}]({url})\nℍ𝕠𝕤𝕥: {host}login\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`")
+									"""txtname = file.split('.')[0].replace(' ','_')+'.txt'
+									with open(txtname,"w") as t:
+										t.write(url)
+										t.close()
+									await bot.send_document(usid,txtname)"""
+								else:
+									await msg.edit(f"ℕ𝕠 𝕤𝕖 𝕡𝕦𝕕𝕠 𝕤𝕦𝕓𝕚𝕣:\n**{file.split('/')[-1]}**")
+	print('Cancelando putaMierda')
+	await msg.edit("✓ Subida Cancelada ✓")
 
 #ConvertBytes=>>
 def sizeof_fmt(num, suffix='B'):
