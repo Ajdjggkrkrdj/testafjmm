@@ -1323,13 +1323,10 @@ async def up_revistas_api(file,usid,msg,username):
 					print(22)
 					links = []
 					if mode=='n':
-						if filesize-1048>int(zipssize):
+						if filesize-1048>float(zipssize):
 							parts = round(filesize / zipssize)
-							str(parts)
-							if "." in parts:
-								int(parts)
-								parts+=1
-							else:pass
+							parts+=1
+							
 							await msg.edit(f"┏━━━━• **❅Preparando❅** •━━━━┓\n🧩 𝕋𝕠𝕥𝕒𝕝: `{parts} partes`\n┗━━━━•**❅🔩{USER[username]['zips']}MiB🔩❅**•━━━━┛")
 							files = sevenzip(file,volume=zipssize)
 							print(24)
@@ -1351,6 +1348,8 @@ async def up_revistas_api(file,usid,msg,username):
 											url = str(parse).split('url":"')[1].split('"')[0]
 											links.append(url)
 											await bot.send_message(username,f"**[{file.split('/')[-1]}]({url})**")
+											USER[username]+= float(zipssize)
+											await send_config()
 										else:
 											await bot.send_message(username,f"**F**: `{file.split('/')[-1]}`")
 								except:
@@ -1371,27 +1370,29 @@ async def up_revistas_api(file,usid,msg,username):
 						else:
 							numero = 1
 							parts = 1
-							await msg.edit("**↑ SUBIENDO UN ARCHIVO ↑**")
+							await msg.edit("**↑ SUBIENDO UN ARCHIVO ↑**",reply_markup=cancelar)
 							upload_data = {}
 							upload_data["fileStage"] = "2"
 							upload_data["name[es_ES]"] = file.split('/')[-1]
 							upload_data["name[en_US]"] = file.split('/')[-1]
 							post_file_url = host + 'api/v1/submissions/'+ up_id +'/files'
-							fi = Progress(file,lambda current,total,timestart,filename: uploadfile_progres(current,total,timestart,filename,msg,parts, numero))
+							fi = Progress(file,lambda current,total,timestart,filename: uploadfile_progres(current,total,timestart,filename,msg,parts,numero))
 							query = {"file":fi,**upload_data}
 							async with session.post(post_file_url,data=query,headers={'X-Csrf-token':csrfToken}) as resp:
 								text = await resp.text()
 								if '_href' in text:
 									parse = str(text).replace('\/','/')
 									url = str(parse).split('url":"')[1].split('"')[0]
-									await msg.edit(f"🚀 𝕾𝖚𝖇𝖎𝖉𝖆 𝕰𝖃𝕴𝕿𝕺𝕾𝕬 🚀 \n\n[{file.split('/')[-1]}]({url})\nℍ𝕠𝕤𝕥: {host}login\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`")
+									await msg.edit(f"🚀 𝕾𝖚𝖇𝖎𝖉𝖆 𝕰𝖃𝕴𝕿𝕺𝕾𝕬 🚀 \n\n[{file.split('/')[-1]}]({url})\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login",disable_web_page_preview=True)
+									USER[username] += float(zipssize)
+									await send_config()
 									"""txtname = file.split('.')[0].replace(' ','_')+'.txt'
 									with open(txtname,"w") as t:
 										t.write(url)
 										t.close()
 									await bot.send_document(usid,txtname)"""
 								else:
-									await msg.edit(f"ℕ𝕠 𝕤𝕖 𝕡𝕦𝕕𝕠 𝕤𝕦𝕓𝕚𝕣:\n**{file.split('/')[-1]}**")
+									await msg.edit(f"ℕ𝕠 𝕤𝕖 𝕡𝕦𝕕𝕠 𝕤𝕦𝕓𝕚𝕣:\n\n**{file.split('/')[-1]}**")
 	except asyncio.CancelledError:
 		pass
 	finally:
