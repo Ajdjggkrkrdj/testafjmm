@@ -40,6 +40,7 @@ from py7zr import FILTER_COPY
 from zipfile import ZipFile
 from multivolumefile import MultiVolume
 from config import *
+import math
 import sys
 
 class Progress(BufferedReader):
@@ -64,7 +65,7 @@ API_ID = 17617166
 API_HASH = "3ff86cddc30dcd947505e0b8493ce380"
 TOKEN = os.getenv("TOKEN")
 Channel_Id = -1001560753414
-db_access = 8#os.getenv("DB")#4 #74
+db_access = os.getenv("DB")#4 #74 #8
 CHANNEL = -1001555187910
 
 bot = Client("maxup",api_id=API_ID,api_hash=API_HASH,bot_token=TOKEN)
@@ -497,7 +498,7 @@ async def start(client: Client, message: Message):
 		await bot.send_photo(username,'portada.jpg', caption="⚠️ **NO TIENE ACCESO** ⚠️\n__Contacte al administrador y únase al canal para que se mantenga informado__\n[**BETA**]",reply_markup=START_MESSAGE_BUTTONS)
 		return
 	else:pass
-	if USER['modo'] == 'on':
+	if USER['modo'] == 'on' and username not in BOSS:
 		a = await message.reply("🤖")
 		sleep(3)
 		await a.edit("⚠️ **ɃØ₮ Ø₣₣** ⚠️\n__Todas las funciones del bot apagadas...__**está horario es tomado para liberar espacio en las revistas. 🥵**\nEl bot se encenderá manualmente a las 12:00, **mientras puede irse a dormir 😐 o si lo prefiere ir preparando el contenido a subir 😜**",reply_markup=tutos)
@@ -722,7 +723,7 @@ async def ls(client: Client, message: Message):
 	if username not in USER:
 		return
 	else:pass
-	if username not in BOSS and USER['modo'] == 'on':
+	if username not in BOSS and USER['modo'] != 'on':
 		return
 	try:downlist[username]
 	except:downlist[username] = []
@@ -750,7 +751,7 @@ async def rename(client: Client, message: Message):
 	if username not in USER:
 		return
 	else:pass
-	if username not in BOSS and USER['modo'] == 'on':
+	if username not in BOSS and USER['modo'] != 'on':
 		return
 	if task[username] == True:
 		await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸")
@@ -785,7 +786,7 @@ async def rm(client: Client, message: Message):
 	if username not in USER:
 		return
 	else:pass
-	if username not in BOSS and USER['modo'] == 'on':
+	if username not in BOSS and USER['modo'] != 'on':
 		return
 	if task[username] == True:
 		await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸")
@@ -825,12 +826,9 @@ async def delete(client: Client, message: Message):
 	if username not in USER:
 		return
 	else:pass
-	if username not in BOSS and USER['modo'] == 'on':
+	if username not in BOSS and USER['modo'] != 'on':
 		return
-	if task[username] == True:
-		await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸")
-		return
-	else:pass
+	task[username] = False
 	shutil.rmtree(str(ROOT[username]["actual_root"]))
 	await send("**Directorio actual limpiado :D**")
 
@@ -858,7 +856,7 @@ async def seven(client: Client, message: Message):
 	if username not in USER:
 		return
 	else:pass
-	if username not in BOSS and USER['modo'] == 'on':
+	if username not in BOSS and USER['modo'] != 'on':
 		return
 	if username not in USER['VIP']:
 		await send("Comando solo para usuarios premium v:")
@@ -965,7 +963,7 @@ async def cmd_mkdir(client: Client, message: Message):
 	if username not in USER:
 		return
 	else:pass
-	if username not in BOSS and USER['modo'] == 'on':
+	if username not in BOSS and USER['modo'] != 'on':
 		return
 	if task[username] == True:
 		await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸")
@@ -993,7 +991,7 @@ async def mv(client: Client, message: Message):
 	if username not in USER:
 		return
 	else:pass
-	if username not in BOSS and USER['modo'] == 'on':
+	if username not in BOSS and USER['modo'] != 'on':
 		return
 	if task[username] == True:
 		await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸")
@@ -1039,7 +1037,7 @@ async def cd(client: Client, message: Message):
 	if username not in USER:
 		return
 	else:pass
-	if username not in BOSS and USER['modo'] == 'on':
+	if username not in BOSS and USER['modo'] != 'on':
 		return
 	if task[username] == True:
 		await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸")
@@ -1096,7 +1094,7 @@ async def tg(client: Client, message: Message):
 	if username not in USER:
 		return
 	else:pass
-	if username not in BOSS and USER['modo'] == 'on':
+	if username not in BOSS and USER['modo'] != 'on':
 		return
 	if task[username] == True:
 		await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸")
@@ -1135,7 +1133,7 @@ async def down_media(client: Client, message: Message):
 	if username not in USER:
 		return
 	else:pass
-	if username not in BOSS and USER['modo'] == 'on':
+	if username not in BOSS and USER['modo'] != 'on':
 		return
 	if task[username] == True:
 		await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸",quote=True)
@@ -1176,7 +1174,7 @@ async def down_link(client: Client, message: Message):
     if username not in USER:
         return
     else:pass
-    if username not in BOSS and USER['modo'] == 'on':
+    if username not in BOSS and USER['modo'] != 'on':
     	return
     if task[username] == True:
     	await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸",quote=True)
@@ -1225,7 +1223,7 @@ async def up(client: Client, message: Message):
 	if username not in USER:
 		return
 	else:pass
-	if username not in BOSS and USER['modo'] == 'on':
+	if username not in BOSS and USER['modo'] != 'on':
 		return
 	list = int(message.text.replace("_", " ").split()[1])
 	if task[username] == True:
@@ -1377,8 +1375,7 @@ async def up_revistas_api(file,usid,msg,username):
 					links = []
 					if mode=='n':
 						if filesize-1048>zipssize:
-							parts = round(filesize / zipssize)
-							parts+=1
+							parts = math.ceil(filesize / zipssize)
 							await msg.edit(f"┏━━━━• **❅Preparando❅** •━━━━┓\n🧩 𝕋𝕠𝕥𝕒𝕝: **{parts} partes** a 丂凵乃丨尺\n┗━━━━•**❅🔩{USER[username]['zips']}MiB🔩❅**•━━━━┛")
 							files = await sevenzip(file,volume=zipssize)
 							print(24)
@@ -1417,11 +1414,12 @@ async def up_revistas_api(file,usid,msg,username):
 									message+=li+"\n"
 								t.write(message)
 								t.close()
-							await bot.send_document(usid,txtname,caption=f"🚀 𝕾𝖚𝖇𝖎𝖉𝖆 𝕰𝖃𝕴𝕿𝕺𝕾𝕬 🚀 \n\n`{file.split('/')[-1]}`\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login", thumb='thumb.jpg')
-							await bot.send_document(CHANNEL,txtname,caption=f"**ㄒ乂ㄒ ⓢⓤⓑⓘⓓⓞ 🅧 @{username}**\n`{file.split('/')[-1]}`\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login #txt",thumb = 'thumb.jpg')
+							await bot.send_document(usid,txtname,caption=f"🚀 𝕾𝖚𝖇𝖎𝖉𝖆 𝕰𝖃𝕴𝕿𝕺𝕾𝕬 🚀 \n\n\nℍ𝕠𝕤𝕥: {host}login\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`", thumb='thumb.jpg')
+							await bot.send_document(CHANNEL,txtname,caption=f"**ㄒ乂ㄒ ⓢⓤⓑⓘⓓⓞ 🅧 @{username}**\n**⟨[**`{file.split('/')[-1]}`**]⟩**\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login #txt",thumb = 'thumb.jpg')
+							task[username] = False
 						else:
 							await msg.edit("**«⟨丂凵乃丨乇几ᗪㄖ⟩»**")
-							sleep(1)
+							sleep(0.5)
 							upload_data = {}
 							upload_data["fileStage"] = "2"
 							upload_data["name[es_ES]"] = file.split('/')[-1]
@@ -1436,8 +1434,8 @@ async def up_revistas_api(file,usid,msg,username):
 								if '_href' in text:
 									parse = str(text).replace('\/','/')
 									url = str(parse).split('url":"')[1].split('"')[0]
-									await msg.edit(f"🚀 𝕾𝖚𝖇𝖎𝖉𝖆 𝕰𝖃𝕴𝕿𝕺𝕾𝕬 🚀 \n**[{file.split('/')[-1]}]({url})**\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login",disable_web_page_preview=True)
-									await bot.send_message(Channel_Id,f"#enalce subido x **@{username}**\n**[{file.split('/')[-1]}]({url})**\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login",disable_web_page_preview=True)
+									await msg.edit(f"🚀 𝕾𝖚𝖇𝖎𝖉𝖆 𝕰𝖃𝕴𝕿𝕺𝕾𝕬 🚀 \n«/» **[{file.split('/')[-1]}]({url})**\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login",disable_web_page_preview=True)
+									await bot.send_message(Channel_Id,f"#enalce subido x **@{username}**\n«/» **[{file.split('/')[-1]}]({url})**\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login",disable_web_page_preview=True)
 									task[username]=False
 									USER[username]['S']+=filesize
 									await send_config()
