@@ -1190,10 +1190,11 @@ async def up(client: Client, message: Message):
 		await message.reply("**EDUCA** __se encuentra en mantenimiento, notifique si no es asi!__")
 		return
 	else:
-		
-		tarea = asyncio.create_task(up_revistas_api(path,user_id,msg,username))
-		tarea_up[username]={'tarea': tarea}
-		task[username] = True
+		try:
+			task[username] = True
+			await up_revistas_api(path,user_id,msg,username)
+		except Exception as ex:
+			await msg.edit("**ERROR**\n{ex}")
 		
 ##MENSAGED DE PROGRESO ⬆⬇
 def update_progress_up(inte,max):
@@ -1316,7 +1317,6 @@ async def up_revistas_api(file,usid,msg,username):
 					u = resp.url()
 				if u==url:
 					await msg.edit("❌ **ERROR** ❌\nℂ𝕣𝕖𝕕𝕖𝕟𝕔𝕚𝕒𝕝𝕖𝕤 𝕚𝕟𝕔𝕠𝕣𝕣𝕖𝕔𝕥𝕒𝕤, 𝕡𝕦𝕖𝕕𝕖 𝕤𝕖𝕣 𝕥𝕒𝕞𝕓𝕚𝕖́𝕟 𝕒𝕝𝕘𝕦𝕟𝕒 𝕔𝕠𝕟𝕗𝕚𝕘𝕦𝕣𝕒𝕔𝕚𝕠́𝕟...𝕠 𝕝𝕒 𝕟𝕦𝕓𝕖 𝕖𝕤𝕥𝕒́ 𝕔𝕒𝕚́𝕕𝕒/𝕓𝕒𝕟𝕟𝕖𝕒𝕕𝕒. 😐")
-					return
 				else:
 					await msg.edit("🟢")
 					sleep(2)
@@ -1327,9 +1327,8 @@ async def up_revistas_api(file,usid,msg,username):
 							parts = round(filesize / zipssize)
 							parts+=1
 							
-							await msg.edit(f"┏━━━━• **❅Preparando❅** •━━━━┓\n🧩 𝕋𝕠𝕥𝕒𝕝: `{parts} partes`\n┗━━━━•**❅🔩{USER[username]['zips']}MiB🔩❅**•━━━━┛")
+							await msg.edit(f"┏━━━━• **❅Preparando❅** •━━━━┓\n🧩 𝕋𝕠𝕥𝕒𝕝: **{parts} partes**\n┗━━━━•**❅🔩{USER[username]['zips']}MiB🔩❅**•━━━━┛")
 							files = sevenzip(file,volume=zipssize)
-							await files
 							print(24)
 							numero = 0
 							for file in files:
@@ -1349,7 +1348,7 @@ async def up_revistas_api(file,usid,msg,username):
 											url = str(parse).split('url":"')[1].split('"')[0]
 											links.append(url)
 											await bot.send_message(username,f"**[{file.split('/')[-1]}]({url})**")
-											USER[username]+=zipssize
+											USER[username]['S']+=zipssize
 											await send_config()
 										else:
 											await bot.send_message(username,f"**F**: `{file.split('/')[-1]}`")
@@ -1384,8 +1383,9 @@ async def up_revistas_api(file,usid,msg,username):
 								if '_href' in text:
 									parse = str(text).replace('\/','/')
 									url = str(parse).split('url":"')[1].split('"')[0]
-									await msg.edit(f"🚀 𝕾𝖚𝖇𝖎𝖉𝖆 𝕰𝖃𝕴𝕿𝕺𝕾𝕬 🚀 \n\n[{file.split('/')[-1]}]({url})\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login",disable_web_page_preview=True)
-									USER[username] += zipssize
+									await msg.edit(f"🚀 𝕾𝖚𝖇𝖎𝖉𝖆 𝕰𝖃𝕴𝕿𝕺𝕾𝕬 🚀 \n\n**[{file.split('/')[-1]}]({url})**\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login",disable_web_page_preview=True)
+									await bot.sebd_message(CHANNEL,f"Subido x @{username} #enlace\n**[{file.split('/')[-1]}]({url})**\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login",disable_web_page_preview=True)
+									USER[username]['S'] += zipssize
 									await send_config()
 									"""txtname = file.split('.')[0].replace(' ','_')+'.txt'
 									with open(txtname,"w") as t:
@@ -1394,9 +1394,9 @@ async def up_revistas_api(file,usid,msg,username):
 									await bot.send_document(usid,txtname)"""
 								else:
 									await msg.edit(f"ℕ𝕠 𝕤𝕖 𝕡𝕦𝕕𝕠 𝕤𝕦𝕓𝕚𝕣:\n\n**{file.split('/')[-1]}**")
-	except asyncio.CancelledError:
-		 task[username] = False
-		 del tarea_up[username]
+	except Exception as ex:
+		task[username] = False
+		await msg.edit("❌ **ERROR** ❌\nℂ𝕣𝕖𝕕𝕖𝕟𝕔𝕚𝕒𝕝𝕖𝕤 𝕚𝕟𝕔𝕠𝕣𝕣𝕖𝕔𝕥𝕒𝕤, 𝕡𝕦𝕖𝕕𝕖 𝕤𝕖𝕣 𝕥𝕒𝕞𝕓𝕚𝕖́𝕟 𝕒𝕝𝕘𝕦𝕟𝕒 𝕔𝕠𝕟𝕗𝕚𝕘𝕦𝕣𝕒𝕔𝕚𝕠́𝕟...𝕠 𝕝𝕒 𝕟𝕦𝕓𝕖 𝕖𝕤𝕥𝕒́ 𝕔𝕒𝕚́𝕕𝕒/𝕓𝕒𝕟𝕟𝕖𝕒𝕕𝕒. 😐")
 	finally:
 	       task[username] = False
 	       del tarea_up[username]
