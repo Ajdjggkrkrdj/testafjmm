@@ -3,6 +3,7 @@ pyrogram
 tgcrypto
 cryptg
 aiohttp
+aiohttp_socks
 aiofiles
 requests
 ujson
