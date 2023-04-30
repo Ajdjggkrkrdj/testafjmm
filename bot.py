@@ -65,7 +65,8 @@ API_ID = 17617166
 API_HASH = "3ff86cddc30dcd947505e0b8493ce380"
 TOKEN = os.getenv("TOKEN")
 Channel_Id = -1001560753414
-db_access = os.getenv("DB")#4 #74 #8
+db_access_str = os.getenv("DB")#4 #74 #8
+db_access = int(db_access_str)
 CHANNEL = -1001555187910
 
 bot = Client("maxup",api_id=API_ID,api_hash=API_HASH,bot_token=TOKEN)
