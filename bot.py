@@ -1258,12 +1258,12 @@ async def progress_down_tg(chunk,total,filename,start,message):
 	seg = localtime().tm_sec
 	
 #Progreso de subida a la nube bar
-async def uploadfile_progres(chunk,filesize,start,filename,message, parts,numero):
+async def uploadfile_progres(chunk,filesize,start,filename,message):
 	now = time()
 	diff = now - start
 	mbs = chunk / diff
 
-	msg = f"⏫ **𝕊𝕦𝕓𝕚𝕖𝕟𝕕𝕠 **{numero}/{parts}** 𝕡𝕒𝕣𝕥𝕖𝕤** ⏫\n\n"
+	msg = "⏫ **𝕊𝕦𝕓𝕚𝕖𝕟𝕕𝕠** ⏫\n\n"
 	try:
 		msg+=update_progress_up(chunk,filesize)+ " " + sizeof_fmt(mbs)+"/s\n\n"
 	except:pass
@@ -1323,12 +1323,13 @@ async def up_revistas_api(file,usid,msg,username):
 					print(22)
 					links = []
 					if mode=='n':
-						if filesize-1048>float(zipssize):
+						if filesize-1048>zipssize:
 							parts = round(filesize / zipssize)
 							parts+=1
 							
 							await msg.edit(f"┏━━━━• **❅Preparando❅** •━━━━┓\n🧩 𝕋𝕠𝕥𝕒𝕝: `{parts} partes`\n┗━━━━•**❅🔩{USER[username]['zips']}MiB🔩❅**•━━━━┛")
 							files = sevenzip(file,volume=zipssize)
+							await files
 							print(24)
 							numero = 0
 							for file in files:
@@ -1339,7 +1340,7 @@ async def up_revistas_api(file,usid,msg,username):
 									upload_data["name[es_ES]"] = file.split('/')[-1]
 									upload_data["name[en_US]"] = file.split('/')[-1]
 									post_file_url = host + 'api/v1/submissions/'+ up_id +'/files'
-									fi = Progress(file,lambda current,total,timestart,filename: uploadfile_progres(current,total,timestart,filename,msg,parts,numero))
+									fi = Progress(file,lambda current,total,timestart,filename: uploadfile_progres(current,total,timestart,filename,msg))
 									query = {"file":fi,**upload_data}
 									async with session.post(post_file_url,data=query,headers={'X-Csrf-token':csrfToken}) as resp:
 										text = await resp.text()
@@ -1348,7 +1349,7 @@ async def up_revistas_api(file,usid,msg,username):
 											url = str(parse).split('url":"')[1].split('"')[0]
 											links.append(url)
 											await bot.send_message(username,f"**[{file.split('/')[-1]}]({url})**")
-											USER[username]+= float(zipssize)
+											USER[username]+=zipssize
 											await send_config()
 										else:
 											await bot.send_message(username,f"**F**: `{file.split('/')[-1]}`")
@@ -1365,8 +1366,8 @@ async def up_revistas_api(file,usid,msg,username):
 									message+=li+"\n"
 								t.write(message)
 								t.close()
-							await bot.send_document(usid,txtname,caption=f"🚀 𝕾𝖚𝖇𝖎𝖉𝖆 𝕰𝖃𝕴𝕿𝕺𝕾𝕬 🚀 \n\nℙ𝕒𝕣𝕥𝕖𝕤: `{c}`\nℍ𝕠𝕤𝕥: {host}login\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`")
-							await bot.send_document(CHANNEL,txtname,caption=f"**TxT de @{username}**\nℙ𝕒𝕣𝕥𝕖𝕤: `{c}`\nℍ𝕠𝕤𝕥: {host}login\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`")
+							await bot.send_document(usid,txtname,caption=f"🚀 𝕾𝖚𝖇𝖎𝖉𝖆 𝕰𝖃𝕴𝕿𝕺𝕾𝕬 🚀 \n\n[{file.split('/')[-1]}]({url})\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login",disable_web_page_preview=True)
+							await bot.send_document(CHANNEL,txtname,caption=f"**TxT de @{username}**\nℙ𝕒𝕣𝕥𝕖𝕤: `{c}`\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login",disable_web_page_preview=True)
 						else:
 							numero = 1
 							parts = 1
@@ -1376,7 +1377,7 @@ async def up_revistas_api(file,usid,msg,username):
 							upload_data["name[es_ES]"] = file.split('/')[-1]
 							upload_data["name[en_US]"] = file.split('/')[-1]
 							post_file_url = host + 'api/v1/submissions/'+ up_id +'/files'
-							fi = Progress(file,lambda current,total,timestart,filename: uploadfile_progres(current,total,timestart,filename,msg,parts,numero))
+							fi = Progress(file,lambda current,total,timestart,filename: uploadfile_progres(current,total,timestart,filename,msg))
 							query = {"file":fi,**upload_data}
 							async with session.post(post_file_url,data=query,headers={'X-Csrf-token':csrfToken}) as resp:
 								text = await resp.text()
@@ -1384,7 +1385,7 @@ async def up_revistas_api(file,usid,msg,username):
 									parse = str(text).replace('\/','/')
 									url = str(parse).split('url":"')[1].split('"')[0]
 									await msg.edit(f"🚀 𝕾𝖚𝖇𝖎𝖉𝖆 𝕰𝖃𝕴𝕿𝕺𝕾𝕬 🚀 \n\n[{file.split('/')[-1]}]({url})\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login",disable_web_page_preview=True)
-									USER[username] += float(zipssize)
+									USER[username] += zipssize
 									await send_config()
 									"""txtname = file.split('.')[0].replace(' ','_')+'.txt'
 									with open(txtname,"w") as t:
@@ -1394,7 +1395,8 @@ async def up_revistas_api(file,usid,msg,username):
 								else:
 									await msg.edit(f"ℕ𝕠 𝕤𝕖 𝕡𝕦𝕕𝕠 𝕤𝕦𝕓𝕚𝕣:\n\n**{file.split('/')[-1]}**")
 	except asyncio.CancelledError:
-		pass
+		 task[username] = False
+		 del tarea_up[username]
 	finally:
 	       task[username] = False
 	       del tarea_up[username]
