@@ -843,6 +843,7 @@ async def delall(client: Client, message: Message):
 	if username not in BOSS:
 		return
 	else:pass
+	task.clear()
 	shutil.rmtree("downloads")
 	await send("**Root de todos los usiarios limpio ;D**")
 	return
@@ -1241,6 +1242,7 @@ async def up(client: Client, message: Message):
 	   	task[username] = True
 	   	await up_revistas_api(path,user_id,msg,username)
 	except Exception as ex:
+		task[username] = False
 		await message.reply(f"**ERROR**\n{ex}")
 		
 ##MENSAGED DE PROGRESO ⬆⬇
@@ -1415,7 +1417,7 @@ async def up_revistas_api(file,usid,msg,username):
 									message+=li+"\n"
 								t.write(message)
 								t.close()
-							await bot.send_document(usid,txtname,caption=f"🚀 𝕾𝖚𝖇𝖎𝖉𝖆 𝕰𝖃𝕴𝕿𝕺𝕾𝕬 🚀 \n\n\nℍ𝕠𝕤𝕥: {host}login\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`", thumb='thumb.jpg')
+							await bot.send_document(usid,txtname,caption=f"🚀 𝕾𝖚𝖇𝖎𝖉𝖆 𝕰𝖃𝕴𝕿𝕺𝕾𝕬 🚀\n\nℍ𝕠𝕤𝕥: {host}login\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`", thumb='thumb.jpg')
 							await bot.send_document(CHANNEL,txtname,caption=f"**ㄒ乂ㄒ ⓢⓤⓑⓘⓓⓞ 🅧 @{username}**\n**⟨[**`{file.split('/')[-1]}`**]⟩**\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login #txt",thumb = 'thumb.jpg')
 							task[username] = False
 						else:
