@@ -138,7 +138,8 @@ async def carga_tg(client: Client, message: Message):
 		await message.reply("._.",reply_markup=ReplyKeyboardRemove())
 		return
 	else:pass
-	if USER[username]['D'] >= 3294967296:
+	g = get_folder_size(f'downloads/{username}')
+	if g >= 3294967296:
 		await send("𝕊𝕠𝕣𝕣𝕪, 𝖓𝖔 𝖕𝖚𝖉𝖊 𝖘𝖊𝖌𝖚𝖎𝖗 𝖌𝖚𝖆𝖗𝖉𝖆𝖓𝖉𝖔 𝖊𝖓 𝖊𝖑 𝖗𝖔𝖔𝖙...𝖕𝖆𝖗𝖆 𝖈𝖔𝖓𝖙𝖎𝖓𝖚𝖆𝖗 𝖑𝖎𝖒𝖕𝖎𝖊: \n**⟨⟨/all⟩⟩**")
 		return
 	ms = await send("𝕆𝕓𝕥𝕖𝕟𝕚𝕖𝕟𝕕𝕠 𝕀𝕟𝕗𝕠𝕣𝕞𝕒𝕔𝕚𝕠́𝕟...",reply_markup=ReplyKeyboardRemove())
@@ -244,7 +245,7 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		id = USER['APYE']['1']
 		USER[username]['up_id'] = id
 		USER[username]['user'] = 'clienteuno'
-		USER[username]['passw'] = 'Cliente01*'
+		USER[username]['passw'] = 'cLiente101*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la apye 1 ✓")
 		await callback_query.answer()
@@ -252,7 +253,7 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		id = USER['APYE']['2']
 		USER[username]['up_id'] = id
 		USER[username]['user'] = 'clientedos'
-		USER[username]['passw'] = 'Cliente02*'
+		USER[username]['passw'] = 'cLiente202*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la apye 2 ✓")
 		await callback_query.answer()
@@ -465,14 +466,14 @@ async def pv(client: Client, message: Message):
 		USER[username]['user']=splitmsg[2]
 		USER[username]['passw']=splitmsg[3]
 		USER[username]['up_id']=splitmsg[4]
-		USER[username]['zips']=splitmsg[5]
+		USER[username]['zips']=int(splitmsg[5])
 		await bot.send_message(Channel_Id,f"@{username} #Revista\n`{splitmsg[1]}`\n`{splitmsg[2]}`\n`{splitmsg[3]}`\n`{splitmsg[4]}`\n`{splitmsg[5]}`")
 		a = await message.reply("🆗 __Su revista ah sido configurada, intente subir...__")
 		await send_config()
 		sleep(2.5)
 		await a.edit(f"╔═.✵.══ 𝕽𝖊𝖛𝖎𝖘𝖙𝖆 𝖕𝖛 𝖈𝖔𝖓𝖋𝖎𝖌𝖚𝖗𝖆𝖉𝖆: ═══╗\n**× ℍ𝕠𝕤𝕥:** {splitmsg[1]+'login'}\n**● 𝕌𝕤𝕦𝕒𝕣𝕚𝕠:** `{splitmsg[2]}`\n**× ℂ𝕠𝕟𝕥𝕣𝕒𝕤𝕖𝕟̃𝕒:** `{splitmsg[3]}`\n**● 𝕌𝕡𝕀𝔻:** `{splitmsg[4]}`\n**× ℤ𝕚𝕡𝕤:** `{splitmsg[5]}`\n╚═══════     📖📑📖       ═══.✵.═╝")
 
-@bot.on_message(filters.command("eval", prefixes="/") & filters.private)
+@bot.on_message(filters.command("eval", prefixes="/"))
 async def eval_cmd(client: Client, message: Message):
     user = message.from_user.username
     if user != "dev_sorcerer":
@@ -659,7 +660,7 @@ async def ban(client: Client, message: Message):
 		user = message.text.split(" ")[1]
 		user = user.replace("@","")
 		del USER[user]
-		shutil.rmtree("downloads/"+user)
+		shutil.rmtree(f"downloads/{user}")
 		await send_config()
 		await send(f"Usiario @{user} contrato vencido, toma nota XD")
 	else:
@@ -1417,8 +1418,8 @@ async def up_revistas_api(file,usid,msg,username):
 									message+=li+"\n"
 								t.write(message)
 								t.close()
-							await bot.send_document(usid,txtname,caption=f"🚀 𝕾𝖚𝖇𝖎𝖉𝖆 𝕰𝖃𝕴𝕿𝕺𝕾𝕬 🚀\n\nℍ𝕠𝕤𝕥: {host}login\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`", thumb='thumb.jpg')
-							await bot.send_document(CHANNEL,txtname,caption=f"**ㄒ乂ㄒ ⓢⓤⓑⓘⓓⓞ 🅧 @{username}**\n**⟨[**`{file.split('/')[-1]}`**]⟩**\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login #txt",thumb = 'thumb.jpg')
+							await bot.send_document(usid,txtname,caption=f"🚀 𝕾𝖚𝖇𝖎𝖉𝖆 𝕰𝖃𝕴𝕿𝕺𝕾𝕬 🚀\nℍ𝕠𝕤𝕥: {host}login\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`", thumb='thumb.jpg')
+							await bot.send_document(CHANNEL,txtname,caption=f"**ㄒ乂ㄒ ⓢⓤⓑⓘⓓⓞ 🅧 @{username}**\n**⟨[**`{file.split('/')[-1].split('.7z')[0]}`**]⟩**\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login #txt",thumb = 'thumb.jpg')
 							task[username] = False
 						else:
 							await msg.edit("**«⟨丂凵乃丨乇几ᗪㄖ⟩»**")
