@@ -2,7 +2,7 @@ from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, 
 
 START_MESSAGE_BUTTONS = InlineKeyboardMarkup([
     [InlineKeyboardButton('🎷 ℂ𝔸ℕ𝔸𝕃 🎻', url='https://t.me/maxUpload')],
-    [InlineKeyboardButton("💳 𝔸ℂℂ𝔼𝕊𝕆 🔐", url="https://t.me/thorfinDevBot")]
+    [InlineKeyboardButton("💳 𝔸ℂℂ𝔼𝕊𝕆 🔐", url="https://t.me/catDev01")]
 ])
 
 DOWN = ReplyKeyboardMarkup([

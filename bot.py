@@ -72,7 +72,7 @@ CHANNEL = -1001555187910
 bot = Client("maxup",api_id=API_ID,api_hash=API_HASH,bot_token=TOKEN)
 
 BOSS = ['dev_sorcerer']#usuarios supremos
-USER = { 'modo': 'on', 'VIP':['dev_sorcerer'], 'APYE': { '1': '29566', '2': '29533', '3': '29534', '4': '29535', '5': '29536', '6': '29537', '7': '29538', '8': '29539', '9': '29540', '10': '29541'},'EDIC':{'01': '268'  ,'02': '270'  ,'03': '272'  ,'04': '274'  ,'05': '275' }, 'CINFO':{'001': '313'  ,'002': '314'  ,'003': '319'  ,'004': '320'  ,'005': '321' } ,'dev_sorcerer':{'S': 0, 'D':0, 'auto':'n', 'proxy': False, 'host': 'https://apye.esceg.cu/index.php/apye/','user': 'cliente','passw' : 'Cliente01*','up_id': '29564','mode' : 'n','zips' : 35}
+USER = { 'modo': 'on', 'VIP':['dev_sorcerer'], 'APYE': { '1': '30693', '2': '30694', '3': '29534', '4': '29535', '5': '29536', '6': '29537', '7': '29538', '8': '29539', '9': '29540', '10': '29541'},'EDIC':{'01': '268'  ,'02': '270'  ,'03': '272'  ,'04': '274'  ,'05': '275' }, 'CINFO':{'001': '313'  ,'002': '314'  ,'003': '319'  ,'004': '320'  ,'005': '321' } ,'dev_sorcerer':{'S': 0, 'D':0, 'auto':'n', 'proxy': False, 'host': 'https://apye.esceg.cu/index.php/apye/','user': 'cliente','passw' : 'cLiente101*','up_id': '30693','mode' : 'n','zips' : 35}
 }#usuarios premitidos en el bot 
 
 ROOT = {}
@@ -82,7 +82,7 @@ task = { 'dev_sorcerer': False}
 archivos = {}
 ##Base de Datos##
 def update(username):
-	USER[username] = {'S':0 ,'D':0, 'auto': 'n', 'proxy': False, 'host': 'https://apye.esceg.cu/index.php/apye/','user': 'clienteuno','passw' : 'Cliente01*', 'up_id': '29566','mode' : 'n','zips' : 35}
+	USER[username] = {'S':0 ,'D':0, 'auto': 'n', 'proxy': False, 'host': 'https://apye.esceg.cu/index.php/apye/','user': 'clienteuno','passw' : 'cLiente101*', 'up_id': '30693','mode' : 'n','zips' : 35}
 async def get_messages():
 	msg = await bot.get_messages(CHANNEL,message_ids=db_access)
 	USER.update(loads(msg.text))
@@ -228,6 +228,8 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		await limite_msg(msgg[0],username)
 		await msg.delete()
 		await callback_query.answer()
+	elif callback_query.data == "cancelar":
+		pass
 	elif callback_query.data == "del":
 		await msg.delete()
 		await callback_query.answer()
@@ -269,13 +271,13 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		await msg.edit("✓ Ok ahora subire a la apye 3 ✓")
 		await callback_query.answer()
 	elif callback_query.data == "4":
-		if username not in USER['VIP']:
+		"""if username not in USER['VIP']:
 			await callback_query.answer("Cliente solo para premiums ‼️")
-			return
+			return"""
 		id = USER['APYE']['4']
 		USER[username]['up_id'] = id
 		USER[username]['user'] = 'clientecuatro'
-		USER[username]['passw'] = 'C1i3nte04*'
+		USER[username]['passw'] = 'fC1i3nte04*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la apye 4 ✓")
 		await callback_query.answer()
@@ -286,7 +288,7 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		id = USER['APYE']['5']
 		USER[username]['up_id'] = id
 		USER[username]['user'] = 'clientecinco'
-		USER[username]['passw'] = 'C1i3nte05*'
+		USER[username]['passw'] = 'fC1i3nte505*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la apye 5 ✓")
 		await callback_query.answer()
@@ -294,7 +296,7 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		id = USER['APYE']['6']
 		USER[username]['up_id'] = id
 		USER[username]['user'] = 'clienteseis'
-		USER[username]['passw'] = 'Cliente06*'
+		USER[username]['passw'] = 'fCliente06*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la apye 6 ✓")
 		await callback_query.answer()
@@ -302,7 +304,7 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		id = USER['APYE']['7']
 		USER[username]['up_id'] = id
 		USER[username]['user'] = 'clientesiete'
-		USER[username]['passw'] = 'Cliente07*'
+		USER[username]['passw'] = 'fCliente07*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la apye 7 ✓")
 		await callback_query.answer()
@@ -310,7 +312,7 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		id = USER['APYE']['8']
 		USER[username]['up_id'] = id
 		USER[username]['user'] = 'clienteocho'
-		USER[username]['passw'] = 'Cliente08*'
+		USER[username]['passw'] = 'fCliente08*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la apye 8 ✓")
 		await callback_query.answer()
@@ -318,7 +320,7 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		id = USER['APYE']['9']
 		USER[username]['up_id'] = id
 		USER[username]['user'] = 'clientenueve'
-		USER[username]['passw'] = 'Cliente09*'
+		USER[username]['passw'] = 'fCliente09*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la apye 9 ✓")
 		await callback_query.answer()
@@ -326,7 +328,7 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		id = USER['APYE']['10']
 		USER[username]['up_id'] = id
 		USER[username]['user'] = 'clientediez'
-		USER[username]['passw'] = 'Cliente10*'
+		USER[username]['passw'] = 'fCliente10*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la apye 10 ✓")
 		await callback_query.answer()
@@ -433,7 +435,22 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		await msg.edit("✓ **EDUCA** 𝕮𝖔𝖓𝖋𝖎𝖌𝖚𝖗𝖆𝖉𝖆 𝖈𝖔𝖓 𝖊́𝖝𝖎𝖙𝖔 ✓")
 		await callback_query.answer()"""
 	
-		
+@bot.on_message(filters.command("status", prefixes="/"))
+async def status(client:Client, message:Message):
+	user = message.from_user.username
+	if user != 'dev_sorcerer':
+				return
+	else:pass
+	modo = USER['modo']
+	if modo == 'on':
+				USER['modo']='off'
+				await message.reply("**✓ Status: OFF ✓**")
+				await send_config()
+	else:
+				USER['modo']='on'
+				await message.reply("**✓ Status: ON ✓**")
+				await send_config()
+				
 @bot.on_message(filters.command("rv", prefixes="/") & filters.private)
 async def rev(client:Client, message:Message):
 	user = message.from_user.username
@@ -480,7 +497,7 @@ async def eval_cmd(client: Client, message: Message):
     	return
     else:pass
     text=message.text
-    splitmsg = text.replace("/eval", "")
+    splitmsg = text.replace("/eval", "").strip()
     try:
         code = str(eval(splitmsg))
         await message.reply(code)
@@ -654,11 +671,22 @@ async def ban(client: Client, message: Message):
 		msg = message.text.split(" ")
 		if len(msg) == 3:
 			user = message.text.split(" ")[1]
-			user = user.replace("@","")
-			USER['VIP'].remove(user)
-			await send(f"Usaurio @{user} ya no es premium!!!")
+			user = user.replace("@","").strip()
+			if user not in USER:
+				await send(f'@{user} no tiene VIP !')
+				return
+			else:
+				USER['VIP'].remove(user)
+				await send(f"Usaurio @{user} ya no es premium!!!")
+				await send_config()
+				return
+		else:pass
 		user = message.text.split(" ")[1]
-		user = user.replace("@","")
+		user = user.replace("@","").strip()
+		if user not in USER:
+			await send(f"@{user} no posee contrato!!!")
+			return
+		else:pass
 		del USER[user]
 		shutil.rmtree(f"downloads/{user}")
 		await send_config()
@@ -762,16 +790,21 @@ async def rename(client: Client, message: Message):
 	msgh = files_formatter(str(ROOT[username]["actual_root"]),username)
 	lista = message.text.split(" ")
 	name1 = int(lista[1])
-	name2 = lista[2]
-	if not "." in name2:
-		await send("__Tiene q darle o mantener el formato__\n**Ej:** `/rn 0 algo.mp4`")
-		return
+	mssg = message.text
+	name2 = mssg.replace("/rn "+lista[1],'').strip()
 	actual = str(ROOT[username]["actual_root"]+"/")+msgh[1][name1]
+	
 	if not "." in actual:
-		if not "." in name2: pass
+		if not "." in name2 and not "/" in name2: pass
 		else:
-			await send("**La carpeta no se puede renombrar con punto v:**")
+			await send("**La carpeta no se puede renombrar con ,.*/**")
 			return
+	else:pass												
+	if '.' in actual:
+		if not "." in name2:
+			await send("__Tiene q darle o mantener el formato__\n**Ej:** `/rn 0 Algo Importante.mp4`")
+			return
+		else:pass
 	shutil.move(actual,h+"/"+name2)
 	await send(f"**ℝ𝕖𝕟𝕠𝕞𝕓𝕣𝕒𝕕𝕠:**\n~~{msgh[1][name1]}~~\n➥ `{name2}`",reply_markup=root)
 	"""msg = files_formatter(str(ROOT[username]["actual_root"]),username)
@@ -861,9 +894,9 @@ async def seven(client: Client, message: Message):
 	else:pass
 	if username not in BOSS and USER['modo'] != 'on':
 		return
-	if username not in USER['VIP']:
+	"""if username not in USER['VIP']:
 		await send("Comando solo para usuarios premium v:")
-		return
+		return"""
 	if task[username] == True:
 		await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸")
 		return
@@ -871,6 +904,10 @@ async def seven(client: Client, message: Message):
 	msgh = files_formatter(str(ROOT[username]["actual_root"]),username)
 
 	if len(lista) == 2:
+		if username not in USER['VIP'] and username not in BOSS:
+			await send("Comprimir esta desactivado (solo puede picar) para usted :/ stop con el abuso.")
+			return
+		else:pass
 		i = int(lista[1])
 		j = str(msgh[1][i])
 		if not "." in j:
@@ -890,9 +927,15 @@ async def seven(client: Client, message: Message):
 		j = str(msgh[1][i])
 		t = int(lista[2])
 		g = str(ROOT[username]["actual_root"]+"/")+msgh[1][i]
+		
 		h = await send(f"𝕮𝖔𝖒𝖕𝖗𝖎𝖒𝖎𝖊𝖓𝖉𝖔...")
 		task[username] = True
 		if not "." in j:
+			if username not in USER['VIP'] and username not in BOSS:
+				await h.edit("Comprimir carpetas esta desactivado para usted :/ stop con el abuso.")
+				task[username] = False
+				return
+			else:pass
 			p = shutil.make_archive(j, format = "zip", root_dir=g)
 			await h.edit(f"𝕯𝖎𝖛𝖎𝖉𝖎𝖊𝖓𝖉𝖔 𝖊𝖓 𝖕𝖆𝖗𝖙𝖊𝖘 𝖉𝖊 {𝖙}𝕸𝖎𝕭")
 			sleep(2)
@@ -905,7 +948,15 @@ async def seven(client: Client, message: Message):
 			task[username] = False
 			return
 		else:
+			if Path(g).stat().st_size > 314572800 and username not in BOSS:
+				await h.edit("**No posee el poder necesario para portar el baston :(**\n__Permitido picar solo archivos q pesen max. 300MiB__")
+				task[username] = False
+				return
+			else:pass
+				
 			task[username] = True
+			await h.edit(f"𝕯𝖎𝖛𝖎𝖉𝖎𝖊𝖓𝖉𝖔 𝖊𝖓 𝖕𝖆𝖗𝖙𝖊𝖘 𝖉𝖊 {𝖙} 𝕸𝖎𝕭")
+			sleep(2)
 			a = asyncio.create_task(sevenzip(g,password=None,volume = t*1024*1024))
 			await a
 			await h.edit("✓ 𝕮𝖔𝖒𝖕𝖗𝖊𝖓𝖘𝖎𝖔́𝖓 𝖗𝖊𝖆𝖑𝖎𝖟𝖆𝖉𝖆 ✓",reply_markup=root)
@@ -996,9 +1047,7 @@ async def mv(client: Client, message: Message):
 	else:pass
 	if username not in BOSS and USER['modo'] != 'on':
 		return
-	if task[username] == True:
-		await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸")
-		return
+
 	lista = message.text.split(" ")
 	msgh = files_formatter(str(ROOT[username]["actual_root"]),username)
 	new_dir = int(lista[2])
@@ -1133,6 +1182,15 @@ async def down_media(client: Client, message: Message):
 	except:await send_config()
 	try: archivos[username]
 	except: archivos[username]=0
+	try:downlist[username]
+	except:downlist[username] = []
+	if exists('downloads/'+str(username)+'/'):pass
+	else:
+		os.makedirs('downloads/'+str(username)+'/')
+	try:ROOT[username]
+	except:ROOT[username] = {"actual_root":f"downloads/{str(username)}"}
+	try:task[username]
+	except:task[username] = False
 	if username not in USER:
 		return
 	else:pass
@@ -1411,7 +1469,11 @@ async def up_revistas_api(file,usid,msg,username):
 									pass
 							await msg.edit("🌩️ **₣Ɨ₦₳ⱠƗƵ₳ƉØ** ⤵️")							
 							await bot.send_message(usid,f"💻 **🅂🅄🄱🄸🄳🄾 {subido} / {parts}** ☁️")
-							txtname = file.split('.')[0].replace(' ','_')+'.txt'
+							if '.7z' in file:
+								txtname = file.split('.7z')[0].replace(' ','_')+'.txt'
+							else:
+								txtname = file.split('.')[0].replace(' ','_')+'.txt'
+								
 							with open(txtname,"w") as t:
 								message = ""
 								for li in links:
@@ -1421,6 +1483,7 @@ async def up_revistas_api(file,usid,msg,username):
 							await bot.send_document(usid,txtname,caption=f"🚀 𝕾𝖚𝖇𝖎𝖉𝖆 𝕰𝖃𝕴𝕿𝕺𝕾𝕬 🚀\nℍ𝕠𝕤𝕥: {host}login\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`", thumb='thumb.jpg')
 							await bot.send_document(CHANNEL,txtname,caption=f"**ㄒ乂ㄒ ⓢⓤⓑⓘⓓⓞ 🅧 @{username}**\n**⟨[**`{file.split('/')[-1].split('.7z')[0]}`**]⟩**\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login #txt",thumb = 'thumb.jpg')
 							task[username] = False
+							os.remove(ROOT[username]['actual_root']+f"/{str(txtname)}")
 						else:
 							await msg.edit("**«⟨丂凵乃丨乇几ᗪㄖ⟩»**")
 							sleep(0.5)
