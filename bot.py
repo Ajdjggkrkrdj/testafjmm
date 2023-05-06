@@ -434,6 +434,31 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		await send_config()
 		await msg.edit("✓ **EDUCA** 𝕮𝖔𝖓𝖋𝖎𝖌𝖚𝖗𝖆𝖉𝖆 𝖈𝖔𝖓 𝖊́𝖝𝖎𝖙𝖔 ✓")
 		await callback_query.answer()"""
+@bot.on_message(filters.command("users", prefixes="/"))
+async def status_users(client:Client, message:Message):
+	user = message.from_user.username
+	if user != 'dev_sorcerer':
+				return
+	else:pass
+	up = 0
+	down = 0
+	info = ""
+	msg = "**✦✧ ༒ Ɨ₦₣ØɌⲘ₳€ƗØ₦ ₮Ø₮₳Ⱡ ༒ ✧✦**\n"
+	for i in USER:
+		if i == 'modo':continue
+		if i == 'VIP':continue
+		if i == 'APYE':continue
+		if i == 'EDIC':continue
+		if i == 'CINFO':continue
+		S = sizeof_fmt(USER[i]['S'])
+		D = sizeof_fmt(USER[i]['D'])
+		up += USER[i]['S']
+		down += USER[i]['D']
+		info += f"Ʉ$Ʉ₳ɌƗØ: **@{i}**\n𝔻𝕖𝕤𝕔𝕒𝕣𝕘𝕒𝕕𝕠: **{D}**\n𝕊𝕦𝕓𝕚𝕕𝕠: **{S}**\n\n"
+	users = str(len(USER)-5)
+	msg +=f"🅤🅢🅐🅤🅡🅘🅞🅢: **{users}**\n🅄🄿🄻🄾🄰🄳🄴🄳: **{sizeof_fmt(up)}**\n🄳🄾🅆🄽🄻🄾🄰🄳🄴🄳: **{sizeof_fmt(down)}**\n\n"
+	await message.reply(msg+info)
+	
 	
 @bot.on_message(filters.command("status", prefixes="/"))
 async def status(client:Client, message:Message):
@@ -670,7 +695,7 @@ async def ban(client: Client, message: Message):
 	if username in BOSS:
 		msg = message.text.split(" ")
 		if len(msg) == 3:
-			user = message.text.split(" ")[1]
+			user = msg[1]
 			user = user.replace("@","").strip()
 			if user not in USER:
 				await send(f'@{user} no tiene VIP !')
@@ -681,7 +706,7 @@ async def ban(client: Client, message: Message):
 				await send_config()
 				return
 		else:pass
-		user = message.text.split(" ")[1]
+		user = msg[1]
 		user = user.replace("@","").strip()
 		if user not in USER:
 			await send(f"@{user} no posee contrato!!!")
@@ -834,19 +859,15 @@ async def rm(client: Client, message: Message):
 		v2 = int(list.split("-")[-1])
 		for i in range(v1,v2+1):
 			try:
-				size += Path(str(ROOT[username]["actual_root"])+"/"+msgh[1][i]).stat().st_size
 				unlink(str(ROOT[username]["actual_root"])+"/"+msgh[1][i])
 			except:
-				size += get_folder_size(str(ROOT[username]["actual_root"])+"/"+msgh[1][i])
 				shutil.rmtree(str(ROOT[username]["actual_root"])+"/"+msgh[1][i])
 		await message.reply("🗑️ 𝔸𝕣𝕔𝕙𝕚𝕧𝕠𝕤 𝕤𝕖𝕝𝕖𝕔𝕔𝕚𝕠𝕟𝕒𝕕𝕠𝕤 𝕖𝕝𝕚𝕞𝕚𝕟𝕒𝕕𝕠𝕤.",reply_markup=root)
 		await send_config()
 	else:
 		try:
-			size += Path(str(ROOT[username]["actual_root"])+"/"+msgh[1][int(list)]).stat().st_size
 			unlink(str(ROOT[username]["actual_root"])+"/"+msgh[1][int(list)])
 		except:
-			size += get_folder_size(str(ROOT[username]["actual_root"])+"/"+msgh[1][int(list)])
 			shutil.rmtree(str(ROOT[username]["actual_root"])+"/"+msgh[1][int(list)])
 		await message.reply("🗑️ 𝔸𝕣𝕔𝕙𝕚𝕧𝕠 𝕤𝕖𝕝𝕖𝕔𝕔𝕚𝕠𝕟𝕒𝕕𝕠 𝕖𝕝𝕚𝕞𝕚𝕟𝕒𝕕𝕠.",reply_markup=root)
 		await send_config()
@@ -948,8 +969,8 @@ async def seven(client: Client, message: Message):
 			task[username] = False
 			return
 		else:
-			if Path(g).stat().st_size > 314572800 and username not in BOSS:
-				await h.edit("**No posee el poder necesario para portar el baston :(**\n__Permitido picar solo archivos q pesen max. 300MiB__")
+			if Path(g).stat().st_size > 525336576 and username not in BOSS:
+				await h.edit("**No posee el poder necesario para portar el baston :(**\n__Permitido picar solo archivos q pesen max. 500MiB__")
 				task[username] = False
 				return
 			else:pass
@@ -1292,6 +1313,7 @@ async def up(client: Client, message: Message):
 	   	return
 	try:
 	   msg = await message.reply("ℙ𝕣𝕖𝕡𝕒𝕣𝕒𝕟𝕕𝕠 𝕤𝕦𝕓𝕚𝕕𝕒...")
+	   
 	   msgh = files_formatter(str(ROOT[username]["actual_root"]),username)
 	   path = str(ROOT[username]["actual_root"]+"/")+msgh[1][list]
 	   if USER[username]['host'] == 'educa':
@@ -1440,6 +1462,7 @@ async def up_revistas_api(file,usid,msg,username):
 							parts = math.ceil(filesize / zipssize)
 							await msg.edit(f"┏━━━━• **❅Preparando❅** •━━━━┓\n🧩 𝕋𝕠𝕥𝕒𝕝: **{parts} partes** a 丂凵乃丨尺\n┗━━━━•**❅🔩{USER[username]['zips']}MiB🔩❅**•━━━━┛")
 							files = await sevenzip(file,volume=zipssize)
+							await bot.pin_chat_message(usid,msg.id, disable_notification=True,both_sides=True)
 							print(24)
 							subido = 0
 							numero = 0
@@ -1469,11 +1492,7 @@ async def up_revistas_api(file,usid,msg,username):
 									pass
 							await msg.edit("🌩️ **₣Ɨ₦₳ⱠƗƵ₳ƉØ** ⤵️")							
 							await bot.send_message(usid,f"💻 **🅂🅄🄱🄸🄳🄾 {subido} / {parts}** ☁️")
-							if '.7z' in file:
-								txtname = file.split('.7z')[0].replace(' ','_')+'.txt'
-							else:
-								txtname = file.split('.')[0].replace(' ','_')+'.txt'
-								
+							txtname = file.split('.7z')[0].replace(' ','_')+'.txt'	
 							with open(txtname,"w") as t:
 								message = ""
 								for li in links:
@@ -1483,7 +1502,7 @@ async def up_revistas_api(file,usid,msg,username):
 							await bot.send_document(usid,txtname,caption=f"🚀 𝕾𝖚𝖇𝖎𝖉𝖆 𝕰𝖃𝕴𝕿𝕺𝕾𝕬 🚀\nℍ𝕠𝕤𝕥: {host}login\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`", thumb='thumb.jpg')
 							await bot.send_document(CHANNEL,txtname,caption=f"**ㄒ乂ㄒ ⓢⓤⓑⓘⓓⓞ 🅧 @{username}**\n**⟨[**`{file.split('/')[-1].split('.7z')[0]}`**]⟩**\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login #txt",thumb = 'thumb.jpg')
 							task[username] = False
-							os.remove(ROOT[username]['actual_root']+f"/{str(txtname)}")
+							os.unlink(txtname)
 						else:
 							await msg.edit("**«⟨丂凵乃丨乇几ᗪㄖ⟩»**")
 							sleep(0.5)
