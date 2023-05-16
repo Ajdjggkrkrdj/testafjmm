@@ -13,3 +13,4 @@ pathlib
 yarl
 psutil
 py7zr
+unidecode

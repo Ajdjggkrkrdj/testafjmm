@@ -17,7 +17,7 @@ root = InlineKeyboardMarkup(
 )
 tutos = InlineKeyboardMarkup(
 	[
-		[InlineKeyboardButton("👨🏼‍💻 ₮Ʉ₮Ø$ 👨🏼‍💻",url='https://t.me/+SCbjkkQfp4ZiYjgx')]
+		[InlineKeyboardButton("👨🏼‍💻 ₮Ʉ₮Ø$ 👨🏼‍💻",url='https://t.me/+iEX64u7itJMzOGY5')]
 	]
 )
 
@@ -29,7 +29,7 @@ cancelar = InlineKeyboardMarkup(
 
 MENU = InlineKeyboardMarkup(
 	[	[InlineKeyboardButton("👑𝔼𝔻𝕌ℂ𝔸👑", callback_data = "EDUCA")],		[InlineKeyboardButton("༒ℝ𝕖𝕧𝔸𝕡𝕪𝕖༒", callback_data="APYE"),InlineKeyboardButton("༒ℝ𝕖𝕧𝔼𝕕𝕚𝕔༒", callback_data="EDIC")],
-		[InlineKeyboardButton("༒ℝ𝕖𝕧ℂ𝕚𝕟𝕗𝕠༒", callback_data="CINFO")],
+		[InlineKeyboardButton("༒ℝ𝕖𝕧ℂ𝕚𝕟𝕗𝕠༒", callback_data="CINFO"),InlineKeyboardButton("༒ℝ𝕖𝕧𝕊𝕥𝕘𝕠༒", callback_data="STGO")],
 		[InlineKeyboardButton("❌",callback_data="del")]
 	]
 )
@@ -53,8 +53,8 @@ EDIC = InlineKeyboardMarkup(
         [InlineKeyboardButton("📖 ℝ𝕖𝕧𝕚𝕤𝕥𝕒𝕤 𝔼𝕕𝕚𝕔𝕚𝕠𝕟𝕖𝕤📕", callback_data="REVISTAS.edic")],
         [InlineKeyboardButton("1", callback_data="01"),
             InlineKeyboardButton("2", callback_data="02"),
-            InlineKeyboardButton("3", callback_data="03")],
-            [InlineKeyboardButton("4", callback_data="04"),
+            InlineKeyboardButton("3", callback_data="03"),
+            InlineKeyboardButton("4", callback_data="04"),
             InlineKeyboardButton("5", callback_data="05")],
             [InlineKeyboardButton("⬅️", callback_data="back")]
         ]
@@ -65,9 +65,29 @@ CINFO = InlineKeyboardMarkup(
         [InlineKeyboardButton("📖 ℝ𝕖𝕧𝕚𝕤𝕥𝕒𝕤 ℂ𝕚𝕟𝕗𝕠.📕", callback_data="REVISTAS.cinfo")],
         [InlineKeyboardButton("1", callback_data="001"),
             InlineKeyboardButton("2", callback_data="002"),
-            InlineKeyboardButton("3", callback_data="003")],
-            [InlineKeyboardButton("4", callback_data="004"),
+            InlineKeyboardButton("3", callback_data="003"),
+            InlineKeyboardButton("4", callback_data="004"),
             InlineKeyboardButton("5", callback_data="005")],
+            [InlineKeyboardButton("⬅️", callback_data="back")]
+        ]
+)
+
+STGO = InlineKeyboardMarkup(
+    [
+        [InlineKeyboardButton("📖 ℝ𝕖𝕧𝕚𝕤𝕥𝕒𝕤 𝕊𝕥𝕘𝕠.📕", callback_data="REVISTAS.santiago")],
+        [InlineKeyboardButton("1", callback_data="0001")],
+            [InlineKeyboardButton("2", callback_data="0002")],
+            [InlineKeyboardButton("⬅️", callback_data="back")]
+        ]
+)
+
+ZIPSTGO = InlineKeyboardMarkup(
+    [
+        [InlineKeyboardButton("📦 𝕊𝕖𝕝𝕖𝕔𝕔𝕚𝕠𝕟𝕖 𝕥𝕒𝕞𝕒𝕟̃𝕠 𝕕𝕖𝕝 𝕫𝕚𝕡 🗜️", callback_data="ZIPS.santiago")],
+        [InlineKeyboardButton("20", callback_data="z2"),
+            InlineKeyboardButton("30", callback_data="z3"),
+            InlineKeyboardButton("40", callback_data="z4"),
+            InlineKeyboardButton("50", callback_data="z5")],
             [InlineKeyboardButton("⬅️", callback_data="back")]
         ]
 )
