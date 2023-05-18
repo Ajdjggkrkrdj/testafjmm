@@ -508,20 +508,19 @@ async def status_users(client:Client, message:Message):
 	msg = "**✦✧ ༒ Ɨ₦₣ØɌⲘ₳€ƗØ₦ ₮Ø₮₳Ⱡ ༒ ✧✦**\n"
 	for i in USER:
 		if i == 'modo':continue
-		#if i == 'up':continue
-		#if i == 'down':continue
 		if i == 'VIP':continue
 		if i == 'APYE':continue
 		if i == 'EDIC':continue
 		if i == 'CINFO':continue
 		if i == 'dev_sorcerer':continue
+		if i == 'STGO':continue
 		S = sizeof_fmt(USER[i]['S'])
 		D = sizeof_fmt(USER[i]['D'])
-		up += USER[i]['S']
+		up +=USER[i]['S']
 		down += USER[i]['D']
 
 		info += f"Ʉ$Ʉ₳ɌƗØ: **@{i}**\n𝔻𝕖𝕤𝕔𝕒𝕣𝕘𝕒𝕕𝕠: **{D}**\n𝕊𝕦𝕓𝕚𝕕𝕠: **{S}**\n\n"
-	users = str(len(USER)-6)
+	users = str(len(USER)-7)
 	msg +=f"🅤🅢🅐🅤🅡🅘🅞🅢: **{users}**\n🅄🄿🄻🄾🄰🄳🄴🄳: **{sizeof_fmt(up)}**\n🄳🄾🅆🄽🄻🄾🄰🄳🄴🄳: **{sizeof_fmt(down)}**\n\n"
 	await message.reply(msg+info)
 	
