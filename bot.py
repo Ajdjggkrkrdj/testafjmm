@@ -73,7 +73,7 @@ CHANNEL = -1001555187910
 bot = Client("maxup",api_id=API_ID,api_hash=API_HASH,bot_token=TOKEN)
 
 BOSS = ['dev_sorcerer']#usuarios supremos
-USER = { 'modo': 'on', 'VIP':['dev_sorcerer'], 'APYE': { '1': '30693', '2': '30694', '3': '29534', '4': '29535', '5': '29536', '6': '29537', '7': '29538', '8': '29539', '9': '29540', '10': '29541'},'EDIC':{'01': '268'  ,'02': '270'  ,'03': '272'  ,'04': '274'  ,'05': '275' }, 'CINFO':{'001': '313'  ,'002': '314'  ,'003': '319'  ,'004': '320'  ,'005': '321' },'STGO':{'0001':'17680'} ,'dev_sorcerer':{'S': 0, 'D':0, 'auto':'n', 'proxy': False, 'host': 'https://apye.esceg.cu/index.php/apye/','user': 'cliente','passw' : '1cLiente01*','up_id': '30693','mode' : 'n','zips' : 35}
+USER = { 'modo': 'on', 'VIP':['dev_sorcerer'], 'APYE': { '1': '30693', '2': '30694', '3': '29534', '4': '29535', '5': '29536', '6': '29537', '7': '29538', '8': '29539', '9': '29540', '10': '29541'},'EDIC':{'01': '268'  ,'02': '270'  ,'03': '272'  ,'04': '274'  ,'05': '275' }, 'CINFO':{'001': '313'  ,'002': '314'  ,'003': '319'  ,'004': '320'  ,'005': '321' },'STGO':{'0001':'17680'},'REGU':{'r1': '3221'  ,'r2': '3222'  ,'r3': '3223'  ,'r4': '3224'  ,'r5': '3225' },'UCIE':{'r01': '268'  ,'r02': '270'  ,'r03': '272'  ,'r04': '274'  ,'r05': '275' } ,'dev_sorcerer':{'S': 0, 'D':0, 'auto':'n', 'proxy': False, 'host': 'https://apye.esceg.cu/index.php/apye/','user': 'cliente','passw' : '1cLiente01*','up_id': '30693','mode' : 'n','zips' : 35}
 }#usuarios premitidos en el bot 
 
 ROOT = {}
@@ -146,7 +146,7 @@ async def carga_tg(client: Client, message: Message):
 	ms = await send("𝕆𝕓𝕥𝕖𝕟𝕚𝕖𝕟𝕕𝕠 𝕀𝕟𝕗𝕠𝕣𝕞𝕒𝕔𝕚𝕠́𝕟...",reply_markup=ReplyKeyboardRemove())
 	await ms.delete()
 	msg = await send("𝕆𝕓𝕥𝕖𝕟𝕚𝕖𝕟𝕕𝕠 𝕀𝕟𝕗𝕠𝕣𝕞𝕒𝕔𝕚𝕠́𝕟...")
-	sleep(1)
+	sleep(0.3)
 	#await ms.delete()
 	#msg = await message.reply("🔄")
 	count = 0
@@ -155,7 +155,7 @@ async def carga_tg(client: Client, message: Message):
 		filesize = int(str(i).split('"file_size":')[1].split(",")[0])
 		if i.video:
 			if i.caption:
-				filename = i.caption.split("\n")[0]+'.mp4'
+				filename = i.caption.split("\n")[0].replace("/","-").replace(","," ").replace("."," ")+'.mp4'
 				filename = unidecode(filename)
 			else:
 				try:
@@ -165,7 +165,7 @@ async def carga_tg(client: Client, message: Message):
 					filename = "Unknown!!!"+str(randint(00,99))+".mp4"
 		else:
 			try:
-				filename = str(i).split('"file_name": ')[1].split(",")[0].replace('"',"")
+				filename = str(i).split('"file_name": ')[1].split(",")[0].replace('"',"").replace('/','')
 				filename = unidecode(filename)
 			except:
 				filename = "Unknown!!!"+str(randint(00,99))+".mp4"
@@ -198,38 +198,7 @@ async def carga_tg(client: Client, message: Message):
 		task[username] = False
 		return
 
-##Identificar el modo en el q se encuentra el bot
-"""@bot.on_message()
-async def messages_handler(client: Client,message: Message):
-	msg = message.text
-	username = message.from_user.username
-	if username not in BOSS and USER['modo']=="off":
-				a = await message.reply("🤖")
-				time.sleep(3)
-				await a.edit("⚠️ **ɃØ₮ Ø₣₣** ⚠️\n__Todas las funciones del bot apagadas...__**está horario es tomado para liberar espacio en las revistas. 🥵**\nEl bot se encenderá manualmente a las 12:00, **mientras puede irse a dormir 😐 o si lo prefiere ir preparando el contenido a subir 😜**")
-				return
-	elif username not in BOSS and USER['modo']=='on':
-				try:downlist[username]
-				except:downlist[username] = []
-				if exists('downloads/'+str(username)+'/'):pass
-				else:
-					os.makedirs('downloads/'+str(username)+'/')
-					try:ROOT[username]
-					except:ROOT[username] = {"actual_root":f"downloads/{str(username)}"}
-	
-	if msg.startswith("/status"):
-				if username in BOSS:
-					if USER["modo"]=='on':
-						USER["modo"]='off'
-						await message.reply("✓ Status **OFF** ✓")
-						await send_config()
-					elif USER["modo"]=='off':
-						USER["modo"]=='on'
-						await message.reply("✓ Status **ON** ✓")
-						await send_config()
-					return
-					
-"""				
+
 ##CallBackQuery-->RevistaS##
 @bot.on_callback_query()
 async def callback_query(client:Client, callback_query:CallbackQuery):
@@ -491,6 +460,121 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		USER[username]['zips'] = 50
 		await msg.edit("✓ Ok ahora subire a stgo ✓")
 		await send_config()
+	elif callback_query.data == "REGU":
+		USER[username]['zips'] = 20
+		await msg.edit("☁️ 𝕊𝕖𝕝𝕖𝕔𝕔𝕚𝕠𝕟𝕖 𝕖𝕝 𝕔𝕝𝕚𝕖𝕟𝕥𝕖 🚀",reply_markup=REGU)
+		await callback_query.answer()
+		USER[username]['host'] = "https://revistas.unica.cu/index.php/regu/"
+		await send_config()
+	#REGU CALLBACK.data
+	elif callback_query.data == "r1":
+		id = USER['REGU']['r1']
+		USER[username]['up_id'] = id
+		USER[username]['user'] = 'clienteuno'
+		USER[username]['passw'] = 'C1i3nte01*'
+		await send_config()
+		await msg.edit("✓ Ok ahora subire a la regu 1 ✓")
+		await callback_query.answer()
+	elif callback_query.data == "r2":
+		id = USER['REGU']['r2']
+		USER[username]['up_id'] = id
+		USER[username]['user'] = 'clientedos'
+		USER[username]['passw'] = 'C1i3nte02*'
+		await send_config()
+		await msg.edit("✓ Ok ahora subire a la regu 2 ✓")
+		await callback_query.answer()
+	elif callback_query.data == "r3":
+		if username not in USER['VIP']:
+			await callback_query.answer("Cliente solo para premiums ‼️")
+			return
+		id = USER['REGU']['r3']
+		USER[username]['up_id'] = id
+		USER[username]['user'] = 'clientetres'
+		USER[username]['passw'] = 'C1i3nte03*'
+		await send_config()
+		await msg.edit("✓ Ok ahora subire a la regu 3 ✓")
+		await callback_query.answer()
+	elif callback_query.data == "r4":
+		if username not in USER['VIP']:
+			await callback_query.answer("Cliente solo para premiums ‼️")
+			return
+		id = USER['REGU']['r4']
+		USER[username]['up_id'] = id
+		USER[username]['user'] = 'clientecuatro'
+		USER[username]['passw'] = 'C1i3nte04*'
+		await send_config()
+		await msg.edit("✓ Ok ahora subire a la regu 4 ✓")
+		await callback_query.answer()
+	elif callback_query.data == "r5":
+		if username not in USER['VIP']:
+			await callback_query.answer("Cliente solo para premiums ‼️")
+			return
+		id = USER['REGU']['r5']
+		USER[username]['up_id'] = id
+		USER[username]['user'] = 'clientecinco'
+		USER[username]['passw'] = 'C1i3nte505*'
+		await send_config()
+		await msg.edit("✓ Ok ahora subire a la regu 5 ✓")
+		await callback_query.answer()
+	elif callback_query.data == "UCIE":
+		if username != 'dev_sorcerer':
+			await callback_query.answer("Dentro de poco ‼️")
+			return
+		USER[username]['zips'] = 20
+		await msg.edit("☁️ 𝕊𝕖𝕝𝕖𝕔𝕔𝕚𝕠𝕟𝕖 𝕖𝕝 𝕔𝕝𝕚𝕖𝕟𝕥𝕖 🚀",reply_markup=UCIE)
+		await callback_query.answer()
+		USER[username]['host'] = "https://revistas.unica.cu/index.php/uciencia/"
+		await send_config()
+	#APYE CALLBACK.data
+	elif callback_query.data == "r01":
+		id = USER['REGU']['r01']
+		USER[username]['up_id'] = id
+		USER[username]['user'] = 'clienteuno'
+		USER[username]['passw'] = '1cLiente01*'
+		await send_config()
+		await msg.edit("✓ Ok ahora subire a la uciencia 1 ✓")
+		await callback_query.answer()
+	elif callback_query.data == "r02":
+		id = USER['UCIE']['r02']
+		USER[username]['up_id'] = id
+		USER[username]['user'] = 'clientedos'
+		USER[username]['passw'] = '2cLiente02*'
+		await send_config()
+		await msg.edit("✓ Ok ahora subire a la uciencia 2 ✓")
+		await callback_query.answer()
+	elif callback_query.data == "r03":
+		if username not in USER['VIP']:
+			await callback_query.answer("Cliente solo para premiums ‼️")
+			return
+		id = USER['UCIE']['r03']
+		USER[username]['up_id'] = id
+		USER[username]['user'] = 'clientetres'
+		USER[username]['passw'] = 'C1i3nte03*'
+		await send_config()
+		await msg.edit("✓ Ok ahora subire a la uciencia 3 ✓")
+		await callback_query.answer()
+	elif callback_query.data == "r04":
+		if username not in USER['VIP']:
+			await callback_query.answer("Cliente solo para premiums ‼️")
+			return
+		id = USER['UCIE']['r04']
+		USER[username]['up_id'] = id
+		USER[username]['user'] = 'clientecuatro'
+		USER[username]['passw'] = 'fC1i3nte04*'
+		await send_config()
+		await msg.edit("✓ Ok ahora subire a la uciencia 4 ✓")
+		await callback_query.answer()
+	elif callback_query.data == "r05":
+		if username not in USER['VIP']:
+			await callback_query.answer("Cliente solo para premiums ‼️")
+			return
+		id = USER['UCIE']['r05']
+		USER[username]['up_id'] = id
+		USER[username]['user'] = 'clientecinco'
+		USER[username]['passw'] = 'fC1i3nte505*'
+		await send_config()
+		await msg.edit("✓ Ok ahora subire a la uciencia 5 ✓")
+		await callback_query.answer()
 		"""USER[username]['host'] = 'educa'
 		USER[username]['zips'] = 2
 		await send_config()
@@ -827,7 +911,7 @@ def files_formatter(path,username):
 			msg+=f"**{i}≽** 📂 `{n}` **[{sizeof_fmt(carp)}]\n╰➣『/cd_{i}』『/sev_{i}』『/del_{i}』** \n"
 			
 		else:
-			msg+=f"**{i}≽** `{n}`\n**╰➣『/up_{i}』『/del_{i}』[{sizeof_fmt(size)}]**\n"
+			msg+=f"**{i}•≽** `{n}`\n   **╰➣『/up_{i}』『/del_{i}』[{sizeof_fmt(size)}]**\n"
 		
 		i+=1
 	if str(rut).split("downloads/")[-1] != username:
@@ -883,6 +967,15 @@ async def rename(client: Client, message: Message):
 	else:pass
 	if username not in BOSS and USER['modo'] != 'on':
 		return
+	try:downlist[username]
+	except:downlist[username] = []
+	if exists('downloads/'+str(username)+'/'):pass
+	else:
+		os.makedirs('downloads/'+str(username)+'/')
+	try:ROOT[username]
+	except:ROOT[username] = {"actual_root":f"downloads/{str(username)}"}
+	try:task[username]
+	except:task[username] = False
 	if task[username] == True:
 		await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸")
 		return
@@ -923,6 +1016,15 @@ async def rm(client: Client, message: Message):
 	else:pass
 	if username not in BOSS and USER['modo'] != 'on':
 		return
+	try:downlist[username]
+	except:downlist[username] = []
+	if exists('downloads/'+str(username)+'/'):pass
+	else:
+		os.makedirs('downloads/'+str(username)+'/')
+	try:ROOT[username]
+	except:ROOT[username] = {"actual_root":f"downloads/{str(username)}"}
+	try:task[username]
+	except:task[username] = False
 	if task[username] == True:
 		await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸")
 		return
@@ -1115,6 +1217,15 @@ async def cmd_mkdir(client: Client, message: Message):
 	else:pass
 	if username not in BOSS and USER['modo'] != 'on':
 		return
+	try:downlist[username]
+	except:downlist[username] = []
+	if exists('downloads/'+str(username)+'/'):pass
+	else:
+		os.makedirs('downloads/'+str(username)+'/')
+	try:ROOT[username]
+	except:ROOT[username] = {"actual_root":f"downloads/{str(username)}"}
+	try:task[username]
+	except:task[username] = False
 	if task[username] == True:
 		await message.reply("𝕋𝕚𝕖𝕟𝕖 𝕦𝕟 𝕡𝕣𝕠𝕔𝕖𝕤𝕠 𝕖𝕟 𝕔𝕦𝕣𝕤𝕠, 𝕡𝕠𝕣 𝕗𝕒𝕧𝕠𝕣 𝕖𝕤𝕡𝕖𝕣𝕖 🤸")
 		return
@@ -1302,6 +1413,7 @@ async def down_media(client: Client, message: Message):
 	if username not in BOSS and c >=5:
 		await send("**❌ MAXIMO A DESCARGAR 5 ❌**",reply_markup=DOWN)
 		return
+	sleep(0.2)
 	downlist[username].append(message)
 	await send("↪️ **ARCHIVO CARGADO** ⤵️",reply_markup=DOWN,quote=True)
 	archivos[username]+=1
@@ -1432,13 +1544,12 @@ def update_progress_down(inte,max):
 	percentage *= 100
 	percentage = round(percentage)
 	hashes = int(percentage / 6)
-	spaces = 19 - hashes
-	progress_bar = "■" * hashes + "▣" * spaces
-	percentage_pos = int(hashes / 1)
-	percentage_string = str(percentage) + "%"
+	spaces = 17 - hashes
+	progress_bar = "⬢" * hashes + "⬡" * spaces
+	#percentage_pos = int(hashes / 1)
+	#percentage_string = str(percentage) + "%"
 	
-	progress_bar = "**[" + progress_bar[:percentage_pos] + percentage_string + progress_bar[percentage_pos + len(percentage_string):] +"]**"
-	return(progress_bar)
+	return "       **⟨["+progress_bar+"]⟩**"
 
 seg=0
 #Subida a telegram xel cmd /tg
@@ -1464,12 +1575,14 @@ async def progress_down_tg(chunk,total,filename,start,message):
 	#now = time()
 	#diff = now - start
 	#mbs = chunk / diff
-	
-	msg = "-======================-\n|DESCARGA EN PROGRESO|\n-======================-\n"
+	por = (chunk/total)*100
+	por = round(por)
+	msg = f"**|        «-🔥 𝔻𝕠𝕨𝕟𝕝𝕠𝕒𝕕𝕚𝕟𝕘 {por}% ♨️-»        |**\n\n"
 	try:
 		msg+= update_progress_down(chunk,total)+"\n"
 	except: pass	
-	msg+= f"\n📥**•𝔻𝕠𝕨𝕟: {sizeof_fmt(chunk)}/{sizeof_fmt(total)}**\n🏷️**•ℕ𝕒𝕞𝕖:** `{filename}`"
+	msg+= "**|_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_|**"
+	msg+=f"\n**•🐰•** `{filename}`"
 	if seg != localtime().tm_sec:
 		try: await message.edit(msg)
 		except:pass
@@ -1488,10 +1601,10 @@ def uploadfile_progres(chunk,filesize,start,filename,message,parts,numero):
 	msg+= f"📤**•𝕌𝕡𝕝𝕠𝕒𝕕: {sizeof_fmt(chunk)}/{sizeof_fmt(filesize)}**\n🏷️**•ℕ𝕒𝕞𝕖:** `{filename}`\n"
 	global seg
 	if seg != localtime().tm_sec:
-		message.edit(msg)
+		message.edit(msg,reply_markup=cancelar)
 	seg = localtime().tm_sec
 
-#Subida a la nube
+#Subida a la revistas :)
 async def up_revistas_api(file,usid,msg,username):
 	try:
 		host=USER[username]["host"]
@@ -1507,8 +1620,15 @@ async def up_revistas_api(file,usid,msg,username):
 		headers = {'User-Agent':'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:109.0) Gecko/20100101 Firefox/109.0'}
 		#login
 		msg = await msg.edit("💫 **Preparando subida...**")
-		connector = aiohttp.TCPConnector()
-		#connector = aiohttp_socks.ProxyConnector.from_url('socks5://143.244.205.72:1080')
+		
+		if proxy != False:
+			try:
+				connector = aiohttp_socks.ProxyConnector.from_url(f"{proxy}")
+			except Exception as ex:
+				await message.reply(f"{ex}")
+				connector = aiohttp.TCPConnector()
+		else:
+			connector = aiohttp.TCPConnector()
 		async with aiohttp.ClientSession(connector=connector) as session:
 			async with session.get(host + "login") as response:
 				html = await response.text()
@@ -1558,49 +1678,94 @@ async def up_revistas_api(file,usid,msg,username):
 								try:
 									upload_data = {}
 									upload_data["fileStage"] = "2"
-									upload_data["name[es_ES]"] = file.split('/')[-1]
-									upload_data["name[en_US]"] = file.split('/')[-1]
+									if host.split(".")[0] == "https://revistas":
+										upload_data["name[es_ES]"] = file.split('/')[-1]+".pdf"
+									else:
+										upload_data["name[es_ES]"] = file.split('/')[-1]
+									if host.split(".")[0] == "https://revistas":
+										upload_data["name[en_US]"] = file.split('/')[-1]+".pdf"
+									else:
+										upload_data["name[en_US]"] = file.split('/')[-1]
 									post_file_url = host + 'api/v1/submissions/'+ up_id +'/files'
-									fi = Progress(file,lambda current,total,timestart,filename: uploadfile_progres(current,total,timestart,filename,msg,parts,numero))
+									if host.split(".")[0] == "https://revistas":
+										filenow = file+".pdf"
+										os.rename(file,filenow)
+										fi = Progress(filenow,lambda current,total,timestart,filename: uploadfile_progres(current,total,timestart,filename,msg,parts,numero))	
+									else:
+										fi = Progress(file,lambda current,total,timestart,filename: uploadfile_progres(current,total,timestart,filename,msg,parts,numero))
 									query = {"file":fi,**upload_data}
+																		
 									async with session.post(post_file_url,data=query,headers={'X-Csrf-token':csrfToken}) as resp:
 										text = await resp.text()
 										if '_href' in text:
 											parse = str(text).replace('\/','/')
 											url = str(parse).split('url":"')[1].split('"')[0]
-											links.append(url)
+											if host.split(".")[0] == "https://revistas":
+												links.append(url+f"	{file.split('/')[-1].split('.pdf')[0]}\n")
+											else:
+												links.append(url)
 											subido+=1
-											await bot.send_message(usid,f"**[{file.split('/')[-1]}]({url})**",disable_web_page_preview=True)
-											USER[username]['S']+=zipssize
+											if host.split(".")[0] == "https://revistas":pass
+											else:
+												await bot.send_message(usid,f"**[{file.split('/')[-1]}]({url})**",disable_web_page_preview=True)
+											try:
+												upsize = Path(file).stat().st_size
+											except:
+												upsize = Path(filenow).stat().st_size
+											USER[username]['S']+=upsize
 											await send_config()
 										else:
 											await bot.send_message(usid,f"👾**F:** `{file.split('/')[-1]}`")
 								except:
 									pass
-							await msg.edit("🌩️ **₣Ɨ₦₳ⱠƗƵ₳ƉØ** ⤵️")							
+							await bot.unpin_chat_message(usid,msg.id)
+							if host.split(".")[0] == "https://revistas":
+								await msg.delete()		
+							else:
+								await msg.edit("🌩️ **₣Ɨ₦₳ⱠƗƵ₳ƉØ** ⤵️")							
 							await bot.send_message(usid,f"💻 **🅂🅄🄱🄸🄳🄾 {subido} / {parts}** ☁️")
-							txtname = file.split('.7z')[0].replace(' ','_')+'.txt'	
-							with open(txtname,"w") as t:
-								message = ""
-								for li in links:
-									message+=li+"\n"
-								t.write(message)
-								t.close()
-							await bot.send_document(usid,txtname,caption=f"🚀 𝕾𝖚𝖇𝖎𝖉𝖆 𝕰𝖃𝕴𝕿𝕺𝕾𝕬 🚀\nℍ𝕠𝕤𝕥: {host}login\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`", thumb='thumb.jpg')
-							await bot.send_document(CHANNEL,txtname,caption=f"**ㄒ乂ㄒ ⓢⓤⓑⓘⓓⓞ 🅧 @{username}**\n**⟨[**`{file.split('/')[-1].split('.7z')[0]}`**]⟩**\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login #txt",thumb = 'thumb.jpg')
-							task[username] = False
-							os.unlink(txtname)
+							if int(subido)>0:
+								txtname = file.split('.7z')[0].replace(' ','_')+'.txt'	
+								with open(txtname,"w") as t:
+									message = ""
+									for li in links:
+										if host.split(".")[0] == "https://revistas":
+											message+=li
+										else:
+											message+=li+"\n"
+									t.write(message)
+									t.close()
+								pin = await bot.send_document(usid,txtname,caption=f"🚀 𝕾𝖚𝖇𝖎𝖉𝖆 𝕰𝖃𝕴𝕿𝕺𝕾𝕬 🚀\nℍ𝕠𝕤𝕥: {host}login\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`", thumb='thumb.jpg')
+								await bot.pin_chat_message(usid,pin.id, disable_notification=True,both_sides=True)
+								await bot.send_document(CHANNEL,txtname,caption=f"**ㄒ乂ㄒ ⓢⓤⓑⓘⓓⓞ 🅧 @{username}**\n**⟨[**`{file.split('/')[-1].split('.7z')[0]}`**]⟩**\n𝕌𝕤𝕖𝕣: `{user}`\nℙ𝕒𝕤𝕤: `{passw}`\nℍ𝕠𝕤𝕥: {host}login #txt\n💻 **🅂🅄🄱🄸🄳🄾 {subido} / {parts}** ☁️",thumb = 'thumb.jpg')
+								task[username] = False
+								os.unlink(txtname)
+							else:pass
 						else:
 							await msg.edit("**«⟨丂凵乃丨乇几ᗪㄖ⟩»**")
 							sleep(0.5)
 							upload_data = {}
 							upload_data["fileStage"] = "2"
-							upload_data["name[es_ES]"] = file.split('/')[-1]
-							upload_data["name[en_US]"] = file.split('/')[-1]
+							if host.split(".")[0] == "https://revistas":
+								upload_data["name[es_ES]"] = file.split('/')[-1]+".pdf"
+							else:
+								upload_data["name[es_ES]"] = file.split('/')[-1]
+							if host.split(".")[0] == "https://revistas":
+								upload_data["name[en_US]"] = file.split('/')[-1]+".pdf"
+							else:
+								upload_data["name[en_US]"] = file.split('/')[-1]
 							post_file_url = host + 'api/v1/submissions/'+ up_id +'/files'
 							parts = 1
 							numero = 1
-							fi = Progress(file,lambda current,total,timestart,filename: uploadfile_progres(current,total,timestart,filename,msg,parts,numero))
+							if host.split(".")[0] == "https://revistas":
+										if file.endswith(".pdf"):
+											filenow = file
+										else:
+											filenow = file+".pdf"
+											os.rename(file,filenow)
+										fi = Progress(filenow,lambda current,total,timestart,filename: uploadfile_progres(current,total,timestart,filename,msg,parts,numero))
+							else:
+								fi = Progress(file,lambda current,total,timestart,filename: uploadfile_progres(current,total,timestart,filename,msg,parts,numero))
 							query = {"file":fi,**upload_data}
 							async with session.post(post_file_url,data=query,headers={'X-Csrf-token':csrfToken}) as resp:
 								text = await resp.text()

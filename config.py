@@ -30,6 +30,7 @@ cancelar = InlineKeyboardMarkup(
 MENU = InlineKeyboardMarkup(
 	[	[InlineKeyboardButton("👑𝔼𝔻𝕌ℂ𝔸👑", callback_data = "EDUCA")],		[InlineKeyboardButton("༒ℝ𝕖𝕧𝔸𝕡𝕪𝕖༒", callback_data="APYE"),InlineKeyboardButton("༒ℝ𝕖𝕧𝔼𝕕𝕚𝕔༒", callback_data="EDIC")],
 		[InlineKeyboardButton("༒ℝ𝕖𝕧ℂ𝕚𝕟𝕗𝕠༒", callback_data="CINFO"),InlineKeyboardButton("༒ℝ𝕖𝕧𝕊𝕥𝕘𝕠༒", callback_data="STGO")],
+		[InlineKeyboardButton("༒ℝ𝕖𝕧ℝ𝕖𝕘𝕦༒", callback_data="REGU"),InlineKeyboardButton("༒ℝ𝕖𝕧𝕌𝕔𝕚𝕖༒", callback_data="UCIE")],
 		[InlineKeyboardButton("❌",callback_data="del")]
 	]
 )
@@ -88,6 +89,30 @@ ZIPSTGO = InlineKeyboardMarkup(
             InlineKeyboardButton("30", callback_data="z3"),
             InlineKeyboardButton("40", callback_data="z4"),
             InlineKeyboardButton("50", callback_data="z5")],
+            [InlineKeyboardButton("⬅️", callback_data="back")]
+        ]
+)
+
+REGU = InlineKeyboardMarkup(
+    [
+        [InlineKeyboardButton("📖 ℝ𝕖𝕧𝕚𝕤𝕥𝕒𝕤 ℝ𝕖𝕘𝕦.📕", callback_data="REVISTAS.regu")],
+        [InlineKeyboardButton("1", callback_data="r1"),
+            InlineKeyboardButton("2", callback_data="r2"),
+            InlineKeyboardButton("3", callback_data="r3"),
+            InlineKeyboardButton("4", callback_data="r4"),
+            InlineKeyboardButton("5", callback_data="r5")],
+            [InlineKeyboardButton("⬅️", callback_data="back")]
+        ]
+)
+
+UCIE = InlineKeyboardMarkup(
+    [
+        [InlineKeyboardButton("📖 ℝ𝕖𝕧𝕚𝕤𝕥𝕒𝕤 𝕌𝕔𝕚𝕖𝕟𝕔𝕚𝕒.📕", callback_data="REVISTAS.uciencia")],
+        [InlineKeyboardButton("1", callback_data="r01"),
+            InlineKeyboardButton("2", callback_data="r02"),
+            InlineKeyboardButton("3", callback_data="r03"),
+            InlineKeyboardButton("4", callback_data="r04"),
+            InlineKeyboardButton("5", callback_data="r05")],
             [InlineKeyboardButton("⬅️", callback_data="back")]
         ]
 )
