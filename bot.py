@@ -41,6 +41,7 @@ from zipfile import ZipFile
 from multivolumefile import MultiVolume
 from config import *
 import math
+import itertools
 import sys
 from unidecode import unidecode
 
@@ -72,8 +73,9 @@ CHANNEL = -1001555187910
 
 bot = Client("maxup",api_id=API_ID,api_hash=API_HASH,bot_token=TOKEN)
 
+#'EDIC':{'01': '268'  ,'02': '270'  ,'03': '272'  ,'04': '274'  ,'05': '275' }, 'CINFO':{'001': '313'  ,'002': '314'  ,'003': '319'  ,'004': '320'  ,'005': '321' },
 BOSS = ['dev_sorcerer']#usuarios supremos
-USER = { 'modo': 'on', 'VIP':['dev_sorcerer'], 'APYE': { '1': '30693', '2': '30694', '3': '29534', '4': '29535', '5': '29536', '6': '29537', '7': '29538', '8': '29539', '9': '29540', '10': '29541'},'EDIC':{'01': '268'  ,'02': '270'  ,'03': '272'  ,'04': '274'  ,'05': '275' }, 'CINFO':{'001': '313'  ,'002': '314'  ,'003': '319'  ,'004': '320'  ,'005': '321' },'STGO':{'0001':'17680'},'REGU':{'r1': '3221'  ,'r2': '3222'  ,'r3': '3223'  ,'r4': '3224'  ,'r5': '3225' },'UCIE':{'r01': '268'  ,'r02': '270'  ,'r03': '272'  ,'r04': '274'  ,'r05': '275' } ,'dev_sorcerer':{'S': 0, 'D':0, 'auto':'n', 'proxy': False, 'host': 'https://apye.esceg.cu/index.php/apye/','user': 'cliente','passw' : '1cLiente01*','up_id': '30693','mode' : 'n','zips' : 35}
+USER = { 'modo': 'on', 'VIP':['dev_sorcerer'], 'APYE': { '1': '30693', '2': '30694', '3': '29534', '4': '29535', '5': '29536', '6': '29537', '7': '29538', '8': '29539', '9': '29540', '10': '29541'},'STGO':{'0001':'17680'},'REGU':{'r1': '3221'  ,'r2': '3222'  ,'r3': '3223'  ,'r4': '3224'  ,'r5': '3225' },'UCIE':{'r01': '3322'  ,'r02': '3323'  ,'r03': '272'  ,'r04': '274'  ,'r05': '275' } ,'TECE':{'t1': '746'  ,'t2': '747'  ,'t3': '749'  ,'t4': '750'  ,'t5': '751' } ,'dev_sorcerer':{'S': 0, 'D':0, 'auto':'n', 'proxy': False, 'host': 'https://apye.esceg.cu/index.php/apye/','user': 'cliente','passw' : '1cLiente01*','up_id': '30693','mode' : 'n','zips' : 35}
 }#usuarios premitidos en el bot 
 
 ROOT = {}
@@ -210,7 +212,10 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		await msg.delete()
 		await callback_query.answer()
 	elif callback_query.data == "cancelar":
-		pass
+		task[username]=False
+		await msg.delete()
+		await bot.send_message(username,"✓ __Subida actual cancelada__ ✓")
+		await callback_query.answer()
 	elif callback_query.data == "del":
 		await msg.delete()
 		await callback_query.answer()
@@ -517,28 +522,28 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 		await msg.edit("✓ Ok ahora subire a la regu 5 ✓")
 		await callback_query.answer()
 	elif callback_query.data == "UCIE":
-		if username != 'dev_sorcerer':
+		"""if username != 'dev_sorcerer':
 			await callback_query.answer("Dentro de poco ‼️")
-			return
-		USER[username]['zips'] = 20
+			return"""
+		USER[username]['zips'] = 19
 		await msg.edit("☁️ 𝕊𝕖𝕝𝕖𝕔𝕔𝕚𝕠𝕟𝕖 𝕖𝕝 𝕔𝕝𝕚𝕖𝕟𝕥𝕖 🚀",reply_markup=UCIE)
 		await callback_query.answer()
 		USER[username]['host'] = "https://revistas.unica.cu/index.php/uciencia/"
 		await send_config()
-	#APYE CALLBACK.data
+	#UCIEN CALLBACK.data
 	elif callback_query.data == "r01":
-		id = USER['REGU']['r01']
+		id = USER['UCIE']['r01']
 		USER[username]['up_id'] = id
-		USER[username]['user'] = 'clienteuno'
-		USER[username]['passw'] = '1cLiente01*'
+		USER[username]['user'] = 'clientuno'
+		USER[username]['passw'] = 'Cliente01*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la uciencia 1 ✓")
 		await callback_query.answer()
 	elif callback_query.data == "r02":
 		id = USER['UCIE']['r02']
 		USER[username]['up_id'] = id
-		USER[username]['user'] = 'clientedos'
-		USER[username]['passw'] = '2cLiente02*'
+		USER[username]['user'] = 'clientdos'
+		USER[username]['passw'] = 'Cliente02*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la uciencia 2 ✓")
 		await callback_query.answer()
@@ -548,8 +553,8 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 			return
 		id = USER['UCIE']['r03']
 		USER[username]['up_id'] = id
-		USER[username]['user'] = 'clientetres'
-		USER[username]['passw'] = 'C1i3nte03*'
+		USER[username]['user'] = 'clienttres'
+		USER[username]['passw'] = 'Cliente03*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la uciencia 3 ✓")
 		await callback_query.answer()
@@ -559,8 +564,8 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 			return
 		id = USER['UCIE']['r04']
 		USER[username]['up_id'] = id
-		USER[username]['user'] = 'clientecuatro'
-		USER[username]['passw'] = 'fC1i3nte04*'
+		USER[username]['user'] = 'clientcuatro'
+		USER[username]['passw'] = 'Cliente04*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la uciencia 4 ✓")
 		await callback_query.answer()
@@ -570,10 +575,66 @@ async def callback_query(client:Client, callback_query:CallbackQuery):
 			return
 		id = USER['UCIE']['r05']
 		USER[username]['up_id'] = id
-		USER[username]['user'] = 'clientecinco'
-		USER[username]['passw'] = 'fC1i3nte505*'
+		USER[username]['user'] = 'clientcinco'
+		USER[username]['passw'] = 'Cliente05*'
 		await send_config()
 		await msg.edit("✓ Ok ahora subire a la uciencia 5 ✓")
+		await callback_query.answer()
+	elif callback_query.data == "TECE":
+		USER[username]['zips'] = 4
+		await msg.edit("☁️ 𝕊𝕖𝕝𝕖𝕔𝕔𝕚𝕠𝕟𝕖 𝕖𝕝 𝕔𝕝𝕚𝕖𝕟𝕥𝕖 🚀",reply_markup=TECE)
+		await callback_query.answer()
+		USER[username]['host'] = "https://tecedu.uho.edu.cu/index.php/tecedu/"
+		await send_config()
+	#TECE CALLBACK.data
+	elif callback_query.data == "t1":
+		id = USER['TECE']['t1']
+		USER[username]['up_id'] = id
+		USER[username]['user'] = 'clienteuno'
+		USER[username]['passw'] = 'Cliente01*'
+		await send_config()
+		await msg.edit("✓ Ok ahora subire a la tece 1 ✓")
+		await callback_query.answer()
+	elif callback_query.data == "t2":
+		id = USER['TECE']['t2']
+		USER[username]['up_id'] = id
+		USER[username]['user'] = 'clientedos'
+		USER[username]['passw'] = 'Cliente02*'
+		await send_config()
+		await msg.edit("✓ Ok ahora subire a la tece 2 ✓")
+		await callback_query.answer()
+	elif callback_query.data == "t3":
+		if username not in USER['VIP']:
+			await callback_query.answer("Cliente solo para premiums ‼️")
+			return
+		id = USER['TECE']['t3']
+		USER[username]['up_id'] = id
+		USER[username]['user'] = 'clientetres'
+		USER[username]['passw'] = 'Cliente03*'
+		await send_config()
+		await msg.edit("✓ Ok ahora subire a la tece 3 ✓")
+		await callback_query.answer()
+	elif callback_query.data == "t4":
+		if username not in USER['VIP']:
+			await callback_query.answer("Cliente solo para premiums ‼️")
+			return
+		id = USER['TECE']['t4']
+		USER[username]['up_id'] = id
+		USER[username]['user'] = 'clientecuatro'
+		USER[username]['passw'] = 'Cliente04*'
+		await send_config()
+		await msg.edit("✓ Ok ahora subire a la tece 4 ✓")
+		await callback_query.answer()
+	elif callback_query.data == "t5":
+		if username not in USER['VIP']:
+			await callback_query.answer("Cliente solo para premiums ‼️")
+			return
+		id = USER['TECE']['t5']
+		USER[username]['up_id'] = id
+		USER[username]['user'] = 'clientecinco'
+		USER[username]['passw'] = 'Cliente05*'
+		await send_config()
+		await msg.edit("✓ Ok ahora subire a la tece 5 ✓")
 		await callback_query.answer()
 		"""USER[username]['host'] = 'educa'
 		USER[username]['zips'] = 2
@@ -590,21 +651,19 @@ async def status_users(client:Client, message:Message):
 	down = 0
 	info = ""
 	msg = "**✦✧ ༒ Ɨ₦₣ØɌⲘ₳€ƗØ₦ ₮Ø₮₳Ⱡ ༒ ✧✦**\n"
-	for i in USER:
-		if i == 'modo':continue
-		if i == 'VIP':continue
-		if i == 'APYE':continue
-		if i == 'EDIC':continue
-		if i == 'CINFO':continue
+	users = 0
+	for i in USER:		
 		if i == 'dev_sorcerer':continue
-		if i == 'STGO':continue
-		S = sizeof_fmt(USER[i]['S'])
-		D = sizeof_fmt(USER[i]['D'])
-		up +=USER[i]['S']
-		down += USER[i]['D']
+		try:
+			S = sizeof_fmt(USER[i]['S'])
+			D = sizeof_fmt(USER[i]['D'])
+			up +=USER[i]['S']
+			down += USER[i]['D']
 
-		info += f"Ʉ$Ʉ₳ɌƗØ: **@{i}**\n𝔻𝕖𝕤𝕔𝕒𝕣𝕘𝕒𝕕𝕠: **{D}**\n𝕊𝕦𝕓𝕚𝕕𝕠: **{S}**\n\n"
-	users = str(len(USER)-7)
+			info += f"Ʉ$Ʉ₳ɌƗØ: **@{i}**\n𝔻𝕖𝕤𝕔𝕒𝕣𝕘𝕒𝕕𝕠: **{D}**\n𝕊𝕦𝕓𝕚𝕕𝕠: **{S}**\n\n"
+			cont+=1
+		except:
+			continue
 	msg +=f"🅤🅢🅐🅤🅡🅘🅞🅢: **{users}**\n🅄🄿🄻🄾🄰🄳🄴🄳: **{sizeof_fmt(up)}**\n🄳🄾🅆🄽🄻🄾🄰🄳🄴🄳: **{sizeof_fmt(down)}**\n\n"
 	await message.reply(msg+info)
 	
@@ -696,7 +755,7 @@ async def start(client: Client, message: Message):
 	else:pass
 	if USER['modo'] != 'on' and username not in BOSS:
 		a = await message.reply("🤖")
-		sleep(3)
+		sleep(5)
 		await a.edit("⚠️ **ɃØ₮ Ø₣₣** ⚠️\n__Todas las funciones del bot apagadas...__**está horario es tomado para liberar espacio en las revistas. 🥵**\nEl bot se encenderá manualmente, **mientras puede irse a dormir 😐 o si lo prefiere ir preparando el contenido a subir 😜**",reply_markup=tutos)
 		return
 
@@ -718,7 +777,12 @@ async def start(client: Client, message: Message):
 	elif b.split(".")[0] == "https://apye":
 		rv = 'a'
 	elif b.split(".")[0] == "https://revistas":
-		rv = 'u'
+		if b.split("/")[4] == "uciencia":
+			rv = 'uc'
+		else:
+			rv = 'u'	
+	elif b.split(".")[0] == "https://tecedu":
+		rv = 't'
 	elif b.split(".")[0] == "https://santiago":
 		rv = 's'
 	elif b == 'educa':
@@ -739,7 +803,11 @@ async def start(client: Client, message: Message):
 	elif rv == "c":
 		msg+="☆ ℍ𝕠𝕤𝕥: **cinfo** ✓𝕽𝖊𝖛𝖎𝖘𝖙𝖆✓\n"
 	elif rv == "u":
-		msg+="☆ ℍ𝕠𝕤𝕥: **unica** ✓𝕽𝖊𝖛𝖎𝖘𝖙𝖆✓\n"
+		msg+="☆ ℍ𝕠𝕤𝕥: **regu** ✓𝕽𝖊𝖛𝖎𝖘𝖙𝖆✓\n"
+	elif rv == "uc":
+		msg+="☆ ℍ𝕠𝕤𝕥: **uciencia** ✓𝕽𝖊𝖛𝖎𝖘𝖙𝖆✓\n"
+	elif rv == "t":
+		msg+="☆ ℍ𝕠𝕤𝕥: **tecedu** ✓𝕽𝖊𝖛𝖎𝖘𝖙𝖆✓\n"
 	elif rv == "s":
 		msg+="☆ ℍ𝕠𝕤𝕥: **stgo** ✓𝕽𝖊𝖛𝖎𝖘𝖙𝖆✓\n"
 	elif rv =="ac":
@@ -1523,7 +1591,7 @@ async def up(client: Client, message: Message):
 	   	await up_revistas_api(path,user_id,msg,username)
 	except Exception as ex:
 		task[username] = False
-		await message.reply(f"**ERROR**\n{ex}")
+		await msg.edit("⚠️ __Imposible la carga del archivo por algun motivo__ ‼️")
 		
 ##MENSAGED DE PROGRESO ⬆⬇
 def update_progress_up(inte,max):
@@ -1536,7 +1604,7 @@ def update_progress_up(inte,max):
 	percentage_pos = int(hashes / 1)
 	percentage_string = str(percentage) + "%"
 	
-	progress_bar = "**[" + progress_bar[:percentage_pos] + percentage_string + progress_bar[percentage_pos + len(percentage_string):] +"]**"
+	progress_bar = " **[" + progress_bar[:percentage_pos] + percentage_string + progress_bar[percentage_pos + len(percentage_string):] +"]**"
 	return(progress_bar)
 ###
 def update_progress_down(inte,max):
@@ -1590,15 +1658,21 @@ async def progress_down_tg(chunk,total,filename,start,message):
 	
 #Progreso de subida a la nube bar
 def uploadfile_progres(chunk,filesize,start,filename,message,parts,numero):
+	clock_emojis = itertools.cycle(['🕐', '🕑', '🕒', '🕓', '🕔', '🕕', '🕖', '🕗', '🕘', '🕙', '🕚', '🕛'])
+	
 	now = time()
 	diff = now - start
 	mbs = chunk / diff
+	filename = filename.replace(".pdf","").strip()
+	partes = filename.split(".")
+	exten = ".".join(partes[-2:])
+	filename = filename[:14]+"(...)."+exten
 
 	msg = f"⏫ **𝕊𝕦𝕓𝕚𝕖𝕟𝕕𝕠 {numero} / {parts} 𝕡𝕒𝕣𝕥𝕖𝕤** ⏫\n\n"
 	try:
 		msg+=update_progress_up(chunk,filesize)+ " " + sizeof_fmt(mbs)+"/s\n\n"
 	except:pass
-	msg+= f"📤**•𝕌𝕡𝕝𝕠𝕒𝕕: {sizeof_fmt(chunk)}/{sizeof_fmt(filesize)}**\n🏷️**•ℕ𝕒𝕞𝕖:** `{filename}`\n"
+	msg+= f"🎒: `{filename}`\n**{next(clock_emojis)}: 0:00:00  |  🆙: {sizeof_fmt(chunk)}/{sizeof_fmt(filesize)}**"
 	global seg
 	if seg != localtime().tm_sec:
 		message.edit(msg,reply_markup=cancelar)
@@ -1678,16 +1752,16 @@ async def up_revistas_api(file,usid,msg,username):
 								try:
 									upload_data = {}
 									upload_data["fileStage"] = "2"
-									if host.split(".")[0] == "https://revistas":
+									if host.split(".")[0] == "https://revistas" or host.split(".")[0] == "https://tecedu":
 										upload_data["name[es_ES]"] = file.split('/')[-1]+".pdf"
 									else:
 										upload_data["name[es_ES]"] = file.split('/')[-1]
-									if host.split(".")[0] == "https://revistas":
+									if host.split(".")[0] == "https://revistas" or host.split(".")[0] == "https://tecedu":
 										upload_data["name[en_US]"] = file.split('/')[-1]+".pdf"
 									else:
 										upload_data["name[en_US]"] = file.split('/')[-1]
 									post_file_url = host + 'api/v1/submissions/'+ up_id +'/files'
-									if host.split(".")[0] == "https://revistas":
+									if host.split(".")[0] == "https://revistas" or host.split(".")[0] == "https://tecedu":
 										filenow = file+".pdf"
 										os.rename(file,filenow)
 										fi = Progress(filenow,lambda current,total,timestart,filename: uploadfile_progres(current,total,timestart,filename,msg,parts,numero))	
@@ -1700,12 +1774,12 @@ async def up_revistas_api(file,usid,msg,username):
 										if '_href' in text:
 											parse = str(text).replace('\/','/')
 											url = str(parse).split('url":"')[1].split('"')[0]
-											if host.split(".")[0] == "https://revistas":
+											if host.split(".")[0] == "https://revistas" or host.split(".")[0] == "https://tecedu":
 												links.append(url+f"	{file.split('/')[-1].split('.pdf')[0]}\n")
 											else:
 												links.append(url)
 											subido+=1
-											if host.split(".")[0] == "https://revistas":pass
+											if host.split(".")[0] == "https://revistas" or host.split(".")[0] == "https://tecedu":pass
 											else:
 												await bot.send_message(usid,f"**[{file.split('/')[-1]}]({url})**",disable_web_page_preview=True)
 											try:
@@ -1719,7 +1793,7 @@ async def up_revistas_api(file,usid,msg,username):
 								except:
 									pass
 							await bot.unpin_chat_message(usid,msg.id)
-							if host.split(".")[0] == "https://revistas":
+							if host.split(".")[0] == "https://revistas" or host.split(".")[0] == "https://tecedu":
 								await msg.delete()		
 							else:
 								await msg.edit("🌩️ **₣Ɨ₦₳ⱠƗƵ₳ƉØ** ⤵️")							
@@ -1729,7 +1803,7 @@ async def up_revistas_api(file,usid,msg,username):
 								with open(txtname,"w") as t:
 									message = ""
 									for li in links:
-										if host.split(".")[0] == "https://revistas":
+										if host.split(".")[0] == "https://revistas" or host.split(".")[0] == "https://tecedu":
 											message+=li
 										else:
 											message+=li+"\n"
@@ -1746,19 +1820,25 @@ async def up_revistas_api(file,usid,msg,username):
 							sleep(0.5)
 							upload_data = {}
 							upload_data["fileStage"] = "2"
-							if host.split(".")[0] == "https://revistas":
-								upload_data["name[es_ES]"] = file.split('/')[-1]+".pdf"
+							if host.split(".")[0] == "https://revistas" or host.split(".")[0] == "https://tecedu":
+								if file.split('/')[-1].endswith(".pdf"):
+									upload_data["name[es_ES]"] = file.split('/')[-1]
+								else:
+									upload_data["name[es_ES]"] = file.split('/')[-1]+".pdf"
 							else:
 								upload_data["name[es_ES]"] = file.split('/')[-1]
-							if host.split(".")[0] == "https://revistas":
-								upload_data["name[en_US]"] = file.split('/')[-1]+".pdf"
+							if host.split(".")[0] == "https://revistas" or host.split(".")[0] == "https://tecedu":
+								if file.split('/')[-1].endswith(".pdf"):
+									upload_data["name[en_US]"] = file.split('/')[-1]
+								else:
+									upload_data["name[en_US]"] = file.split('/')[-1]+".pdf"
 							else:
 								upload_data["name[en_US]"] = file.split('/')[-1]
 							post_file_url = host + 'api/v1/submissions/'+ up_id +'/files'
 							parts = 1
 							numero = 1
-							if host.split(".")[0] == "https://revistas":
-										if file.endswith(".pdf"):
+							if host.split(".")[0] == "https://revistas" or host.split(".")[0] == "https://tecedu":
+										if file.split('/')[-1].endswith(".pdf"):
 											filenow = file
 										else:
 											filenow = file+".pdf"

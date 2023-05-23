@@ -31,6 +31,7 @@ MENU = InlineKeyboardMarkup(
 	[	[InlineKeyboardButton("👑𝔼𝔻𝕌ℂ𝔸👑", callback_data = "EDUCA")],		[InlineKeyboardButton("༒ℝ𝕖𝕧𝔸𝕡𝕪𝕖༒", callback_data="APYE"),InlineKeyboardButton("༒ℝ𝕖𝕧𝔼𝕕𝕚𝕔༒", callback_data="EDIC")],
 		[InlineKeyboardButton("༒ℝ𝕖𝕧ℂ𝕚𝕟𝕗𝕠༒", callback_data="CINFO"),InlineKeyboardButton("༒ℝ𝕖𝕧𝕊𝕥𝕘𝕠༒", callback_data="STGO")],
 		[InlineKeyboardButton("༒ℝ𝕖𝕧ℝ𝕖𝕘𝕦༒", callback_data="REGU"),InlineKeyboardButton("༒ℝ𝕖𝕧𝕌𝕔𝕚𝕖༒", callback_data="UCIE")],
+		[InlineKeyboardButton("༒ℝ𝕖𝕧𝕋𝕖𝕔𝕖༒", callback_data="TECE")],
 		[InlineKeyboardButton("❌",callback_data="del")]
 	]
 )
@@ -113,6 +114,18 @@ UCIE = InlineKeyboardMarkup(
             InlineKeyboardButton("3", callback_data="r03"),
             InlineKeyboardButton("4", callback_data="r04"),
             InlineKeyboardButton("5", callback_data="r05")],
+            [InlineKeyboardButton("⬅️", callback_data="back")]
+        ]
+)
+
+TECE = InlineKeyboardMarkup(
+    [
+        [InlineKeyboardButton("📖 ℝ𝕖𝕧𝕚𝕤𝕥𝕒𝕤 𝕋𝕖𝕔𝕖𝕕𝕦.📕", callback_data="REVISTAS.tecedu")],
+        [InlineKeyboardButton("1", callback_data="t1"),
+            InlineKeyboardButton("2", callback_data="t2"),
+            InlineKeyboardButton("3", callback_data="t3"),
+            InlineKeyboardButton("4", callback_data="t4"),
+            InlineKeyboardButton("5", callback_data="t5")],
             [InlineKeyboardButton("⬅️", callback_data="back")]
         ]
 )
