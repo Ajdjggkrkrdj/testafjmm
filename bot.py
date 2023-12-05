@@ -1704,7 +1704,7 @@ async def up_revistas_api(file,usid,msg,username):
 		else:
 			connector = aiohttp.TCPConnector()
 		async with aiohttp.ClientSession(connector=connector) as session:
-			async with session.get(host + "login") as response:
+			async with session.get(host + "login",verify=False) as response:
 				html = await response.text()
 			soup = BeautifulSoup(html, "html.parser")
 			csrfToken = soup.find("input",attrs={"name":"csrfToken"})['value']
@@ -1715,14 +1715,14 @@ async def up_revistas_api(file,usid,msg,username):
 			payload['username'] = user
 			payload['password'] = passw
 			payload['remember'] = '1'
-			async with session.post(url_post, data=payload) as e:
+			async with session.post(url_post, data=payload,verify=False) as e:
 				print(222)
 			url = host + 'user/profile'
-			async with session.get(url) as resp:
+			async with session.get(url,verify=False) as resp:
 				try:
 					u = resp.url
 				except:
-					u = resp.url()
+					u = resp.url
 				if u==host+'login/signIn':
 					await msg.edit("❌ **ERROR** ❌\nℂ𝕣𝕖𝕕𝕖𝕟𝕔𝕚𝕒𝕝𝕖𝕤 𝕚𝕟𝕔𝕠𝕣𝕣𝕖𝕔𝕥𝕒𝕤, 𝕡𝕦𝕖𝕕𝕖 𝕤𝕖𝕣 𝕥𝕒𝕞𝕓𝕚𝕖́𝕟 𝕒𝕝𝕘𝕦𝕟𝕒 𝕔𝕠𝕟𝕗𝕚𝕘𝕦𝕣𝕒𝕔𝕚𝕠́𝕟...𝕠 𝕝𝕒 𝕟𝕦𝕓𝕖 𝕖𝕤𝕥𝕒́ 𝕔𝕒𝕚́𝕕𝕒/𝕓𝕒𝕟𝕟𝕖𝕒𝕕𝕒. 😐")
 					task[username]=False
@@ -1733,7 +1733,7 @@ async def up_revistas_api(file,usid,msg,username):
 ]
 					for _ in range(5):
 						for frame in frames:
-							sleep(0.3)
+							await asyncio.sleep(0.3)
 							await msg.edit(frame)
 							
 					print(22)
@@ -1769,7 +1769,7 @@ async def up_revistas_api(file,usid,msg,username):
 										fi = Progress(file,lambda current,total,timestart,filename: uploadfile_progres(current,total,timestart,filename,msg,parts,numero))
 									query = {"file":fi,**upload_data}
 																		
-									async with session.post(post_file_url,data=query,headers={'X-Csrf-token':csrfToken}) as resp:
+									async with session.post(post_file_url,data=query,headers={'X-Csrf-token':csrfToken},verify=False) as resp:
 										text = await resp.text()
 										if '_href' in text:
 											parse = str(text).replace('\/','/')
@@ -1847,7 +1847,7 @@ async def up_revistas_api(file,usid,msg,username):
 							else:
 								fi = Progress(file,lambda current,total,timestart,filename: uploadfile_progres(current,total,timestart,filename,msg,parts,numero))
 							query = {"file":fi,**upload_data}
-							async with session.post(post_file_url,data=query,headers={'X-Csrf-token':csrfToken}) as resp:
+							async with session.post(post_file_url,data=query,headers={'X-Csrf-token':csrfToken},verify=False) as resp:
 								text = await resp.text()
 								if '_href' in text:
 									parse = str(text).replace('\/','/')
