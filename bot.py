@@ -1700,11 +1700,11 @@ async def up_revistas_api(file,usid,msg,username):
 				connector = aiohttp_socks.ProxyConnector.from_url(f"{proxy}")
 			except Exception as ex:
 				await message.reply(f"{ex}")
-				connector = aiohttp.TCPConnector()
+				connector = aiohttp.TCPConnector(ssl=False)
 		else:
-			connector = aiohttp.TCPConnector()
+			connector = aiohttp.TCPConnector(ssl=False)
 		async with aiohttp.ClientSession(connector=connector) as session:
-			async with session.get(host + "login",verify=False) as response:
+			async with session.get(host + "login") as response:
 				html = await response.text()
 			soup = BeautifulSoup(html, "html.parser")
 			csrfToken = soup.find("input",attrs={"name":"csrfToken"})['value']
@@ -1715,10 +1715,10 @@ async def up_revistas_api(file,usid,msg,username):
 			payload['username'] = user
 			payload['password'] = passw
 			payload['remember'] = '1'
-			async with session.post(url_post, data=payload,verify=False) as e:
+			async with session.post(url_post, data=payload) as e:
 				print(222)
 			url = host + 'user/profile'
-			async with session.get(url,verify=False) as resp:
+			async with session.get(url) as resp:
 				try:
 					u = resp.url
 				except:
@@ -1769,7 +1769,7 @@ async def up_revistas_api(file,usid,msg,username):
 										fi = Progress(file,lambda current,total,timestart,filename: uploadfile_progres(current,total,timestart,filename,msg,parts,numero))
 									query = {"file":fi,**upload_data}
 																		
-									async with session.post(post_file_url,data=query,headers={'X-Csrf-token':csrfToken},verify=False) as resp:
+									async with session.post(post_file_url,data=query,headers={'X-Csrf-token':csrfToken}) as resp:
 										text = await resp.text()
 										if '_href' in text:
 											parse = str(text).replace('\/','/')
@@ -1847,7 +1847,7 @@ async def up_revistas_api(file,usid,msg,username):
 							else:
 								fi = Progress(file,lambda current,total,timestart,filename: uploadfile_progres(current,total,timestart,filename,msg,parts,numero))
 							query = {"file":fi,**upload_data}
-							async with session.post(post_file_url,data=query,headers={'X-Csrf-token':csrfToken},verify=False) as resp:
+							async with session.post(post_file_url,data=query,headers={'X-Csrf-token':csrfToken}) as resp:
 								text = await resp.text()
 								if '_href' in text:
 									parse = str(text).replace('\/','/')
